@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.utils.Pool
 import kotlin.properties.Delegates
 
-abstract class B2DComponent: Component, Pool.Poolable {
+class PhysicsComponent: Component, Pool.Poolable {
     private var body: Body? = null
     var width by Delegates.notNull<Float>()
     var height by Delegates.notNull<Float>()

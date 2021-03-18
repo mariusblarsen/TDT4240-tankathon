@@ -3,8 +3,7 @@ package tdt4240.tankathon.game.ecs
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.World
-import tdt4240.tankathon.game.ecs.component.B2DComponent
+import tdt4240.tankathon.game.ecs.component.PhysicsComponent
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
 
 /* PooledEngine
@@ -21,8 +20,8 @@ class ECSengine: PooledEngine() {
         entity.add(playerComponent)
 
         /* Add box2D physics to the player */
-        val b2DComponent : B2DComponent? = createComponent(B2DComponent::class.java)
-        entity.add(playerComponent)
+        val physicsComponent : PhysicsComponent? = createComponent(PhysicsComponent::class.java)
+        entity.add(physicsComponent)
 
     }
 }
