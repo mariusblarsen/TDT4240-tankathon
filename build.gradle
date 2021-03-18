@@ -87,5 +87,6 @@ project(":core") {
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        implementation group: 'io.github.libktx', name: 'ktx-ashley', version: '1.9.14-b1'
     }
 }
