@@ -1,47 +1,40 @@
 package tdt4240.tankathon.game
 
 import com.badlogic.ashley.core.PooledEngine
+import com.badlogic.gdx.Application.LOG_INFO
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.FitViewport
 import ktx.app.KtxGame
-import ktx.app.KtxScreen
+import ktx.log.Logger
+import ktx.log.info
+import ktx.log.logger
 import tdt4240.tankathon.game.ecs.system.RenderSystem
+import tdt4240.tankathon.game.screens.AbstractScreen
+import tdt4240.tankathon.game.screens.GameScreen
 import tdt4240.tankathon.game.screens.MenuScreen
 
-const val V_WIDTH = 9  // TODO: Real value
-const val V_HEIGHT = 16  // TODO: Real value
+const val V_WIDTH = 16  // TODO: Real value
+const val V_HEIGHT = 9  // TODO: Real value
+const val UNIT_SCALE = 1/16f
+private val LOG: Logger = logger<TankathonGame>()
 
-class TankathonGame : KtxGame<KtxScreen>() {
-    var batch: Batch? = null
-    var img: Texture? = null
+
+class TankathonGame : KtxGame<AbstractScreen>() {
+    val batch: Batch by lazy { SpriteBatch() }
     /*
     val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
     val engine: PooledEngine by lazy {
         PooledEngine().apply{
-            addSystem(RenderSystem(batch!!, gameViewport))
+            addSystem(RenderSystem(batch, gameViewport))
         }
     }*/
     override fun create() {
-        batch = SpriteBatch()
-        //addScreen(MenuScreen(this@TankathonGame))
-        //setScreen<MenuScreen>()
-        img = Texture("badlogic.jpg")
-    }
-
-    override fun render() {
-        Gdx.gl.glClearColor(0f, 0f, 0.5f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        batch?.begin()
-        batch?.draw(img, 0f, 0f)
-        batch?.end()
-    }
-
-    override fun dispose() {
-        batch?.dispose()
-        img?.dispose()
+        Gdx.app.logLevel = LOG_INFO
+        LOG.info { "Create game instance" }
+        addScreen(MenuScreen(this))
+        addScreen(GameScreen(this))
+        setScreen<MenuScreen>()
     }
 }
