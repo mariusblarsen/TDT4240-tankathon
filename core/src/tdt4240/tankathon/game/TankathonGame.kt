@@ -15,8 +15,9 @@ import tdt4240.tankathon.game.screens.AbstractScreen
 import tdt4240.tankathon.game.screens.GameScreen
 import tdt4240.tankathon.game.screens.MenuScreen
 
-const val V_WIDTH = 9  // TODO: Real value
-const val V_HEIGHT = 16  // TODO: Real value
+const val V_WIDTH = 16  // TODO: Real value
+const val V_HEIGHT = 9  // TODO: Real value
+const val UNIT_SCALE = 1/16f
 private val LOG: Logger = logger<TankathonGame>()
 
 
