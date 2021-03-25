@@ -27,11 +27,9 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
         sprite.setPosition(1f, 1f)
     }
 
-    override fun resize(width: Int, height: Int) {
-        gameViewport.update(width, height, true)
-    }
 
     override fun render(delta: Float) {
+        engine.update(delta)
         gameViewport.apply()
         batch.use(gameViewport.camera.combined) {
             sprite.draw(it)

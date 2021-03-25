@@ -22,7 +22,12 @@ private val LOG: Logger = logger<TankathonGame>()
 
 
 class TankathonGame : KtxGame<AbstractScreen>() {
-    val batch: Batch by lazy { SpriteBatch() }
+    val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
+    val batch: Batch by lazy { SpriteBatch()}
+    val engine: Engine by lazy {PooledEngine().apply{
+        addSystem(RenderSystem(batch, gameViewport ))
+    } }
+
     /*
     val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
     val engine: PooledEngine by lazy {
