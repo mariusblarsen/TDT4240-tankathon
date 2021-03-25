@@ -1,44 +1,71 @@
 package tdt4240.tankathon.game.screens
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.utils.viewport.FitViewport
-import ktx.graphics.use
+import ktx.ashley.entity
+import ktx.ashley.with
 import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.V_HEIGHT
 import tdt4240.tankathon.game.V_WIDTH
+import tdt4240.tankathon.game.ecs.component.PlayerComponent
+
+import tdt4240.tankathon.game.ecs.component.SpriteComponent
+import tdt4240.tankathon.game.ecs.component.TransformComponent
 
 private val LOG = logger<GameScreen>()
 
 class GameScreen(game: TankathonGame) : AbstractScreen(game){
-    private val texture = Texture("tank.png")
-    private val sprite = Sprite(texture).apply {
-        setSize(this.texture.width * UNIT_SCALE, this.texture.height * UNIT_SCALE)
+    private val playerTexture = Texture(Gdx.files.internal("tank.png"))
+
+    private val player = engine.entity {
+        with<TransformComponent>{
+            position.x = V_WIDTH*0.5f
+            position.y = V_HEIGHT*0.5f
+            size.x = playerTexture.width * UNIT_SCALE
+            size.y = playerTexture.height * UNIT_SCALE
+        }
+        with<SpriteComponent>{
+            sprite.run{
+                setRegion(playerTexture)
+                setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
+                setOriginCenter()
+            }
+        }
+        with<PlayerComponent>()
     }
-    val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
 
     override fun show() {
         LOG.info { "Game Screen" }
-        sprite.setPosition(1f, 1f)
+        /* Can be uncommented to add multiple "players"
+         * TODO: To be removed.
+        repeat(10){
+            engine.entity {
+                with<TransformComponent>{
+                    position.set(MathUtils.random(0f, 16f), MathUtils.random(0f, 9f), 0f)
+                    size.x = playerTexture.width * UNIT_SCALE
+                    size.y = playerTexture.height * UNIT_SCALE
+                }
+                with<SpriteComponent>{
+                    sprite.run{
+                        setRegion(playerTexture)
+                        setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
+                        setOriginCenter()
+                    }
+                }
+                with<PlayerComponent>()
+            }
+        }*/
     }
 
-    override fun resize(width: Int, height: Int) {
-        gameViewport.update(width, height, true)
-    }
 
     override fun render(delta: Float) {
-        gameViewport.apply()
-        batch.use(gameViewport.camera.combined) {
-            sprite.draw(it)
-        }
+        engine.update(delta)
     }
 
     override fun dispose() {
-        texture.dispose()
+        playerTexture.dispose()
     }
 }
