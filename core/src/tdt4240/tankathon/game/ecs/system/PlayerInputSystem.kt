@@ -16,6 +16,7 @@ class PlayerInputSystem(
         allOf(PlayerComponent::class, TransformComponent::class).get()
 ){
     private val inputVec = Vector2()
+    private val screenWidth = Gdx.graphics.width
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transform = entity[TransformComponent.mapper]
         require(transform != null){ "Entity |entity| must have a TransformComponent. entity=$entity"}
@@ -23,11 +24,14 @@ class PlayerInputSystem(
         require(player != null){ "Entity |entity| must have a PlayerComponent. entity=$entity"}
 
         /* Handle input */
-        inputVec.x = Gdx.input.x.toFloat()
-        inputVec.y = Gdx.input.y.toFloat()
+        /* Aiming */
+        if (Gdx.input.x > screenWidth/2){
+            inputVec.x = Gdx.input.x.toFloat() - screenWidth/4f
+            inputVec.y = Gdx.input.y.toFloat()
 
-        gameViewport.unproject(inputVec)
-        transform.setRotation(inputVec)
+            gameViewport.unproject(inputVec)
+            transform.setRotation(inputVec)
+        }
     }
 }
 
