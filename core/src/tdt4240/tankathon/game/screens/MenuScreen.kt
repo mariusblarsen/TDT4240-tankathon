@@ -24,7 +24,7 @@ class MenuScreen(game: TankathonGame) : AbstractScreen(game) {
         batch.use {
             font.draw(it, "Menu\nPress any key to start game", 50f, 100f)
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isTouched){
             game.setScreen<GameScreen>()
         }
     }
