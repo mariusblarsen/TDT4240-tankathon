@@ -11,8 +11,10 @@ abstract class AbstractScreen(
         val batch: Batch = game.batch,
         val engine: PooledEngine = game.engine,
         val gameViewport: Viewport = game.gameViewport,
+        val mapViewport: Viewport = game.mapViewport,
 ) : KtxScreen {
     override fun resize(width: Int, height: Int) {
         gameViewport.update(width, height, true)
+        mapViewport.update(width, height, true)
     }
 }
