@@ -12,7 +12,7 @@ import ktx.log.logger
 import sun.font.GraphicComponent
 import tdt4240.tankathon.game.ecs.component.SpriteComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent
-import com.badlogic.ashley.systems.SortedIteratingSystem as SortedIteratingSystem1
+import com.badlogic.ashley.systems.SortedIteratingSystem as SortedIteratingSystem
 
 private val LOG: Logger = logger<RenderSystem>()
 
@@ -20,8 +20,8 @@ class RenderSystem( private val batch: Batch,
                     private val gameViewport: Viewport
 
 ) : SortedIteratingSystem(
-        allOf(GraphicComponent::class, TransformComponent::class).get(),
-        compareBy<TransformComponent>{ entity -> entity[TransformComponent.mapper] },
+        allOf(SpriteComponent::class, TransformComponent::class).get(),
+        compareBy{ entity -> entity[TransformComponent.mapper] }
 
         ){
     override fun update(deltaTime: Float) {

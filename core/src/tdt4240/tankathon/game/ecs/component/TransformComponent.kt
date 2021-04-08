@@ -10,6 +10,7 @@ import ktx.ashley.mapperFor
 import ktx.math.vec2
 import ktx.math.vec3
 
+
 class TransformComponent : Component, Pool.Poolable, Comparable<TransformComponent>{
     val position = Vector3()
     val size = Vector2(1f, 1f)
