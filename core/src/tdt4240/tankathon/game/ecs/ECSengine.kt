@@ -34,4 +34,23 @@ class ECSengine: PooledEngine() {
         entity.add(createComponent(SpriteComponent::class.java))
 
     }
+    fun createNPC(spawnPosition: Vector2) {
+        val entity: Entity = this.createEntity()
+        val position: Vector2 = spawnPosition
+
+        /* Add player component to player */
+        entity.add(createComponent(PlayerComponent::class.java))
+
+        /* Add box2D physics to the player */
+        entity.add(createComponent(PhysicsComponent::class.java))
+
+        /* Add Health to player */
+        entity.add(createComponent(HealthComponent::class.java))
+
+        /* Add Movement to player */
+        // TODO: add MovementComponent
+        /* Add Sprite to player */
+        entity.add(createComponent(SpriteComponent::class.java))
+
+    }
 }
