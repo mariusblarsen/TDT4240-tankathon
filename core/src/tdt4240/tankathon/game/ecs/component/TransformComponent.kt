@@ -35,20 +35,25 @@ class TransformComponent : Component, Pool.Poolable, Comparable<TransformCompone
 
     fun setRotation(input: Vector2){
         /* Receives an Vector 2 representing the position of a touch.
-        * Calculates the vector from center to touch,
+        * Calculates the vector from center of right side of screen,
         * and sets the rotationDeg = angle of vector*/
-        val diffX = input.x - position.x - size.x*0.5f
-        val diffY = input.y - position.y - size.y*0.5f
+        val joyStick = Vector2(3*Gdx.graphics.width/4f, Gdx.graphics.height/2f)
+        val diffX = input.x //- joyStick.x  // TODO Øystein this
+        val diffY = input.y //- joyStick.y
         rotationDeg = Vector2(diffX, diffY).angleDeg() - 90f
     }
 
     fun setVelocity(input: Vector2, deltaTime: Float){
         val diffX = input.x - position.x - size.x*0.5f
         val diffY = input.y - position.y - size.y*0.5f
-        velocityRotation = Vector2(diffX, diffY).angleDeg() - 90f
+        //velocityRotation = Vector2(diffX, diffY).angleDeg() - 90f
 
+        position.x += diffX*deltaTime  // TODO: Normailze (.nor) const speed
+        position.y += diffY*deltaTime
+    /*
         position.x += cos(velocityRotation)*deltaTime
         position.y += sin(velocityRotation)*deltaTime
+        */
     }
 
     companion object{

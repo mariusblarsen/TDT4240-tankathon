@@ -36,7 +36,7 @@ class PlayerInputSystem(
         /* Handle input */
         /* Control tank */
         if (Gdx.input.x < screenWidth / 2) {
-            inputVec.x = Gdx.input.x.toFloat() - screenWidth / 4f
+            inputVec.x = Gdx.input.x.toFloat() // - screenWidth / 4f
             inputVec.y = Gdx.input.y.toFloat()
 
             gameViewport.unproject(inputVec)
