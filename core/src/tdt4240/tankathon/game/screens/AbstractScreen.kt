@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.utils.viewport.Viewport
 import ktx.app.KtxScreen
 import tdt4240.tankathon.game.TankathonGame
+import tdt4240.tankathon.game.ecs.ECSengine
 
 abstract class AbstractScreen(
         val game: TankathonGame,
         val batch: Batch = game.batch,
-        val engine: PooledEngine = game.engine,
+        val engine: ECSengine = game.engine,
         val gameViewport: Viewport = game.gameViewport,
 ) : KtxScreen {
     override fun resize(width: Int, height: Int) {

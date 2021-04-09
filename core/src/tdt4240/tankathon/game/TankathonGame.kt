@@ -10,6 +10,7 @@ import ktx.app.KtxGame
 import ktx.log.Logger
 import ktx.log.info
 import ktx.log.logger
+import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.system.PlayerInputSystem
 import tdt4240.tankathon.game.ecs.system.RenderSystem
 import tdt4240.tankathon.game.screens.AbstractScreen
@@ -28,8 +29,8 @@ private val LOG: Logger = logger<TankathonGame>()
 class TankathonGame : KtxGame<AbstractScreen>() {
     val batch: Batch by lazy { SpriteBatch() }
     val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
-    val engine: PooledEngine by lazy {
-        PooledEngine().apply{
+    val engine: ECSengine by lazy {
+        ECSengine().apply{
             addSystem(PlayerInputSystem(gameViewport))
             addSystem(RenderSystem(
                     batch,

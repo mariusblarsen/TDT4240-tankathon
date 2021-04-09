@@ -2,6 +2,7 @@ package tdt4240.tankathon.game.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.Vector2
 import ktx.ashley.entity
 import ktx.ashley.with
 import ktx.log.info
@@ -36,7 +37,9 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
             }
         }
     }
-    private val player = engine.entity {
+    private val player = engine.createPlayer(Vector2(V_WIDTH/2f, V_HEIGHT/2f), playerTexture)
+    /*
+            engine.entity {
         with<TransformComponent>{
             position.x = V_WIDTH*0.5f
             position.y = V_HEIGHT*0.5f
@@ -52,7 +55,7 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
         }
         with<PlayerComponent>()
     }
-
+*/
     override fun show() {
         LOG.info { "Game Screen" }
     }
