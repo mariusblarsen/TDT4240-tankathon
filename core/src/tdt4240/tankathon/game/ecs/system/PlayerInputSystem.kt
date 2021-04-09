@@ -32,6 +32,16 @@ class PlayerInputSystem(
             gameViewport.unproject(inputVec)
             transform.setRotation(inputVec)
         }
+
+        /* Handle input */
+        /* Control tank */
+        if (Gdx.input.x < screenWidth / 2) {
+            inputVec.x = Gdx.input.x.toFloat() - screenWidth / 4f
+            inputVec.y = Gdx.input.y.toFloat()
+
+            gameViewport.unproject(inputVec)
+            transform.setVelocity(inputVec, deltaTime)
+        }
     }
 }
 

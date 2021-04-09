@@ -31,7 +31,7 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
             sprite.run{
                 setRegion(playerTexture)
                 setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
-                setOriginCenter()
+                setOrigin(width/2, height/4)
             }
         }
         with<PlayerComponent>()
