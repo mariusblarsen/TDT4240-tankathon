@@ -19,7 +19,23 @@ private val LOG = logger<GameScreen>()
 
 class GameScreen(game: TankathonGame) : AbstractScreen(game){
     private val playerTexture = Texture(Gdx.files.internal("tank.png"))
+    private val backgroundTexture = Texture(Gdx.files.internal("map.png"))
 
+    private val background = engine.entity {
+        with<TransformComponent>{
+            size.x = backgroundTexture.width * UNIT_SCALE
+            size.y = backgroundTexture.height * UNIT_SCALE
+            position.x = 0f
+            position.y = 0f
+        }
+        with<SpriteComponent>{
+            sprite.run{
+                setRegion(backgroundTexture)
+                setSize(texture.width* UNIT_SCALE, texture.height* UNIT_SCALE)
+                setOrigin(0f, 0f)
+            }
+        }
+    }
     private val player = engine.entity {
         with<TransformComponent>{
             position.x = V_WIDTH*0.5f
@@ -39,25 +55,6 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
 
     override fun show() {
         LOG.info { "Game Screen" }
-        /* Can be uncommented to add multiple "players"
-         * TODO: To be removed.
-        repeat(10){
-            engine.entity {
-                with<TransformComponent>{
-                    position.set(MathUtils.random(0f, 16f), MathUtils.random(0f, 9f), 0f)
-                    size.x = playerTexture.width * UNIT_SCALE
-                    size.y = playerTexture.height * UNIT_SCALE
-                }
-                with<SpriteComponent>{
-                    sprite.run{
-                        setRegion(playerTexture)
-                        setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
-                        setOriginCenter()
-                    }
-                }
-                with<PlayerComponent>()
-            }
-        }*/
     }
 
 
@@ -67,5 +64,6 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
 
     override fun dispose() {
         playerTexture.dispose()
+        backgroundTexture.dispose()
     }
 }
