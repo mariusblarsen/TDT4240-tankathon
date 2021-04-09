@@ -42,6 +42,8 @@ class PlayerInputSystem(
             gameViewport.unproject(inputVec)
             transform.setVelocity(inputVec, deltaTime)
         }
+        /* Move camera */
+        gameViewport.camera.position.set(transform.position)
     }
 }
 
