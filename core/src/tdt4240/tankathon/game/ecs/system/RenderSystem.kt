@@ -37,7 +37,7 @@ class RenderSystem(
             background.run {
                 // TODO (Marius): Scroll-speed from tank-speed
                 // TODO (Marius): Only scroll on movement
-                scroll(0.1f*deltaTime, 0.1f*deltaTime)
+                //scroll(0.1f*deltaTime, 0.1f*deltaTime)
                 draw(batch)
             }
         }
