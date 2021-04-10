@@ -3,6 +3,7 @@ package tdt4240.tankathon.game.ecs.system
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -10,21 +11,27 @@ import ktx.ashley.allOf
 import ktx.ashley.get
 import tdt4240.tankathon.game.V_HEIGHT
 import tdt4240.tankathon.game.V_WIDTH
+import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
+import tdt4240.tankathon.game.ecs.component.PositionComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent
 
 class PlayerInputSystem(
-        private val gameViewport: Viewport)
+        private val gameViewport: Viewport,
+        private val engine: ECSengine)
     : IteratingSystem(
-        allOf(PlayerComponent::class, TransformComponent::class).get()
+        allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class).get()
 ){
     private val inputVec = Vector2()
     private val screenWidth = Gdx.graphics.width
+    private val bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transform = entity[TransformComponent.mapper]
         require(transform != null){ "Entity |entity| must have a TransformComponent. entity=$entity"}
         val player = entity[PlayerComponent.mapper]
         require(player != null){ "Entity |entity| must have a PlayerComponent. entity=$entity"}
+        val position = entity[PositionComponent.mapper]
+        require(position != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
 
         /* Handle input */
         /* Aiming */
@@ -34,6 +41,7 @@ class PlayerInputSystem(
 
             gameViewport.unproject(inputVec)
             setRotation(inputVec, transform)
+            engine.addBullet(bulletTexture, position.position)  // TODO (Marius): Move? Not sure where
         }
 
         /* Handle input */
@@ -43,10 +51,10 @@ class PlayerInputSystem(
             inputVec.y = Gdx.input.y.toFloat()
 
             gameViewport.unproject(inputVec)
-            setVelocityDirection(inputVec, transform, deltaTime)
+            setVelocityDirection(inputVec, transform, position, deltaTime)
         }
         /* Move camera */
-        gameViewport.camera.position.set(transform.position)
+        gameViewport.camera.position.set(position.position)
     }
 
 
@@ -59,13 +67,14 @@ class PlayerInputSystem(
         transform.rotationDeg = Vector2(input.x - joyStick.x, input.y - joyStick.y).angleDeg()-90
 
     }
-    private fun setVelocityDirection(input: Vector2, transform: TransformComponent, deltaTime: Float){
+    private fun setVelocityDirection(input: Vector2, transform: TransformComponent,
+                                     position: PositionComponent, deltaTime: Float){ // TODO (Marius): Add velocity component
         val joyStick = Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
 
 
         gameViewport.unproject(joyStick)
         val velocity = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor().scl(transform.speed)
-        transform.position.add(velocity.scl(deltaTime))
+        position.position.add(velocity.scl(deltaTime))
         Gdx.app.log("#input", input.toString());
         Gdx.app.log("#tankPost", transform.position.toString());
 
