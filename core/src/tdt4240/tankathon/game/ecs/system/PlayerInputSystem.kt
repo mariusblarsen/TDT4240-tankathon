@@ -21,7 +21,7 @@ class PlayerInputSystem(
     private val inputVec = Vector2()
     private val screenWidth = Gdx.graphics.width
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val transform = entity[TransformComponent.mapper]!!
+        val transform = entity[TransformComponent.mapper]
         require(transform != null){ "Entity |entity| must have a TransformComponent. entity=$entity"}
         val player = entity[PlayerComponent.mapper]
         require(player != null){ "Entity |entity| must have a PlayerComponent. entity=$entity"}
@@ -54,16 +54,17 @@ class PlayerInputSystem(
         /* Receives an Vector 2 representing the position of a touch.
         * Calculates the vector from center of right side of screen,
         * and sets the rotationDeg = angle of vector*/
-        val joyStick = Vector2(V_WIDTH *3f/4f, V_HEIGHT /2f)
+        val joyStick = Vector2(Gdx.graphics.width *3f/4f, Gdx.graphics.height /2f)
+        gameViewport.unproject(joyStick)
         transform.rotationDeg = Vector2(input.x - joyStick.x, input.y - joyStick.y).angleDeg()-90
 
     }
     private fun setVelocityDirection(input: Vector2, transform: TransformComponent, deltaTime: Float){
-        val joyStick = Vector2(V_WIDTH *1f/4f, V_HEIGHT /2f)
+        val joyStick = Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
 
 
-
-        var velocity = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor().scl(transform.speed)
+        gameViewport.unproject(joyStick)
+        val velocity = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor().scl(transform.speed)
         transform.position.add(velocity.scl(deltaTime))
         Gdx.app.log("#input", input.toString());
         Gdx.app.log("#tankPost", transform.position.toString());
