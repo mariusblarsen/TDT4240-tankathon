@@ -37,6 +37,12 @@ class ECSengine: PooledEngine() {
             }
             with<PlayerComponent>()
 
+            with<VelocityComponent>()
+            with<PositionComponent>{
+                position.x = V_WIDTH*0.5f
+                position.y = V_HEIGHT*0.5f
+            }
+
         }
 
         val position: Vector2 = spawnPosition
@@ -80,6 +86,28 @@ class ECSengine: PooledEngine() {
         // TODO: add MovementComponent
         /* Add Sprite to player */
         entity.add(createComponent(SpriteComponent::class.java))
+    }
 
+    /* Adds a bullet with texture, spawn point and velocity */
+    fun addBullet(
+            texture: Texture,
+            spawnPosition: Vector3
+    ): Entity {
+
+        return entity {
+            with<SpriteComponent> {
+                setTexture(texture, spawnPosition)
+            }
+            with<TransformComponent>  {
+                position = spawnPosition
+            }
+            with<BulletComponent>()
+            with<VelocityComponent>() {
+                speed = 0.2f
+            }
+            with<PositionComponent>() {
+                spawnPosition
+            }
+        }
     }
 }
