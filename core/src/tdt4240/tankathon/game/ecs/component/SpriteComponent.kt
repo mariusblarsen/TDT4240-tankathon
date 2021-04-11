@@ -16,7 +16,6 @@ class SpriteComponent: Component, Pool.Poolable, Comparable<SpriteComponent> {
 
     override fun reset() {
         sprite.texture = null
-        sprite.setColor(1f, 1f, 1f, 1f)
     }
 
     override fun compareTo(other: SpriteComponent): Int {

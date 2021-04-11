@@ -23,42 +23,10 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
     private val playerTexture = Texture(Gdx.files.internal("tank.png"))
     private val backgroundTexture = Texture(Gdx.files.internal("map.png"))
 
-    private val background = engine.entity {
-        with<TransformComponent>{
-            size.x = backgroundTexture.width * UNIT_SCALE
-            size.y = backgroundTexture.height * UNIT_SCALE
-        }
-        with<SpriteComponent>{
-            sprite.run{
-                setRegion(backgroundTexture)
-                setSize(texture.width* UNIT_SCALE, texture.height* UNIT_SCALE)
-                setOrigin(0f, 0f)
-            }
-        }
-        with<PositionComponent>{
-            position.x = 0f
-            position.y = 0f
-        }
-    }
-    private val player = engine.createPlayer(Vector2(V_WIDTH/2f, V_HEIGHT/2f), playerTexture)
-    /*
-            engine.entity {
-        with<TransformComponent>{
-            position.x = V_WIDTH*0.5f
-            position.y = V_HEIGHT*0.5f
-            size.x = playerTexture.width * UNIT_SCALE
-            size.y = playerTexture.height * UNIT_SCALE
-        }
-        with<SpriteComponent>{
-            sprite.run{
-                setRegion(playerTexture)
-                setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
-                setOrigin(width/2, height/4)
-            }
-        }
-        with<PlayerComponent>()
-    }
-*/
+    /* Add entities */
+    private val background = engine.setBackground(backgroundTexture)
+    private val player = engine.createPlayer(playerTexture)
+
     override fun show() {
         LOG.info { "Game Screen" }
     }

@@ -20,7 +20,7 @@ class RenderSystem(
         private val batch: Batch,
         private val gameViewport: Viewport,
         ): SortedIteratingSystem(
-        allOf(TransformComponent::class, SpriteComponent::class, PositionComponent::class).get(),
+        allOf(SpriteComponent::class, PositionComponent::class).get(),
         compareBy { entity -> entity[SpriteComponent.mapper]}
 ){
 
@@ -33,7 +33,6 @@ class RenderSystem(
     }
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transformComponent = entity[TransformComponent.mapper]
-        require(transformComponent != null){ "Entity |entity| must have a TransformComponent. entity=$entity"}
         val spriteComponent = entity[SpriteComponent.mapper]
         require(spriteComponent != null){ "Entity |entity| must have a SpriteComponent. entity=$entity"}
         val position = entity[PositionComponent.mapper]
@@ -46,7 +45,9 @@ class RenderSystem(
 
         /* Render method */
         spriteComponent.sprite.run{
-            rotation = transformComponent.rotationDeg
+            if (transformComponent != null){
+                rotation = transformComponent.rotationDeg
+            }
             setPosition(position.position.x, position.position.y)
             draw(batch)
         }
