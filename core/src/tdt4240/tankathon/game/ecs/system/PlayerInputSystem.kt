@@ -9,8 +9,7 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.Viewport
 import ktx.ashley.allOf
 import ktx.ashley.get
-import tdt4240.tankathon.game.V_HEIGHT
-import tdt4240.tankathon.game.V_WIDTH
+import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
 import tdt4240.tankathon.game.ecs.component.PositionComponent
@@ -26,6 +25,10 @@ class PlayerInputSystem(
     private val inputVec = Vector2()
     private val screenWidth = Gdx.graphics.width
     private val bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
+    private val threshold: Float = 0.1f  // For map-boundaries
+    private val backgroundTexture = Texture(Gdx.files.internal("map.png"))  // TODO: Fetch somehow
+    private val playerTexture = Texture(Gdx.files.internal("tank.png"))  // TODO: Fetch somehow
+
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transform = entity[TransformComponent.mapper]
         require(transform != null){ "Entity |entity| must have a TransformComponent. entity=$entity"}
@@ -80,7 +83,25 @@ class PlayerInputSystem(
         val joyStick = Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
         gameViewport.unproject(joyStick)
         velocity.direction = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f)
-        position.position.add(velocity.getVelocity().scl(deltaTime))
+
+
+        /* Check for map-boundaries */
+        /* TODO: How to fetch these values from entities? */
+        val height = backgroundTexture.height * UNIT_SCALE
+        val width = backgroundTexture.width * UNIT_SCALE
+        val playerSize = playerTexture.width * UNIT_SCALE
+
+        val nextPos = position.position.cpy().add(velocity.getVelocity().scl(deltaTime))
+        /* x-direction */
+        if (nextPos.x > threshold &&
+                nextPos.x < width - playerSize - threshold){
+            position.position.x = nextPos.x
+        }
+        /* y-direction */
+        if (nextPos.y > threshold &&
+                nextPos.y < height - playerSize - threshold){
+            position.position.y = nextPos.y
+        }
     }
 }
 

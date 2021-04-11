@@ -34,13 +34,6 @@ class SpriteComponent: Component, Pool.Poolable, Comparable<SpriteComponent> {
             setOrigin(origin.x, origin.y)
         }
     }
-    fun setTexture(texture: Texture, origin: Vector3){
-        sprite.run{
-            setRegion(texture)
-            setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
-            setOrigin(origin.x, origin.y)
-        }
-    }
 
     companion object {
         val mapper = mapperFor<SpriteComponent>()
