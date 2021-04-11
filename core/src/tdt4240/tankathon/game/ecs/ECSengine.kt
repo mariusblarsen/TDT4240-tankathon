@@ -69,7 +69,7 @@ class ECSengine: PooledEngine() {
 
         return this.entity {
             with<SpriteComponent> {
-                setTexture(texture, Vector3(0f, 0f, 0f))
+                setTexture(texture, Vector2(0f, 0f))
             }
             with<TransformComponent>  {
                 rotationDeg = fireDirection.angleDeg()-90
