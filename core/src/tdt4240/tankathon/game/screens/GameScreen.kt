@@ -22,6 +22,7 @@ private val LOG = logger<GameScreen>()
 class GameScreen(game: TankathonGame) : AbstractScreen(game){
     private val playerTexture = Texture(Gdx.files.internal("tank.png"))
     private val backgroundTexture = Texture(Gdx.files.internal("map.png"))
+    private val NPCTexture = Texture(Gdx.files.internal("tank.png"))
 
     private val background = engine.entity {
         with<TransformComponent>{
@@ -58,7 +59,9 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
         }
         with<PlayerComponent>()
     }
+
 */
+    private val NPC = engine.createNPC(Vector2(0f,0f), NPCTexture)
     override fun show() {
         LOG.info { "Game Screen" }
     }

@@ -69,23 +69,39 @@ class ECSengine: PooledEngine() {
 
 
     }
-    fun createNPC(spawnPosition: Vector2) {
-        val entity: Entity = this.createEntity()
-        val position: Vector2 = spawnPosition
+    fun createNPC(spawnPosition: Vector2, texture: Texture) {
+        val entity: Entity = this.entity() {
+            with<TransformComponent> {
+                position.x = spawnPosition.x
+                position.y = spawnPosition.y
 
-        /* Add player component to player */
-        entity.add(createComponent(PlayerComponent::class.java))
+                speed=1f
+                direction.x= 1f
+                direction.y = 1f
+                size.x = texture.width * tdt4240.tankathon.game.UNIT_SCALE
+                size.y = texture.height * tdt4240.tankathon.game.UNIT_SCALE
+            }
+            with<SpriteComponent> {
+                sprite.run {
+                    setRegion(texture)
+                    setSize(texture.width * tdt4240.tankathon.game.UNIT_SCALE, texture.height * tdt4240.tankathon.game.UNIT_SCALE)
+                    setOrigin(width / 2, height / 4)
+                }
+            }
+            with<AIComponent>()
 
-        /* Add box2D physics to the player */
-        entity.add(createComponent(PhysicsComponent::class.java))
+            with<VelocityComponent>{
+                direction.x=1f
+                direction.y=0f
+                speed = 1f
+            }
+            with<PositionComponent> {
+                position.x = spawnPosition.x
+                position.y = spawnPosition.y
+            }
 
-        /* Add Health to player */
-        entity.add(createComponent(HealthComponent::class.java))
 
-        /* Add Movement to player */
-        // TODO: add MovementComponent
-        /* Add Sprite to player */
-        entity.add(createComponent(SpriteComponent::class.java))
+        }
     }
 
     /* Adds a bullet with texture, spawn point and velocity */
