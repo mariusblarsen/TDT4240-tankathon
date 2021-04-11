@@ -2,20 +2,46 @@ package tdt4240.tankathon.game.ecs
 
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.PooledEngine
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
-import tdt4240.tankathon.game.ecs.component.HealthComponent
-import tdt4240.tankathon.game.ecs.component.PhysicsComponent
-import tdt4240.tankathon.game.ecs.component.PlayerComponent
-import tdt4240.tankathon.game.ecs.component.SpriteComponent
+import com.badlogic.gdx.math.Vector3
+import ktx.ashley.entity
+import ktx.ashley.with
+import tdt4240.tankathon.game.UNIT_SCALE
+import tdt4240.tankathon.game.V_HEIGHT
+import tdt4240.tankathon.game.V_WIDTH
+import tdt4240.tankathon.game.ecs.component.*
+
 
 /* PooledEngine
 *
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
 * */
 class ECSengine: PooledEngine() {
-    // TODO: Initialize Box2D world
+    fun createPlayer(playerTexture: Texture): Entity {
+        return this.entity{
+            with<TransformComponent> ()
+            with<SpriteComponent>{
+                sprite.run{
+                    setRegion(playerTexture)
+                    setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
+                    setOrigin(width/2, height/4)
+                }
+            }
+            with<PlayerComponent>()
+            with<VelocityComponent>{
+                speed = 2f
+            }
+            with<PositionComponent>{
+                position.x = V_WIDTH*0.5f
+                position.y = V_HEIGHT*0.5f
+            }
 
-    fun createPlayer(spawnPosition: Vector2) {
+        }
+
+
+    }
+    fun createNPC(spawnPosition: Vector2) {
         val entity: Entity = this.createEntity()
         val position: Vector2 = spawnPosition
 
@@ -32,6 +58,38 @@ class ECSengine: PooledEngine() {
         // TODO: add MovementComponent
         /* Add Sprite to player */
         entity.add(createComponent(SpriteComponent::class.java))
+    }
 
+    /* Adds a bullet with texture, spawn point and velocity */
+    fun addBullet(
+            texture: Texture,
+            spawnPosition: Vector3,
+            fireDirection: Vector2,
+    ): Entity {
+
+        return this.entity {
+            with<SpriteComponent> {
+                setTexture(texture, Vector2(0f, 0f))
+            }
+            with<TransformComponent>  {
+                rotationDeg = fireDirection.angleDeg()-90
+            }
+            with<BulletComponent>()
+            with<VelocityComponent> {
+                direction = Vector3(fireDirection, 0f)
+                speed = 9f
+            }
+            with<PositionComponent> {
+                position = spawnPosition
+            }
+        }
+    }
+    fun setBackground(backgroundTexture: Texture) : Entity{
+        return this.entity {
+            with<SpriteComponent>{
+                setTexture(backgroundTexture, Vector2(0f, 0f))
+            }
+            with<PositionComponent>()
+        }
     }
 }

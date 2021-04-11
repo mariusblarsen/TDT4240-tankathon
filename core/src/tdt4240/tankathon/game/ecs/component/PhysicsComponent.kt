@@ -7,8 +7,9 @@ import kotlin.properties.Delegates
 
 class PhysicsComponent: Component, Pool.Poolable {
     private var body: Body? = null
-    var width by Delegates.notNull<Float>()
-    var height by Delegates.notNull<Float>()
+    var width =16f //by Delegates.notNull<Float>()
+    var height = 9f //by Delegates.notNull<Float>()
+
     /** Delegates.notNull
      * Returns a delegate for a read/write porperty,
      * that is initialized not during construction,
