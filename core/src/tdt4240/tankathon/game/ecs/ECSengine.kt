@@ -18,10 +18,8 @@ import tdt4240.tankathon.game.ecs.component.*
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
 * */
 class ECSengine: PooledEngine() {
-    // TODO: Initialize Box2D world
-
-    fun createPlayer(spawnPosition: Vector2, playerTexture: Texture): Entity {
-        var player: Entity = this.entity{
+    fun createPlayer(playerTexture: Texture): Entity {
+        return this.entity{
             with<TransformComponent> ()
             with<SpriteComponent>{
                 sprite.run{
@@ -31,7 +29,6 @@ class ECSengine: PooledEngine() {
                 }
             }
             with<PlayerComponent>()
-
             with<VelocityComponent>{
                 speed = 2f
             }
@@ -41,28 +38,6 @@ class ECSengine: PooledEngine() {
             }
 
         }
-
-        val position: Vector2 = spawnPosition
-/*
-        /* Add player component to player */
-        entity.add(createComponent(PlayerComponent::class.java))
-
-
-        /* Add box2D physics to the player */
-        //entity.add(createComponent(PhysicsComponent::class.java))
-
-        /* Add Health to player */
-        entity.add(createComponent(HealthComponent::class.java))
-
-        /* Add Movement to player */
-        // TODO: add MovementComponent
-        entity.add(createComponent(TransformComponent::class.java))
-
-        /* Add Sprite to player */
-        entity.add(createComponent(SpriteComponent::class.java))
-
- */
-    return player
 
 
     }
@@ -92,7 +67,7 @@ class ECSengine: PooledEngine() {
             fireDirection: Vector2,
     ): Entity {
 
-        return entity {
+        return this.entity {
             with<SpriteComponent> {
                 setTexture(texture, Vector3(0f, 0f, 0f))
             }
@@ -107,6 +82,14 @@ class ECSengine: PooledEngine() {
             with<PositionComponent> {
                 position = spawnPosition
             }
+        }
+    }
+    fun setBackground(backgroundTexture: Texture) : Entity{
+        return this.entity {
+            with<SpriteComponent>{
+                setTexture(backgroundTexture, Vector2(0f, 0f))
+            }
+            with<PositionComponent>()
         }
     }
 }
