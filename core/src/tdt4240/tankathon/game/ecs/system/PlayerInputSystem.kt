@@ -89,18 +89,17 @@ class PlayerInputSystem(
         /* TODO: How to fetch these values from entities? */
         val height = backgroundTexture.height * UNIT_SCALE
         val width = backgroundTexture.width * UNIT_SCALE
-        val playerHeight = playerTexture.height * UNIT_SCALE
-        val playerWidth = playerTexture.width * UNIT_SCALE
+        val playerSize = playerTexture.width * UNIT_SCALE
 
         val nextPos = position.position.cpy().add(velocity.getVelocity().scl(deltaTime))
         /* x-direction */
         if (nextPos.x > threshold &&
-                nextPos.x < width - playerWidth - threshold){
+                nextPos.x < width - playerSize - threshold){
             position.position.x = nextPos.x
         }
         /* y-direction */
         if (nextPos.y > threshold &&
-                nextPos.y < height - playerHeight - threshold){
+                nextPos.y < height - playerSize - threshold){
             position.position.y = nextPos.y
         }
     }
