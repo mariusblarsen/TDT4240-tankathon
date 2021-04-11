@@ -10,6 +10,7 @@ import ktx.graphics.use
 import ktx.log.Logger
 import ktx.log.error
 import ktx.log.logger
+import tdt4240.tankathon.game.ecs.component.PositionComponent
 import tdt4240.tankathon.game.ecs.component.SpriteComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent
 
@@ -19,7 +20,7 @@ class RenderSystem(
         private val batch: Batch,
         private val gameViewport: Viewport,
         ): SortedIteratingSystem(
-        allOf(TransformComponent::class, SpriteComponent::class).get(),
+        allOf(TransformComponent::class, SpriteComponent::class, PositionComponent::class).get(),
         compareBy { entity -> entity[SpriteComponent.mapper]}
 ){
 
@@ -35,6 +36,8 @@ class RenderSystem(
         require(transformComponent != null){ "Entity |entity| must have a TransformComponent. entity=$entity"}
         val spriteComponent = entity[SpriteComponent.mapper]
         require(spriteComponent != null){ "Entity |entity| must have a SpriteComponent. entity=$entity"}
+        val position = entity[PositionComponent.mapper]
+        require(position != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
 
         if (spriteComponent.sprite.texture == null){
             LOG.error{ "Entity has no texture for rendering. entity=$entity" }
@@ -44,11 +47,7 @@ class RenderSystem(
         /* Render method */
         spriteComponent.sprite.run{
             rotation = transformComponent.rotationDeg
-            setBounds(
-                    transformComponent.position.x,
-                    transformComponent.position.y,
-                    transformComponent.size.x,
-                    transformComponent.size.y)
+            setPosition(position.position.x, position.position.y)
             draw(batch)
         }
     }
