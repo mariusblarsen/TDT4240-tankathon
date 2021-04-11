@@ -47,11 +47,7 @@ class RenderSystem(
         /* Render method */
         spriteComponent.sprite.run{
             rotation = transformComponent.rotationDeg
-            setBounds(
-                    position.position.x,
-                    position.position.y,
-                    transformComponent.size.x,
-                    transformComponent.size.y)
+            setPosition(position.position.x, position.position.y)
             draw(batch)
         }
     }
