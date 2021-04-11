@@ -15,12 +15,13 @@ import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
 import tdt4240.tankathon.game.ecs.component.PositionComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent
+import tdt4240.tankathon.game.ecs.component.VelocityComponent
 
 class PlayerInputSystem(
         private val gameViewport: Viewport,
         private val engine: ECSengine)
     : IteratingSystem(
-        allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class).get()
+        allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class, VelocityComponent::class).get()
 ){
     private val inputVec = Vector2()
     private val screenWidth = Gdx.graphics.width
@@ -32,6 +33,8 @@ class PlayerInputSystem(
         require(player != null){ "Entity |entity| must have a PlayerComponent. entity=$entity"}
         val position = entity[PositionComponent.mapper]
         require(position != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
+        val velocityComponent = entity[VelocityComponent.mapper]
+        require(velocityComponent != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
         /* Handle input */
         /* Aiming */
@@ -40,8 +43,10 @@ class PlayerInputSystem(
             inputVec.y = Gdx.input.y.toFloat()
 
             gameViewport.unproject(inputVec)
-            setRotation(inputVec, transform)
-            engine.addBullet(bulletTexture, position.position)  // TODO (Marius): Move? Not sure where
+            val bulletPosition = Vector3(Gdx.graphics.width/2f, Gdx.graphics.height/2f, 0f)
+            gameViewport.unproject(bulletPosition)
+            val direction = setRotation(inputVec, transform)
+            engine.addBullet(bulletTexture, bulletPosition, direction)  // TODO (Marius): Move? Not sure where
         }
 
         /* Handle input */
@@ -51,33 +56,31 @@ class PlayerInputSystem(
             inputVec.y = Gdx.input.y.toFloat()
 
             gameViewport.unproject(inputVec)
-            setVelocityDirection(inputVec, transform, position, deltaTime)
+            setVelocityDirection(inputVec, velocityComponent, position, deltaTime)
         }
         /* Move camera */
         gameViewport.camera.position.set(position.position)
     }
 
 
-    private fun setRotation(input: Vector2, transform: TransformComponent){
+    private fun setRotation(input: Vector2, transform: TransformComponent): Vector2{
         /* Receives an Vector 2 representing the position of a touch.
         * Calculates the vector from center of right side of screen,
         * and sets the rotationDeg = angle of vector*/
         val joyStick = Vector2(Gdx.graphics.width *3f/4f, Gdx.graphics.height /2f)
         gameViewport.unproject(joyStick)
-        transform.rotationDeg = Vector2(input.x - joyStick.x, input.y - joyStick.y).angleDeg()-90
 
+        val direction = Vector2(input.x - joyStick.x, input.y - joyStick.y)
+        val rotation = direction.angleDeg()-90
+        transform.rotationDeg = rotation
+        return direction
     }
-    private fun setVelocityDirection(input: Vector2, transform: TransformComponent,
-                                     position: PositionComponent, deltaTime: Float){ // TODO (Marius): Add velocity component
+    private fun setVelocityDirection(input: Vector2, velocity: VelocityComponent,
+                                     position: PositionComponent, deltaTime: Float){
         val joyStick = Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
-
-
         gameViewport.unproject(joyStick)
-        val velocity = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor().scl(transform.speed)
-        position.position.add(velocity.scl(deltaTime))
-        Gdx.app.log("#input", input.toString());
-        Gdx.app.log("#tankPost", transform.position.toString());
-
+        velocity.direction = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f)
+        position.position.add(velocity.getVelocity().scl(deltaTime))
     }
 }
 
