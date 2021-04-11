@@ -22,12 +22,7 @@ class ECSengine: PooledEngine() {
 
     fun createPlayer(spawnPosition: Vector2, playerTexture: Texture): Entity {
         var player: Entity = this.entity{
-            with<TransformComponent>{
-            position.x = V_WIDTH*0.5f
-            position.y = V_HEIGHT*0.5f
-            size.x = playerTexture.width * UNIT_SCALE
-            size.y = playerTexture.height * UNIT_SCALE
-        }
+            with<TransformComponent> ()
             with<SpriteComponent>{
                 sprite.run{
                     setRegion(playerTexture)
@@ -37,7 +32,9 @@ class ECSengine: PooledEngine() {
             }
             with<PlayerComponent>()
 
-            with<VelocityComponent>()
+            with<VelocityComponent>{
+                speed = 2f
+            }
             with<PositionComponent>{
                 position.x = V_WIDTH*0.5f
                 position.y = V_HEIGHT*0.5f
@@ -91,22 +88,24 @@ class ECSengine: PooledEngine() {
     /* Adds a bullet with texture, spawn point and velocity */
     fun addBullet(
             texture: Texture,
-            spawnPosition: Vector3
+            spawnPosition: Vector3,
+            fireDirection: Vector2,
     ): Entity {
 
         return entity {
             with<SpriteComponent> {
-                setTexture(texture, spawnPosition)
+                setTexture(texture, Vector3(0f, 0f, 0f))
             }
             with<TransformComponent>  {
-                position = spawnPosition
+                rotationDeg = fireDirection.angleDeg()-90
             }
             with<BulletComponent>()
-            with<VelocityComponent>() {
-                speed = 0.2f
+            with<VelocityComponent> {
+                direction = Vector3(fireDirection, 0f)
+                speed = 9f
             }
-            with<PositionComponent>() {
-                spawnPosition
+            with<PositionComponent> {
+                position = spawnPosition
             }
         }
     }
