@@ -34,8 +34,7 @@ class FireSystem() : IteratingSystem(
 
         //position.position.x += velocity.speed
         //position.position.y += velocity.speed
-
-
     }
+
 }
 

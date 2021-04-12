@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.MathUtils.*
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -44,7 +45,7 @@ class PlayerInputSystem(
 
             gameViewport.unproject(inputVec)
             setRotation(inputVec, transform)
-            engine.addBullet(bulletTexture, position.position)  // TODO (Marius): Move? Not sure where
+            engine.addBullet(bulletTexture, position.position, Vector3(cosDeg(transform.rotationDeg+90), sinDeg(transform.rotationDeg+90),0f))  // TODO (Marius): Move? Not sure where
         }
 
         /* Handle input */

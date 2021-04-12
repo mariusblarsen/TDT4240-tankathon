@@ -85,7 +85,8 @@ class ECSengine: PooledEngine() {
     /* Adds a bullet with texture, spawn point and velocity */
     fun addBullet(
             texture: Texture,
-            spawnPosition: Vector3
+            spawnPosition: Vector3,
+            fireDirection: Vector3
     ): Entity {
 
         return entity {
@@ -93,14 +94,15 @@ class ECSengine: PooledEngine() {
                 setTexture(texture, spawnPosition)
             }
             with<TransformComponent>  {
-                position = spawnPosition
+                //position = spawnPosition
             }
             with<BulletComponent>()
             with<VelocityComponent>() {
-                speed = 0.2f
+                direction.set(fireDirection)
+                speed = 4f
             }
             with<PositionComponent>() {
-                spawnPosition
+                position.set(spawnPosition)
             }
         }
     }

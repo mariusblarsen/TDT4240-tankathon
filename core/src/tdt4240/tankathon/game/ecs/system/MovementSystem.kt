@@ -15,12 +15,12 @@ class MovementSystem() : IteratingSystem(
         allOf(PositionComponent::class, VelocityComponent::class).get()
 ){
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val positon = entity[PositionComponent.mapper]
-        require(positon != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
+        val position = entity[PositionComponent.mapper]
+        require(position != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
         val velocity = entity[VelocityComponent.mapper]
         require(velocity != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
-        positon.position.x+=velocity.direction.x*velocity.speed*deltaTime
-        positon.position.y+=velocity.direction.y*velocity.speed*deltaTime
+        position.position.x+=velocity.direction.x*velocity.speed*deltaTime
+        position.position.y+=velocity.direction.y*velocity.speed*deltaTime
     }
 }
