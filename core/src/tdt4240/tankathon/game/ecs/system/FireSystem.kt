@@ -32,8 +32,8 @@ class FireSystem() : IteratingSystem(
         val sprite = entity[SpriteComponent.mapper]
         require(sprite != null){ "Entity |entity| must have a SpriteComponent. entity=$entity"}
 
-        position.position.x += velocity.speed
-        position.position.y += velocity.speed
+        //position.position.x += velocity.speed
+        //position.position.y += velocity.speed
 
 
     }

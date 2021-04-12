@@ -32,12 +32,9 @@ class AIsystem() : IteratingSystem(
                 velocity.direction.x=enemyPosition.position.x-position.position.x
                 velocity.direction.y=enemyPosition.position.y-position.position.y
                 velocity.direction.nor()
-                Gdx.app.log("#pos", position.position.toString());
-                Gdx.app.log("#vel", velocity.direction.toString());
-                Gdx.app.log("#Speed", velocity.speed.toString());
+
             }
         }
-        position.position.add(velocity.direction.scl(velocity.speed * deltaTime))
 
 
 

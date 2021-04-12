@@ -78,7 +78,6 @@ class PlayerInputSystem(
 
         gameViewport.unproject(joyStick)
         velocity.direction.set(input.x - joyStick.x, input.y - joyStick.y,0f).nor()
-        position.position.add(velocity.direction.scl(velocity.speed).scl(deltaTime))
     }
 }
 
