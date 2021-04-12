@@ -49,6 +49,10 @@ class ECSengine: PooledEngine() {
           with<HealthComponent>(){
               health = 3f
           }
+          with<CanonComponent>(){
+              fireRate=4f
+              timer =0.0
+          }
         }
     }
     fun createNPC(spawnPosition: Vector2, texture: Texture,  enemiesIn: List<Entity>) : Entity {

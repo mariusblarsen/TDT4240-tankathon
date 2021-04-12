@@ -30,11 +30,11 @@ class TankathonGame : KtxGame<AbstractScreen>() {
     val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
     val engine: ECSengine by lazy {
         ECSengine().apply{
-            addSystem(PlayerInputSystem(gameViewport, this))
+            addSystem(FireSystem(this))
+            addSystem(PlayerInputSystem(gameViewport, this, FireSystem(this)))
             addSystem(RenderSystem(
                     batch,
                     gameViewport))
-            addSystem(FireSystem())
             addSystem(AIsystem())
             addSystem(MovementSystem())
         }

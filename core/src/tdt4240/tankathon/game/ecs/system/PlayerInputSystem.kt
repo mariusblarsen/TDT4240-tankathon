@@ -13,14 +13,12 @@ import ktx.ashley.get
 import tdt4240.tankathon.game.V_HEIGHT
 import tdt4240.tankathon.game.V_WIDTH
 import tdt4240.tankathon.game.ecs.ECSengine
-import tdt4240.tankathon.game.ecs.component.PlayerComponent
-import tdt4240.tankathon.game.ecs.component.PositionComponent
-import tdt4240.tankathon.game.ecs.component.TransformComponent
-import tdt4240.tankathon.game.ecs.component.VelocityComponent
+import tdt4240.tankathon.game.ecs.component.*
 
 class PlayerInputSystem(
         private val gameViewport: Viewport,
-        private val engine: ECSengine)
+        private val engine: ECSengine,
+        private val fireSystem: FireSystem)
     : IteratingSystem(
         allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class).get()
 ){
@@ -36,6 +34,10 @@ class PlayerInputSystem(
         require(position != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
         val velocity = entity[VelocityComponent.mapper]
         require(velocity != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
+        val canon = entity[CanonComponent.mapper]
+        require(canon != null){ "Entity |entity| must have a CanonComponent. entity=$entity"}
+        //Gdx.app.log("#INFO", canon.timer.toString());
+
 
         /* Handle input */
         /* Aiming */
@@ -45,7 +47,7 @@ class PlayerInputSystem(
 
             gameViewport.unproject(inputVec)
             setRotation(inputVec, transform)
-            engine.addBullet(bulletTexture, position.position, Vector3(cosDeg(transform.rotationDeg+90), sinDeg(transform.rotationDeg+90),0f))  // TODO (Marius): Move? Not sure where
+            fireSystem.fire(position.position, canon, transform.rotationDeg)
         }
 
         /* Handle input */
