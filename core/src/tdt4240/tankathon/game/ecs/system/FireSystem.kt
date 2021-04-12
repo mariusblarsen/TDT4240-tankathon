@@ -5,18 +5,25 @@ import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import ktx.ashley.allOf
 import ktx.ashley.get
+import ktx.log.Logger
+import ktx.log.info
+import ktx.log.logger
+import tdt4240.tankathon.game.TankathonGame
 
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
 
 private var bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
+private val LOG: Logger = logger<FireSystem>()
+
 class FireSystem(private val engine: ECSengine)
  : IteratingSystem(
         allOf(BulletComponent::class, VelocityComponent::class, SpriteComponent::class,
-                PositionComponent::class, TransformComponent::class, CanonComponent::class).get()
+                PositionComponent::class, TransformComponent::class).get()
 ){
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val bullet = entity[BulletComponent.mapper]
@@ -31,25 +38,12 @@ class FireSystem(private val engine: ECSengine)
         val sprite = entity[SpriteComponent.mapper]
         require(sprite != null){ "Entity |entity| must have a SpriteComponent. entity=$entity"}
 
-        val canon = entity[CanonComponent.mapper]
-        require(canon != null){ "Entity |entity| must have a CanonComponent. entity=$entity"}
+        //val canon = entity[CanonComponent.mapper]
+        //require(canon != null){ "Entity |entity| must have a CanonComponent. entity=$entity"}
 
-        position.position.add(velocity.getVelocity().scl(deltaTime))
-
-
-        canon.timer -= deltaTime
+        //position.position.add(velocity.getVelocity().scl(deltaTime))
+        //canon.timer -= deltaTime
 
     }
-
-
-    public fun fire(gunnerPosition: Vector3, canon: CanonComponent, gunOrientation: Float){
-        if (canon.timer>0){
-            return
-        }
-        engine.addBullet(bulletTexture, gunnerPosition, Vector3(MathUtils.cosDeg(gunOrientation + 90), MathUtils.sinDeg(gunOrientation + 90), 0f))
-            canon.amunition-=1
-            canon.timer=canon.fireRate.toDouble()
-    }
-
 }
 

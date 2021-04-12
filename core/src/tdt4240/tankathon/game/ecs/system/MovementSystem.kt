@@ -20,6 +20,7 @@ class MovementSystem() : IteratingSystem(
         val velocity = entity[VelocityComponent.mapper]
         require(velocity != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
+
         position.position.x+=velocity.direction.x*velocity.speed*deltaTime
         position.position.y+=velocity.direction.y*velocity.speed*deltaTime
     }
