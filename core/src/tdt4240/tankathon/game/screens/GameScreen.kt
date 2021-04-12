@@ -16,13 +16,14 @@ import tdt4240.tankathon.game.ecs.component.PositionComponent
 
 import tdt4240.tankathon.game.ecs.component.SpriteComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent
+import javax.swing.text.html.parser.Entity
 
 private val LOG = logger<GameScreen>()
 
 class GameScreen(game: TankathonGame) : AbstractScreen(game){
     private val playerTexture = Texture(Gdx.files.internal("tank.png"))
     private val backgroundTexture = Texture(Gdx.files.internal("map.png"))
-    private val NPCTexture = Texture(Gdx.files.internal("tank.png"))
+    private val NPCTexture = Texture(Gdx.files.internal("tank.png"))//TODO add suitable texture for NPC
 
     private val background = engine.entity {
         with<TransformComponent>{
@@ -42,26 +43,8 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
         }
     }
     private val player = engine.createPlayer(Vector2(V_WIDTH/2f, V_HEIGHT/2f), playerTexture)
-    /*
-            engine.entity {
-        with<TransformComponent>{
-            position.x = V_WIDTH*0.5f
-            position.y = V_HEIGHT*0.5f
-            size.x = playerTexture.width * UNIT_SCALE
-            size.y = playerTexture.height * UNIT_SCALE
-        }
-        with<SpriteComponent>{
-            sprite.run{
-                setRegion(playerTexture)
-                setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
-                setOrigin(width/2, height/4)
-            }
-        }
-        with<PlayerComponent>()
-    }
 
-*/
-    private val NPC = engine.createNPC(Vector2(0f,0f), NPCTexture)
+    private val NPC = engine.createNPC(Vector2(10f,0f), NPCTexture, listOf(player))
     override fun show() {
         LOG.info { "Game Screen" }
     }

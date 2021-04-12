@@ -11,6 +11,7 @@ import ktx.log.Logger
 import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.ecs.ECSengine
+import tdt4240.tankathon.game.ecs.system.AIsystem
 import tdt4240.tankathon.game.ecs.system.FireSystem
 import tdt4240.tankathon.game.ecs.system.PlayerInputSystem
 import tdt4240.tankathon.game.ecs.system.RenderSystem
@@ -37,6 +38,7 @@ class TankathonGame : KtxGame<AbstractScreen>() {
                     batch,
                     gameViewport))
             addSystem(FireSystem())
+            addSystem(AIsystem())
         }
     }
     override fun create() {

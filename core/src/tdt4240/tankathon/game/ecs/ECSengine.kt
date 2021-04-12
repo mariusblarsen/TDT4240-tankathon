@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import ktx.ashley.entity
 import ktx.ashley.with
+import sun.corba.EncapsInputStreamFactory
 import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.V_HEIGHT
 import tdt4240.tankathon.game.V_WIDTH
@@ -21,7 +22,7 @@ class ECSengine: PooledEngine() {
     // TODO: Initialize Box2D world
 
     fun createPlayer(spawnPosition: Vector2, playerTexture: Texture): Entity {
-        var player: Entity = this.entity{
+      return entity{
             with<TransformComponent>{
             position.x = V_WIDTH*0.5f
             position.y = V_HEIGHT*0.5f
@@ -37,47 +38,25 @@ class ECSengine: PooledEngine() {
             }
             with<PlayerComponent>()
 
-            with<VelocityComponent>()
+            with<VelocityComponent>{
+                direction.set(0f,0f,0f)
+                speed = 2f
+            }
             with<PositionComponent>{
                 position.x = V_WIDTH*0.5f
                 position.y = V_HEIGHT*0.5f
             }
-
+          with<HealthComponent>(){
+              health = 3f
+          }
         }
-
-        val position: Vector2 = spawnPosition
-/*
-        /* Add player component to player */
-        entity.add(createComponent(PlayerComponent::class.java))
-
-
-        /* Add box2D physics to the player */
-        //entity.add(createComponent(PhysicsComponent::class.java))
-
-        /* Add Health to player */
-        entity.add(createComponent(HealthComponent::class.java))
-
-        /* Add Movement to player */
-        // TODO: add MovementComponent
-        entity.add(createComponent(TransformComponent::class.java))
-
-        /* Add Sprite to player */
-        entity.add(createComponent(SpriteComponent::class.java))
-
- */
-    return player
-
-
     }
-    fun createNPC(spawnPosition: Vector2, texture: Texture) {
-        val entity: Entity = this.entity() {
+    fun createNPC(spawnPosition: Vector2, texture: Texture,  enemiesIn: List<Entity>) : Entity {
+        return entity {
             with<TransformComponent> {
                 position.x = spawnPosition.x
                 position.y = spawnPosition.y
 
-                speed=1f
-                direction.x= 1f
-                direction.y = 1f
                 size.x = texture.width * tdt4240.tankathon.game.UNIT_SCALE
                 size.y = texture.height * tdt4240.tankathon.game.UNIT_SCALE
             }
@@ -88,19 +67,18 @@ class ECSengine: PooledEngine() {
                     setOrigin(width / 2, height / 4)
                 }
             }
-            with<AIComponent>()
+            with<AIComponent>{
+                enemies = enemiesIn
+            }
 
             with<VelocityComponent>{
-                direction.x=1f
-                direction.y=0f
+                direction.set(1f, 1f,0f)
                 speed = 1f
             }
             with<PositionComponent> {
                 position.x = spawnPosition.x
                 position.y = spawnPosition.y
             }
-
-
         }
     }
 

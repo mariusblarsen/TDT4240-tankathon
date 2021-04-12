@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Pool
 import ktx.ashley.mapperFor
 
 class PositionComponent : Component, Pool.Poolable{
-    var position = Vector3(0f,0f, 0f)
+    val position = Vector3(0f,0f, 0f)
 
     override fun reset() {
         position.set(Vector3.Zero)

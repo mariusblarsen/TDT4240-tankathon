@@ -15,6 +15,7 @@ import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
 import tdt4240.tankathon.game.ecs.component.PositionComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent
+import tdt4240.tankathon.game.ecs.component.VelocityComponent
 
 class PlayerInputSystem(
         private val gameViewport: Viewport,
@@ -32,6 +33,8 @@ class PlayerInputSystem(
         require(player != null){ "Entity |entity| must have a PlayerComponent. entity=$entity"}
         val position = entity[PositionComponent.mapper]
         require(position != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
+        val velocity = entity[VelocityComponent.mapper]
+        require(velocity != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
         /* Handle input */
         /* Aiming */
@@ -51,7 +54,7 @@ class PlayerInputSystem(
             inputVec.y = Gdx.input.y.toFloat()
 
             gameViewport.unproject(inputVec)
-            setVelocityDirection(inputVec, transform, position, deltaTime)
+            setVelocityDirection(inputVec, velocity, position, deltaTime)
         }
         /* Move camera */
         gameViewport.camera.position.set(position.position)
@@ -66,18 +69,16 @@ class PlayerInputSystem(
         gameViewport.unproject(joyStick)
         transform.rotationDeg = Vector2(input.x - joyStick.x, input.y - joyStick.y).angleDeg()-90
 
+
     }
-    private fun setVelocityDirection(input: Vector2, transform: TransformComponent,
+    private fun setVelocityDirection(input: Vector2, velocity: VelocityComponent,
                                      position: PositionComponent, deltaTime: Float){ // TODO (Marius): Add velocity component
         val joyStick = Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
 
 
         gameViewport.unproject(joyStick)
-        val velocity = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor().scl(transform.speed)
-        position.position.add(velocity.scl(deltaTime))
-        Gdx.app.log("#input", input.toString());
-        Gdx.app.log("#tankPost", transform.position.toString());
-
+        velocity.direction.set(input.x - joyStick.x, input.y - joyStick.y,0f).nor()
+        position.position.add(velocity.direction.scl(velocity.speed).scl(deltaTime))
     }
 }
 
