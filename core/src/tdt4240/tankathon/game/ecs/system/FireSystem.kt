@@ -18,7 +18,6 @@ class FireSystem(private val engine: ECSengine)
         allOf(BulletComponent::class, VelocityComponent::class, SpriteComponent::class,
                 PositionComponent::class, TransformComponent::class, CanonComponent::class).get()
 ){
-    private val bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val bullet = entity[BulletComponent.mapper]
         require(bullet != null){ "Entity |entity| must have a BulletComponent. entity=$entity"}
@@ -34,7 +33,9 @@ class FireSystem(private val engine: ECSengine)
 
         val canon = entity[CanonComponent.mapper]
         require(canon != null){ "Entity |entity| must have a CanonComponent. entity=$entity"}
-        Gdx.app.log("#INFO", canon.timer.toString());
+
+        position.position.add(velocity.getVelocity().scl(deltaTime))
+
 
         canon.timer -= deltaTime
 

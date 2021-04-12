@@ -16,6 +16,10 @@ class VelocityComponent : Component, Pool.Poolable{
         speed = 1f
     }
 
+    fun getVelocity():Vector3{
+        return direction.nor().scl(speed)
+    }
+
     companion object{
         val mapper:ComponentMapper<VelocityComponent> = mapperFor<VelocityComponent>()
     }

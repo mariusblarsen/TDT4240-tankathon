@@ -19,16 +19,9 @@ import tdt4240.tankathon.game.ecs.component.*
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
 * */
 class ECSengine: PooledEngine() {
-    // TODO: Initialize Box2D world
-
-    fun createPlayer(spawnPosition: Vector2, playerTexture: Texture): Entity {
-      return entity{
-            with<TransformComponent>{
-            position.x = V_WIDTH*0.5f
-            position.y = V_HEIGHT*0.5f
-            size.x = playerTexture.width * UNIT_SCALE
-            size.y = playerTexture.height * UNIT_SCALE
-        }
+    fun createPlayer(playerTexture: Texture): Entity {
+        return this.entity{
+            with<TransformComponent> ()
             with<SpriteComponent>{
                 sprite.run{
                     setRegion(playerTexture)
@@ -37,9 +30,7 @@ class ECSengine: PooledEngine() {
                 }
             }
             with<PlayerComponent>()
-
             with<VelocityComponent>{
-                direction.set(0f,0f,0f)
                 speed = 2f
             }
             with<PositionComponent>{
@@ -90,24 +81,32 @@ class ECSengine: PooledEngine() {
     fun addBullet(
             texture: Texture,
             spawnPosition: Vector3,
-            fireDirection: Vector3
+            fireDirection: Vector2,
     ): Entity {
 
-        return entity {
+        return this.entity {
             with<SpriteComponent> {
-                setTexture(texture, spawnPosition)
+                setTexture(texture, Vector2(0f, 0f))
             }
             with<TransformComponent>  {
-                //position = spawnPosition
+                rotationDeg = fireDirection.angleDeg()-90
             }
             with<BulletComponent>()
-            with<VelocityComponent>() {
-                direction.set(fireDirection)
-                speed = 4f
+            with<VelocityComponent> {
+                direction = Vector3(fireDirection, 0f)
+                speed = 9f
             }
-            with<PositionComponent>() {
-                position.set(spawnPosition)
+            with<PositionComponent> {
+                position = spawnPosition
             }
+        }
+    }
+    fun setBackground(backgroundTexture: Texture) : Entity{
+        return this.entity {
+            with<SpriteComponent>{
+                setTexture(backgroundTexture, Vector2(0f, 0f))
+            }
+            with<PositionComponent>()
         }
     }
 }

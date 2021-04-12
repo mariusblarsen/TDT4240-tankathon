@@ -16,7 +16,6 @@ class SpriteComponent: Component, Pool.Poolable, Comparable<SpriteComponent> {
 
     override fun reset() {
         sprite.texture = null
-        sprite.setColor(1f, 1f, 1f, 1f)
     }
 
     override fun compareTo(other: SpriteComponent): Int {
@@ -30,13 +29,6 @@ class SpriteComponent: Component, Pool.Poolable, Comparable<SpriteComponent> {
 
     //TODO(Marius) two methods with same name
     fun setTexture(texture: Texture, origin: Vector2){
-        sprite.run{
-            setRegion(texture)
-            setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
-            setOrigin(origin.x, origin.y)
-        }
-    }
-    fun setTexture(texture: Texture, origin: Vector3){
         sprite.run{
             setRegion(texture)
             setSize(texture.width * UNIT_SCALE, texture.height* UNIT_SCALE)
