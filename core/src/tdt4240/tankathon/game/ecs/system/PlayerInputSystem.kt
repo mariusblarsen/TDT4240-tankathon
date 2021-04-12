@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.MathUtils.*
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -11,16 +12,20 @@ import ktx.ashley.allOf
 import ktx.ashley.get
 import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.ecs.ECSengine
+import tdt4240.tankathon.game.ecs.component.*
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
 import tdt4240.tankathon.game.ecs.component.PositionComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent
 import tdt4240.tankathon.game.ecs.component.VelocityComponent
 
+
 class PlayerInputSystem(
         private val gameViewport: Viewport,
-        private val engine: ECSengine)
+        private val engine: ECSengine,
+        private val fireSystem: FireSystem)
     : IteratingSystem(
-        allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class, VelocityComponent::class).get()
+        allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class,
+                CanonComponent::class, VelocityComponent::class).get()
 ){
     private val inputVec = Vector2()
     private val screenWidth = Gdx.graphics.width
@@ -36,6 +41,9 @@ class PlayerInputSystem(
         require(player != null){ "Entity |entity| must have a PlayerComponent. entity=$entity"}
         val position = entity[PositionComponent.mapper]
         require(position != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
+        val canon = entity[CanonComponent.mapper]
+        require(canon != null){ "Entity |entity| must have a CanonComponent. entity=$entity"}
+
         val velocityComponent = entity[VelocityComponent.mapper]
         require(velocityComponent != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
@@ -46,20 +54,25 @@ class PlayerInputSystem(
             inputVec.y = Gdx.input.y.toFloat()
 
             gameViewport.unproject(inputVec)
+            setRotation(inputVec, transform)
+            canon.timer -= deltaTime
             val bulletPosition = Vector3(Gdx.graphics.width/2f, Gdx.graphics.height/2f, 0f)
             gameViewport.unproject(bulletPosition)
-            val direction = setRotation(inputVec, transform)
-            engine.addBullet(bulletTexture, bulletPosition, direction)  // TODO (Marius): Move? Not sure where
-        }
+            val direction = setRotation(inputVec, transform).nor()
+            if (canon.timer < 0){
+                canon.timer = canon.fireRate
+                engine.addBullet(bulletTexture, bulletPosition, direction)  // TODO (Marius): Move? Not sure where
+            }
 
-        /* Handle input */
+        }
         /* Control tank */
         if (Gdx.input.x < screenWidth / 2) {
             inputVec.x = Gdx.input.x.toFloat()
             inputVec.y = Gdx.input.y.toFloat()
-
             gameViewport.unproject(inputVec)
             setVelocityDirection(inputVec, velocityComponent, position, deltaTime)
+        } else {
+            velocityComponent.direction.set(0f, 0f, 0f)
         }
         /* Move camera */
         gameViewport.camera.position.set(position.position)
@@ -72,7 +85,6 @@ class PlayerInputSystem(
         * and sets the rotationDeg = angle of vector*/
         val joyStick = Vector2(Gdx.graphics.width *3f/4f, Gdx.graphics.height /2f)
         gameViewport.unproject(joyStick)
-
         val direction = Vector2(input.x - joyStick.x, input.y - joyStick.y)
         val rotation = direction.angleDeg()-90
         transform.rotationDeg = rotation
@@ -82,9 +94,9 @@ class PlayerInputSystem(
                                      position: PositionComponent, deltaTime: Float){
         val joyStick = Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
         gameViewport.unproject(joyStick)
-        velocity.direction = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f)
+        velocity.direction = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor()
 
-
+        /* TODO: Move to collison-system
         /* Check for map-boundaries */
         /* TODO: How to fetch these values from entities? */
         val height = backgroundTexture.height * UNIT_SCALE
@@ -102,6 +114,7 @@ class PlayerInputSystem(
                 nextPos.y < height - playerSize - threshold){
             position.position.y = nextPos.y
         }
+        */
     }
 }
 

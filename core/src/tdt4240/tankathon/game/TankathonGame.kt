@@ -11,9 +11,7 @@ import ktx.log.Logger
 import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.ecs.ECSengine
-import tdt4240.tankathon.game.ecs.system.FireSystem
-import tdt4240.tankathon.game.ecs.system.PlayerInputSystem
-import tdt4240.tankathon.game.ecs.system.RenderSystem
+import tdt4240.tankathon.game.ecs.system.*
 import tdt4240.tankathon.game.screens.AbstractScreen
 import tdt4240.tankathon.game.screens.GameScreen
 import tdt4240.tankathon.game.screens.MenuScreen
@@ -32,11 +30,13 @@ class TankathonGame : KtxGame<AbstractScreen>() {
     val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
     val engine: ECSengine by lazy {
         ECSengine().apply{
-            addSystem(PlayerInputSystem(gameViewport, this))
+            addSystem(FireSystem(this))
+            addSystem(PlayerInputSystem(gameViewport, this, FireSystem(this)))
             addSystem(RenderSystem(
                     batch,
                     gameViewport))
-            addSystem(FireSystem())
+            addSystem(AIsystem())
+            addSystem(MovementSystem())
         }
     }
     override fun create() {
