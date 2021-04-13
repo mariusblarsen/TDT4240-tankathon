@@ -3,14 +3,15 @@ package tdt4240.tankathon.game.ecs
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.maps.objects.PolylineMapObject
+import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.math.Polyline
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import ktx.ashley.entity
 import ktx.ashley.with
-import sun.corba.EncapsInputStreamFactory
-import tdt4240.tankathon.game.UNIT_SCALE
-import tdt4240.tankathon.game.V_HEIGHT
-import tdt4240.tankathon.game.V_WIDTH
+import tdt4240.tankathon.game.*
 import tdt4240.tankathon.game.ecs.component.*
 
 
@@ -19,7 +20,7 @@ import tdt4240.tankathon.game.ecs.component.*
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
 * */
 class ECSengine: PooledEngine() {
-    fun createPlayer(playerTexture: Texture): Entity {
+    fun createPlayer(playerTexture: Texture, spawnPoint: Vector2): Entity {
         return this.entity{
             with<TransformComponent> ()
             with<SpriteComponent>{
@@ -34,13 +35,13 @@ class ECSengine: PooledEngine() {
                 speed = 2f
             }
             with<PositionComponent>{
-                position.x = V_WIDTH*0.5f
-                position.y = V_HEIGHT*0.5f
+                position.x = spawnPoint.x* MAP_SCALE
+                position.y = spawnPoint.y* MAP_SCALE
             }
-          with<HealthComponent>(){
-              health = 3f
-          }
-          with<CanonComponent>()
+            with<HealthComponent>{
+                health = 3f
+            }
+            with<CanonComponent>()
         }
     }
     fun createNPC(spawnPosition: Vector2, texture: Texture,  enemiesIn: List<Entity>) : Entity {
@@ -68,8 +69,8 @@ class ECSengine: PooledEngine() {
                 speed = 1f
             }
             with<PositionComponent> {
-                position.x = spawnPosition.x
-                position.y = spawnPosition.y
+                position.x = spawnPosition.x * MAP_SCALE
+                position.y = spawnPosition.y * MAP_SCALE
             }
         }
     }
@@ -104,6 +105,44 @@ class ECSengine: PooledEngine() {
                 setTexture(backgroundTexture, Vector2(0f, 0f))
             }
             with<PositionComponent>()
+        }
+    }
+
+    fun addMapObject(mapObject: Rectangle): Entity{
+        val corners = FloatArray(10)
+        // Bottom left
+        corners[0] = 0f
+        corners[1] = 0f
+
+        // Top left
+        corners[2] = 0f
+        corners[3] = mapObject.height * MAP_SCALE
+
+        // Top right
+        corners[4] = mapObject.width * MAP_SCALE
+        corners[5] = mapObject.height * MAP_SCALE
+
+        // Bottom right
+        corners[6] = mapObject.width * MAP_SCALE
+        corners[7] = 0f
+
+        // Bottom left (again)
+        corners[8] = 0f
+        corners[9] = 0f
+
+        return this.entity{
+            with<MapObjectComponent>{
+                startPosition = Vector2(mapObject.x, mapObject.y)
+                vertices = corners
+            }
+        }
+    }
+    fun addMapObject(mapObject: Polyline): Entity{
+        return this.entity{
+            with<MapObjectComponent>{
+                startPosition = Vector2(mapObject.x * MAP_SCALE, mapObject.y * MAP_SCALE)
+                vertices = mapObject.vertices
+            }
         }
     }
 }
