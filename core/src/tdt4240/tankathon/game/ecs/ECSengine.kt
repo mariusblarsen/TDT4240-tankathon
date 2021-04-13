@@ -11,10 +11,14 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import ktx.ashley.entity
 import ktx.ashley.with
+import ktx.log.Logger
+import ktx.log.info
+import ktx.log.logger
 import tdt4240.tankathon.game.*
 import tdt4240.tankathon.game.ecs.component.*
+import tdt4240.tankathon.game.ecs.system.MovementSystem
 
-
+private val LOG: Logger = logger<ECSengine>()
 /* PooledEngine
 *
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
@@ -32,7 +36,7 @@ class ECSengine: PooledEngine() {
             }
             with<PlayerComponent>()
             with<VelocityComponent>{
-                speed = 2f
+                speed = 2*3f
             }
             with<PositionComponent>{
                 position.x = spawnPoint.x* MAP_SCALE
@@ -42,21 +46,19 @@ class ECSengine: PooledEngine() {
                 health = 3f
             }
             with<CanonComponent>()
+            with<PhysicsComponent>{
+                width = playerTexture.width * UNIT_SCALE
+                height = playerTexture.width * UNIT_SCALE  // To make it quadratic
+            }
         }
     }
     fun createNPC(spawnPosition: Vector2, texture: Texture,  enemiesIn: List<Entity>) : Entity {
         return entity {
-            with<TransformComponent> {
-                position.x = spawnPosition.x
-                position.y = spawnPosition.y
-
-                size.x = texture.width * tdt4240.tankathon.game.UNIT_SCALE
-                size.y = texture.height * tdt4240.tankathon.game.UNIT_SCALE
-            }
+            with<TransformComponent> ()
             with<SpriteComponent> {
                 sprite.run {
                     setRegion(texture)
-                    setSize(texture.width * tdt4240.tankathon.game.UNIT_SCALE, texture.height * tdt4240.tankathon.game.UNIT_SCALE)
+                    setSize(texture.width * UNIT_SCALE, texture.height * UNIT_SCALE)
                     setOrigin(width / 2, height / 4)
                 }
             }
@@ -65,12 +67,15 @@ class ECSengine: PooledEngine() {
             }
 
             with<VelocityComponent>{
-                direction.set(1f, 1f,0f)
                 speed = 1f
             }
             with<PositionComponent> {
                 position.x = spawnPosition.x * MAP_SCALE
                 position.y = spawnPosition.y * MAP_SCALE
+            }
+            with<PhysicsComponent>{
+                width = texture.width * UNIT_SCALE
+                height = texture.width * UNIT_SCALE  // To make it quadratic
             }
         }
     }
@@ -81,7 +86,6 @@ class ECSengine: PooledEngine() {
             spawnPosition: Vector3,
             fireDirection: Vector2,
     ): Entity {
-
         return this.entity {
             with<SpriteComponent> {
                 setTexture(texture, Vector2(0f, 0f))
@@ -99,49 +103,16 @@ class ECSengine: PooledEngine() {
             }
         }
     }
-    fun setBackground(backgroundTexture: Texture) : Entity{
-        return this.entity {
-            with<SpriteComponent>{
-                setTexture(backgroundTexture, Vector2(0f, 0f))
-            }
-            with<PositionComponent>()
-        }
-    }
 
     fun addMapObject(mapObject: Rectangle): Entity{
-        val corners = FloatArray(10)
-        // Bottom left
-        corners[0] = 0f
-        corners[1] = 0f
-
-        // Top left
-        corners[2] = 0f
-        corners[3] = mapObject.height * MAP_SCALE
-
-        // Top right
-        corners[4] = mapObject.width * MAP_SCALE
-        corners[5] = mapObject.height * MAP_SCALE
-
-        // Bottom right
-        corners[6] = mapObject.width * MAP_SCALE
-        corners[7] = 0f
-
-        // Bottom left (again)
-        corners[8] = 0f
-        corners[9] = 0f
-
         return this.entity{
             with<MapObjectComponent>{
-                startPosition = Vector2(mapObject.x, mapObject.y)
-                vertices = corners
-            }
-        }
-    }
-    fun addMapObject(mapObject: Polyline): Entity{
-        return this.entity{
-            with<MapObjectComponent>{
-                startPosition = Vector2(mapObject.x * MAP_SCALE, mapObject.y * MAP_SCALE)
-                vertices = mapObject.vertices
+                hitbox = mapObject.apply {
+                    x *= MAP_SCALE
+                    y *= MAP_SCALE
+                    width *= MAP_SCALE
+                    height *= MAP_SCALE
+                }
             }
         }
     }
