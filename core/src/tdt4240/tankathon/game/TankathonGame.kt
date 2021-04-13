@@ -56,6 +56,7 @@ class TankathonGame : KtxGame<AbstractScreen>() {
             addSystem(DamageSystem(this))
             addSystem(AIsystem())
             addSystem(MovementSystem(this))
+            addSystem(RemoveSystem())
         }
     }
 
