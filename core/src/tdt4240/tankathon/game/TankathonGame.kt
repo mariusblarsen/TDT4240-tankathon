@@ -27,7 +27,7 @@ import tdt4240.tankathon.game.screens.MenuScreen
 const val V_WIDTH_PIXELS = 480  // TODO: Real value
 const val V_HEIGHT_PIXELS = 270  // TODO: Real value
 
-const val TILE_SIZE = 8f
+const val MAP_SCALE = 1/8f
 const val V_WIDTH = 16  // TODO: Real value
 const val V_HEIGHT = 9  // TODO: Real value
 const val UNIT_SCALE = 1/64f  // TODO: May be too much scaling for smaller textures
@@ -41,9 +41,8 @@ class TankathonGame : KtxGame<AbstractScreen>() {
     } }
 
     val gameCamera: OrthographicCamera by lazy { OrthographicCamera() }
-    var tiledMap: TiledMap = TiledMap()
     val batch: Batch by lazy { SpriteBatch() }
-    val renderer: OrthogonalTiledMapRenderer by lazy { OrthogonalTiledMapRenderer(TiledMap(), 1/TILE_SIZE, batch) }
+    val renderer: OrthogonalTiledMapRenderer by lazy { OrthogonalTiledMapRenderer(TiledMap(), MAP_SCALE, batch) }
     val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat(), gameCamera)
     val engine: ECSengine by lazy {
         ECSengine().apply{
@@ -56,7 +55,7 @@ class TankathonGame : KtxGame<AbstractScreen>() {
                     gameCamera))
             addSystem(DamageSystem(this))
             addSystem(AIsystem())
-            addSystem(MovementSystem())
+            addSystem(MovementSystem(this))
         }
     }
 
@@ -70,6 +69,7 @@ class TankathonGame : KtxGame<AbstractScreen>() {
 
     override fun dispose() {
         super.dispose()
+        assetManager.dispose()
         batch.dispose()
     }
 }
