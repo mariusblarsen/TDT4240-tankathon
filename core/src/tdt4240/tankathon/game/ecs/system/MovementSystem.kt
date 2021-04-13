@@ -66,7 +66,6 @@ class MovementSystem(private val ecSengine: ECSengine) : IteratingSystem(
                     collisionDownwards = movingHitbox.y + threshold > obstacle.y + obstacle.height
 
                     horizontalCollision = (movingHitbox.y > obstacle.y + threshold) && (movingHitbox.y < obstacle.y + obstacle.height - threshold)
-                    LOG.info { "horizontalCollision: $horizontalCollision" }
                     if (horizontalCollision){
                         position.position.y+=velocity.direction.y*velocity.speed*deltaTime
                         if ((movingRight and collisionOnLeft)
