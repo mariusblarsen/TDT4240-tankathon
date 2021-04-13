@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="8" tileheight="8" infinite="0" nextlayerid="7" nextobjectid="17">
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="8" tileheight="8" infinite="0" nextlayerid="7" nextobjectid="58">
  <tileset firstgid="1" source="tile_set.tsx"/>
  <layer id="1" name="ground" width="100" height="100">
   <data encoding="base64" compression="zlib">
@@ -17,16 +17,39 @@
   </data>
  </layer>
  <objectgroup id="6" name="collision">
-  <object id="7" name="collision" x="114" y="529.25" width="141" height="166"/>
-  <object id="14" x="-1" y="799">
-   <polyline points="1.18182,1.09091 800,0 801,-799 1,-799 1.27273,1.13636"/>
-  </object>
+  <object id="28" x="20.5" y="800" width="0.5"/>
+  <object id="29" x="-24" y="-28" width="34.6667" height="838.667"/>
+  <object id="31" x="-41.3333" y="-45.3333" width="868" height="56"/>
+  <object id="32" x="781.333" y="-37.3333" width="116" height="858.667"/>
+  <object id="33" x="-60" y="788" width="929.333" height="81.3333"/>
+  <object id="34" x="112.091" y="527.818" width="7.72727" height="72.0909"/>
+  <object id="35" x="112.409" y="527.909" width="55.5909" height="8"/>
+  <object id="36" x="207.909" y="528.091" width="48" height="7.63636"/>
+  <object id="37" x="247.909" y="535.909" width="8.09091" height="56.1818"/>
+  <object id="38" x="248" y="632.091" width="8.18182" height="63.9091"/>
+  <object id="40" x="112.182" y="687.909" width="135.545" height="8.27273"/>
+  <object id="41" x="111.909" y="647.909" width="8" height="39.9091"/>
+  <object id="42" x="136" y="664" width="7.81818" height="8"/>
+  <object id="43" x="223.909" y="663.909" width="7.90909" height="7.90909"/>
+  <object id="44" x="224.091" y="552.091" width="8" height="7.81818"/>
+  <object id="45" x="136.091" y="552.182" width="7.81818" height="7.72727"/>
+  <object id="46" x="184.125" y="231.875" width="55.75" height="7.875"/>
+  <object id="47" x="232.125" y="168" width="7.75" height="71.875"/>
+  <object id="48" x="231.875" y="72.125" width="8.125" height="47.625"/>
+  <object id="49" x="207.875" y="208.25" width="8" height="7.875"/>
+  <object id="50" x="120" y="208.25" width="7.75" height="7.625"/>
+  <object id="51" x="95.625" y="176" width="8.375" height="64"/>
+  <object id="52" x="95.625" y="232.125" width="48.375" height="7.75"/>
+  <object id="53" x="95.875" y="72.125" width="8.25" height="63.75"/>
+  <object id="54" x="104.375" y="72" width="127.25" height="7.75"/>
+  <object id="55" x="120" y="96" width="7.75" height="7.875"/>
+  <object id="56" x="208.125" y="96" width="7.5" height="7.75"/>
  </objectgroup>
  <objectgroup id="5" name="spawnpoint">
   <object id="2" name="npcSpawn" x="212.333" y="82" width="140.667" height="87.6667" rotation="90">
    <ellipse/>
   </object>
-  <object id="16" name="playerSpawn" x="184" y="196">
+  <object id="16" name="playerSpawn" x="110.083" y="526.333">
    <point/>
   </object>
  </objectgroup>

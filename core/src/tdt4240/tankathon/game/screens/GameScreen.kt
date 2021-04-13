@@ -5,17 +5,13 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
-import com.badlogic.gdx.maps.objects.PolygonMapObject
-import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
-import com.badlogic.gdx.math.Polyline
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.physics.box2d.BodyDef
+import com.badlogic.gdx.physics.box2d.FixtureDef
 import ktx.log.info
 import ktx.log.logger
-import tdt4240.tankathon.game.MAP_SCALE
 import tdt4240.tankathon.game.TankathonGame
 
 private val LOG = logger<GameScreen>()
@@ -24,6 +20,10 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
     private val playerTexture = Texture(Gdx.files.internal("tank.png"))
     private val backgroundTexture = Texture(Gdx.files.internal("map.png"))
     private val NPCTexture = Texture(Gdx.files.internal("tank.png"))//TODO add suitable texture for NPC
+
+    /* Box2D */
+    private val bodyDef: BodyDef = BodyDef()
+    private val fixtureDef: FixtureDef = FixtureDef()
 
     override fun show() {
         /* Loading can be moved to a loadingscreen,
@@ -49,7 +49,8 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
         playerTexture.dispose()
         backgroundTexture.dispose()
     }
-    fun parseCollision(tiledMap: TiledMap){
+
+    private fun parseCollision(tiledMap: TiledMap){
         // TODO: Move to a loadscreen
         val collisionLayer: MapLayer = tiledMap.layers.get("collision")
         val collisionObjects = collisionLayer.objects
@@ -60,13 +61,13 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
         for (mapObject: MapObject in collisionObjects){
             if (mapObject is RectangleMapObject){
                 game.engine.addMapObject(mapObject.rectangle)
-            } else if (mapObject is PolylineMapObject){
-                game.engine.addMapObject(mapObject.polyline)
-            }else {
+            }
+            else {
                 LOG.info { "MapObject not supported!" }
             }
         }
     }
+
     private fun parsePlayerSpawnpoint(tiledMap: TiledMap) : Vector2{
         val spawnLayer: MapLayer = tiledMap.layers.get("spawnpoint")
         val spawnObjects = spawnLayer.objects ?: return Vector2(1f, 1f)

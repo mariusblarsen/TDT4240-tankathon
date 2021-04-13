@@ -1,14 +1,12 @@
 package tdt4240.tankathon.game.ecs.component
 
 import com.badlogic.ashley.core.Component
-import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.utils.Pool
-import kotlin.properties.Delegates
+import ktx.ashley.mapperFor
 
 class PhysicsComponent: Component, Pool.Poolable {
-    private var body: Body? = null
-    var width =16f //by Delegates.notNull<Float>()
-    var height = 9f //by Delegates.notNull<Float>()
+    var width = 0f
+    var height = 0f
 
     /** Delegates.notNull
      * Returns a delegate for a read/write porperty,
@@ -17,11 +15,11 @@ class PhysicsComponent: Component, Pool.Poolable {
      */
 
     override fun reset() {
-        body?.world?.destroyBody(body)
-        body = null
-
-        height = 0.0f
-        width = 0.0f
+        height = 0f
+        width = 0f
+    }
+    companion object {
+        val mapper = mapperFor<PhysicsComponent>()
     }
 
 }
