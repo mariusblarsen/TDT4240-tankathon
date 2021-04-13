@@ -2,21 +2,21 @@ package tdt4240.tankathon.game.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.objects.EllipseMapObject
+import com.badlogic.gdx.maps.objects.PolygonMapObject
+import com.badlogic.gdx.maps.objects.PolylineMapObject
+import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.math.Polyline
 import com.badlogic.gdx.math.Vector2
-import ktx.ashley.entity
-import ktx.ashley.with
+import com.badlogic.gdx.utils.Array
 import ktx.log.info
 import ktx.log.logger
+import tdt4240.tankathon.game.MAP_SCALE
 import tdt4240.tankathon.game.TankathonGame
-import tdt4240.tankathon.game.UNIT_SCALE
-import tdt4240.tankathon.game.V_HEIGHT
-import tdt4240.tankathon.game.V_WIDTH
-import tdt4240.tankathon.game.ecs.component.PlayerComponent
-import tdt4240.tankathon.game.ecs.component.PositionComponent
-
-import tdt4240.tankathon.game.ecs.component.SpriteComponent
-import tdt4240.tankathon.game.ecs.component.TransformComponent
-import javax.swing.text.html.parser.Entity
 
 private val LOG = logger<GameScreen>()
 
@@ -25,14 +25,19 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
     private val backgroundTexture = Texture(Gdx.files.internal("map.png"))
     private val NPCTexture = Texture(Gdx.files.internal("tank.png"))//TODO add suitable texture for NPC
 
-
-    /* Add entities */
-    private val background = engine.setBackground(backgroundTexture)
-    private val player = engine.createPlayer(playerTexture)
-    private val NPC = engine.createNPC(Vector2(10f,0f), NPCTexture, listOf(player))
-
     override fun show() {
-        LOG.info { "Game Screen" }
+        /* Loading can be moved to a loadingscreen,
+        with assetManager.progress() showing progress.
+         Would not need finishLoading then.*/
+        game.assetManager.load("map/tilemap.tmx", TiledMap::class.java)
+        game.assetManager.finishLoading()
+        renderer.map = game.assetManager.get("map/tilemap.tmx", TiledMap::class.java)
+        parseCollision(renderer.map)
+        val playerSpawnPoint = parsePlayerSpawnpoint(renderer.map)
+        val npcSpawnPoint = parseNpcSpawnpoint(renderer.map)
+        /* Add entities */
+        val player = engine.createPlayer(playerTexture, playerSpawnPoint)
+        val NPC = engine.createNPC(npcSpawnPoint, NPCTexture, listOf(player))
     }
 
 
@@ -43,5 +48,55 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
     override fun dispose() {
         playerTexture.dispose()
         backgroundTexture.dispose()
+    }
+    fun parseCollision(tiledMap: TiledMap){
+        // TODO: Move to a loadscreen
+        val collisionLayer: MapLayer = tiledMap.layers.get("collision")
+        val collisionObjects = collisionLayer.objects
+        if (collisionObjects == null) {
+            LOG.info { "No collisionObjects detected." }
+            return
+        }
+        for (mapObject: MapObject in collisionObjects){
+            if (mapObject is RectangleMapObject){
+                game.engine.addMapObject(mapObject.rectangle)
+            } else if (mapObject is PolylineMapObject){
+                game.engine.addMapObject(mapObject.polyline)
+            }else {
+                LOG.info { "MapObject not supported!" }
+            }
+        }
+    }
+    private fun parsePlayerSpawnpoint(tiledMap: TiledMap) : Vector2{
+        val spawnLayer: MapLayer = tiledMap.layers.get("spawnpoint")
+        val spawnObjects = spawnLayer.objects ?: return Vector2(1f, 1f)
+
+        for (spawn : MapObject in spawnObjects){
+            if (spawn is RectangleMapObject){
+                if (spawn.name == "playerSpawn"){
+                    return Vector2(spawn.rectangle.x, spawn.rectangle.y)
+                }
+            }
+        }
+        return Vector2(1f, 1f)
+    }
+    private fun parseNpcSpawnpoint(tiledMap: TiledMap) : Vector2{
+        val spawnLayer: MapLayer = tiledMap.layers.get("spawnpoint")
+        val spawnObjects = spawnLayer.objects
+        if (spawnObjects == null) {
+            LOG.info { "No spawnObjects detected." }
+            return Vector2(1f, 1f)
+        }
+        for (spawn : MapObject in spawnObjects){
+            if (spawn.name == "npcSpawn"){
+                if (spawn is RectangleMapObject){
+                    return Vector2(spawn.rectangle.x, spawn.rectangle.y)
+                } else if (spawn is EllipseMapObject) {
+                    // TODO: Random point wihtin ellipse or just multiple single points
+                    return Vector2(spawn.ellipse.x, spawn.ellipse.y)
+                }
+            }
+        }
+        return Vector2(1f, 1f)
     }
 }
