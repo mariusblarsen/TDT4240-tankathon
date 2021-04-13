@@ -6,14 +6,19 @@ import com.badlogic.gdx.math.Rectangle
 import ktx.ashley.addComponent
 import ktx.ashley.allOf
 import ktx.ashley.get
+import ktx.log.Logger
 import ktx.log.debug
 import ktx.log.info
+import ktx.log.logger
+import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
 
 private const val DAMAGE_AREA_HEIGHT= 2f
 private const val DAMAGE_PER_SECOND = 25f
 private const val DEATH_EXPLOSION_DURATION = 0.9f
+
+private val LOG: Logger = logger<DamageSystem>()
 
 class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(allOf( AIComponent::class, TransformComponent::class, PositionComponent:: class).get()) {
     private val playerBoundingBox = Rectangle()
