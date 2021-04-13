@@ -27,6 +27,7 @@ class SpriteComponent: Component, Pool.Poolable, Comparable<SpriteComponent> {
         return (sprite.color.a - other.sprite.color.a).toInt()
     }
 
+    //TODO(Marius) two methods with same name
     fun setTexture(texture: Texture, origin: Vector2){
         sprite.run{
             setRegion(texture)

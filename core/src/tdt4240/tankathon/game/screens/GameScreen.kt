@@ -16,16 +16,20 @@ import tdt4240.tankathon.game.ecs.component.PositionComponent
 
 import tdt4240.tankathon.game.ecs.component.SpriteComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent
+import javax.swing.text.html.parser.Entity
 
 private val LOG = logger<GameScreen>()
 
 class GameScreen(game: TankathonGame) : AbstractScreen(game){
     private val playerTexture = Texture(Gdx.files.internal("tank.png"))
     private val backgroundTexture = Texture(Gdx.files.internal("map.png"))
+    private val NPCTexture = Texture(Gdx.files.internal("tank.png"))//TODO add suitable texture for NPC
+
 
     /* Add entities */
     private val background = engine.setBackground(backgroundTexture)
     private val player = engine.createPlayer(playerTexture)
+    private val NPC = engine.createNPC(Vector2(10f,0f), NPCTexture, listOf(player))
 
     override fun show() {
         LOG.info { "Game Screen" }

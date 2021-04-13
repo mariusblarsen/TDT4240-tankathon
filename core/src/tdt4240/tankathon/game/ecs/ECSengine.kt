@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import ktx.ashley.entity
 import ktx.ashley.with
+import sun.corba.EncapsInputStreamFactory
 import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.V_HEIGHT
 import tdt4240.tankathon.game.V_WIDTH
@@ -36,28 +37,41 @@ class ECSengine: PooledEngine() {
                 position.x = V_WIDTH*0.5f
                 position.y = V_HEIGHT*0.5f
             }
-
+          with<HealthComponent>(){
+              health = 3f
+          }
+          with<CanonComponent>()
         }
-
-
     }
-    fun createNPC(spawnPosition: Vector2) {
-        val entity: Entity = this.createEntity()
-        val position: Vector2 = spawnPosition
+    fun createNPC(spawnPosition: Vector2, texture: Texture,  enemiesIn: List<Entity>) : Entity {
+        return entity {
+            with<TransformComponent> {
+                position.x = spawnPosition.x
+                position.y = spawnPosition.y
 
-        /* Add player component to player */
-        entity.add(createComponent(PlayerComponent::class.java))
+                size.x = texture.width * tdt4240.tankathon.game.UNIT_SCALE
+                size.y = texture.height * tdt4240.tankathon.game.UNIT_SCALE
+            }
+            with<SpriteComponent> {
+                sprite.run {
+                    setRegion(texture)
+                    setSize(texture.width * tdt4240.tankathon.game.UNIT_SCALE, texture.height * tdt4240.tankathon.game.UNIT_SCALE)
+                    setOrigin(width / 2, height / 4)
+                }
+            }
+            with<AIComponent>{
+                enemies = enemiesIn
+            }
 
-        /* Add box2D physics to the player */
-        entity.add(createComponent(PhysicsComponent::class.java))
-
-        /* Add Health to player */
-        entity.add(createComponent(HealthComponent::class.java))
-
-        /* Add Movement to player */
-        // TODO: add MovementComponent
-        /* Add Sprite to player */
-        entity.add(createComponent(SpriteComponent::class.java))
+            with<VelocityComponent>{
+                direction.set(1f, 1f,0f)
+                speed = 1f
+            }
+            with<PositionComponent> {
+                position.x = spawnPosition.x
+                position.y = spawnPosition.y
+            }
+        }
     }
 
     /* Adds a bullet with texture, spawn point and velocity */
