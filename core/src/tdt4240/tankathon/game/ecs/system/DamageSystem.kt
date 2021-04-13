@@ -23,10 +23,11 @@ private val LOG: Logger = logger<DamageSystem>()
 class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(allOf( AIComponent::class, TransformComponent::class, PositionComponent:: class).get()) {
     private val playerBoundingBox = Rectangle()
     private val enemyBoundingBox = Rectangle()
+    private val bulletBoundingBox = Rectangle()
     private val playerEntities by lazy { ecsEngine.getEntitiesFor(
             allOf(PlayerComponent::class).get()) }
-    private val enemyEntities by lazy { ecsEngine.getEntitiesFor(
-            allOf(AIComponent::class).get()
+    private val bulletEntities by lazy { ecsEngine.getEntitiesFor(
+            allOf(BulletComponent::class).get()
     )
     }
 
@@ -36,7 +37,12 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(allOf( A
         require(positionComponent != null){ "Entity |entity| must have a TransformComponent. entity=$entity"}
         val AIComponent = entity[AIComponent.mapper]
         require(AIComponent != null){ "Entity |entity| must have a AIComponent. entity=$entity"}
-
+        enemyBoundingBox.set(
+                positionComponent.position.x,
+                positionComponent.position.y,
+                1f,
+                1f,
+        )
         playerEntities.forEach{ player ->
             player[PositionComponent.mapper]?.let { playerPosition ->
                 playerBoundingBox.set(
@@ -45,18 +51,30 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(allOf( A
                         1f,
                         1f
                 )
-                enemyBoundingBox.set(
-                        positionComponent.position.x,
-                        positionComponent.position.y,
-                        1f,
-                        1f,
-                )
                 if(playerBoundingBox.overlaps(enemyBoundingBox)){
                     enemyHit(player, entity)
                 }
             }
         }
+        bulletEntities.forEach{ bullet ->
+            bullet[PositionComponent.mapper]?.let { bulletPosition ->
+                bulletBoundingBox.set(
+                        bulletPosition.position.x,
+                        bulletPosition.position.y,
+                        0.1f,
+                        0.1f
+                )
+                if(bulletBoundingBox.overlaps(enemyBoundingBox)){
+                    bulletHit(bullet)
+                }
+            }
+        }
     }
+    private fun bulletHit(bullet: Entity){
+        bullet.addComponent<RemoveComponent>(ecsEngine)
+        LOG.info { "BulletHit" }
+    }
+
     private fun enemyHit(player: Entity, enemy: Entity){
         enemy.addComponent<RemoveComponent>(ecsEngine)
         LOG.info { "EnemyHit" }
