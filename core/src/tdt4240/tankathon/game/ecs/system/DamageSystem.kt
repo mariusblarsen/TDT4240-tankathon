@@ -58,6 +58,7 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(allOf( A
         }
     }
     private fun enemyHit(player: Entity, enemy: Entity){
+        enemy.addComponent<RemoveComponent>(ecsEngine)
         LOG.info { "EnemyHit" }
     }
 

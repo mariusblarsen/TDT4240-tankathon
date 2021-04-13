@@ -26,7 +26,7 @@
   <object id="2" name="npcSpawn" x="212.333" y="82" width="140.667" height="87.6667" rotation="90">
    <ellipse/>
   </object>
-  <object id="16" name="playerSpawn" x="494.667" y="276">
+  <object id="16" name="playerSpawn" x="184" y="196">
    <point/>
   </object>
  </objectgroup>
