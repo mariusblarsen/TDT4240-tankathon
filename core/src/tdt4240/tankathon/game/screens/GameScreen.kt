@@ -30,6 +30,7 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
     private val fixtureDef: FixtureDef = FixtureDef()
 
     override fun show() {
+        menuStage.clear()
         /* Loading can be moved to a loadingscreen,
         with assetManager.progress() showing progress.
          Would not need finishLoading then.*/
@@ -51,6 +52,7 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
 
     override fun render(delta: Float) {
         engine.update(delta)
+
     }
 
     override fun dispose() {
