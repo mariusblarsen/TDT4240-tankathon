@@ -1,19 +1,25 @@
 package tdt4240.tankathon.game
 
-import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.Application.LOG_INFO
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 import ktx.app.KtxGame
 import ktx.log.Logger
 import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.ecs.ECSengine
+import tdt4240.tankathon.game.ecs.system.DamageSystem
 import tdt4240.tankathon.game.ecs.system.FireSystem
 import tdt4240.tankathon.game.ecs.system.PlayerInputSystem
 import tdt4240.tankathon.game.ecs.system.RenderSystem
+import tdt4240.tankathon.game.ecs.system.*
 import tdt4240.tankathon.game.screens.AbstractScreen
 import tdt4240.tankathon.game.screens.GameScreen
 import tdt4240.tankathon.game.screens.MenuScreen
@@ -21,6 +27,7 @@ import tdt4240.tankathon.game.screens.MenuScreen
 const val V_WIDTH_PIXELS = 480  // TODO: Real value
 const val V_HEIGHT_PIXELS = 270  // TODO: Real value
 
+const val MAP_SCALE = 1/8f
 const val V_WIDTH = 16  // TODO: Real value
 const val V_HEIGHT = 9  // TODO: Real value
 const val UNIT_SCALE = 1/64f  // TODO: May be too much scaling for smaller textures
@@ -28,17 +35,31 @@ private val LOG: Logger = logger<TankathonGame>()
 
 
 class TankathonGame : KtxGame<AbstractScreen>() {
+
+    val assetManager: AssetManager by lazy { AssetManager().apply {
+        setLoader(TiledMap::class.java, TmxMapLoader(fileHandleResolver))
+    } }
+
+    val gameCamera: OrthographicCamera by lazy { OrthographicCamera() }
     val batch: Batch by lazy { SpriteBatch() }
-    val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
+    val renderer: OrthogonalTiledMapRenderer by lazy { OrthogonalTiledMapRenderer(TiledMap(), MAP_SCALE, batch) }
+    val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat(), gameCamera)
     val engine: ECSengine by lazy {
         ECSengine().apply{
-            addSystem(PlayerInputSystem(gameViewport, this))
+            addSystem(FireSystem(this))
+            addSystem(PlayerInputSystem(gameViewport, this, FireSystem(this)))
             addSystem(RenderSystem(
                     batch,
-                    gameViewport))
-            addSystem(FireSystem())
+                    gameViewport,
+                    renderer,
+                    gameCamera))
+            addSystem(DamageSystem(this))
+            addSystem(AIsystem())
+            addSystem(MovementSystem(this))
+            addSystem(RemoveSystem())
         }
     }
+
     override fun create() {
         Gdx.app.logLevel = LOG_INFO
         LOG.info { "Create game instance" }
@@ -49,6 +70,7 @@ class TankathonGame : KtxGame<AbstractScreen>() {
 
     override fun dispose() {
         super.dispose()
+        assetManager.dispose()
         batch.dispose()
     }
 }

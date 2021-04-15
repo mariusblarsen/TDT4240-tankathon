@@ -18,18 +18,15 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class TransformComponent : Component, Pool.Poolable, Comparable<TransformComponent>{
-    var position = Vector3(0f,0f, 0f)
+    var position = Vector3(0f,0f, 0f) //TODO(Øystein, Marius) cant remove position because of z-diff
     val size = Vector2(1f, 1f)
     var rotationDeg= 0f
-    var direction = Vector3()
-    var speed = 1f
 
     override fun reset() {
         position.set(Vector3.Zero)
         size.set(1f,1f)
         rotationDeg=0f
-        direction.set(Vector3.Zero)
-        speed = 0f
+
     }
     override fun compareTo(other: TransformComponent): Int {
         val zDiff= position.z - other.position.z

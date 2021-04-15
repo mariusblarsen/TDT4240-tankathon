@@ -3,22 +3,28 @@ package tdt4240.tankathon.game.ecs
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.maps.objects.PolylineMapObject
+import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.math.Polyline
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import ktx.ashley.entity
 import ktx.ashley.with
-import tdt4240.tankathon.game.UNIT_SCALE
-import tdt4240.tankathon.game.V_HEIGHT
-import tdt4240.tankathon.game.V_WIDTH
+import ktx.log.Logger
+import ktx.log.info
+import ktx.log.logger
+import tdt4240.tankathon.game.*
 import tdt4240.tankathon.game.ecs.component.*
+import tdt4240.tankathon.game.ecs.system.MovementSystem
 
-
+private val LOG: Logger = logger<ECSengine>()
 /* PooledEngine
 *
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
 * */
 class ECSengine: PooledEngine() {
-    fun createPlayer(playerTexture: Texture): Entity {
+    fun createPlayer(playerTexture: Texture, spawnPoint: Vector2): Entity {
         return this.entity{
             with<TransformComponent> ()
             with<SpriteComponent>{
@@ -30,34 +36,48 @@ class ECSengine: PooledEngine() {
             }
             with<PlayerComponent>()
             with<VelocityComponent>{
-                speed = 2f
+                speed = 2*3f
             }
             with<PositionComponent>{
-                position.x = V_WIDTH*0.5f
-                position.y = V_HEIGHT*0.5f
+                position.x = spawnPoint.x* MAP_SCALE
+                position.y = spawnPoint.y* MAP_SCALE
+            }
+            with<HealthComponent>{
+                health = 3f
+            }
+            with<CanonComponent>()
+            with<PhysicsComponent>{
+                width = playerTexture.width * UNIT_SCALE
+                height = playerTexture.width * UNIT_SCALE  // To make it quadratic
+            }
+        }
+    }
+    fun createNPC(spawnPosition: Vector2, texture: Texture,  enemiesIn: List<Entity>) : Entity {
+        return entity {
+            with<TransformComponent> ()
+            with<SpriteComponent> {
+                sprite.run {
+                    setRegion(texture)
+                    setSize(texture.width * UNIT_SCALE, texture.height * UNIT_SCALE)
+                    setOrigin(width / 2, height / 4)
+                }
+            }
+            with<AIComponent>{
+                enemies = enemiesIn
             }
 
+            with<VelocityComponent>{
+                speed = 1f
+            }
+            with<PositionComponent> {
+                position.x = spawnPosition.x * MAP_SCALE
+                position.y = spawnPosition.y * MAP_SCALE
+            }
+            with<PhysicsComponent>{
+                width = texture.width * UNIT_SCALE
+                height = texture.width * UNIT_SCALE  // To make it quadratic
+            }
         }
-
-
-    }
-    fun createNPC(spawnPosition: Vector2) {
-        val entity: Entity = this.createEntity()
-        val position: Vector2 = spawnPosition
-
-        /* Add player component to player */
-        entity.add(createComponent(PlayerComponent::class.java))
-
-        /* Add box2D physics to the player */
-        entity.add(createComponent(PhysicsComponent::class.java))
-
-        /* Add Health to player */
-        entity.add(createComponent(HealthComponent::class.java))
-
-        /* Add Movement to player */
-        // TODO: add MovementComponent
-        /* Add Sprite to player */
-        entity.add(createComponent(SpriteComponent::class.java))
     }
 
     /* Adds a bullet with texture, spawn point and velocity */
@@ -66,7 +86,6 @@ class ECSengine: PooledEngine() {
             spawnPosition: Vector3,
             fireDirection: Vector2,
     ): Entity {
-
         return this.entity {
             with<SpriteComponent> {
                 setTexture(texture, Vector2(0f, 0f))
@@ -84,12 +103,17 @@ class ECSengine: PooledEngine() {
             }
         }
     }
-    fun setBackground(backgroundTexture: Texture) : Entity{
-        return this.entity {
-            with<SpriteComponent>{
-                setTexture(backgroundTexture, Vector2(0f, 0f))
+
+    fun addMapObject(mapObject: Rectangle): Entity{
+        return this.entity{
+            with<MapObjectComponent>{
+                hitbox = mapObject.apply {
+                    x *= MAP_SCALE
+                    y *= MAP_SCALE
+                    width *= MAP_SCALE
+                    height *= MAP_SCALE
+                }
             }
-            with<PositionComponent>()
         }
     }
 }

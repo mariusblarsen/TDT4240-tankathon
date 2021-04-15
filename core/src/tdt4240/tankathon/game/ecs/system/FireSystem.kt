@@ -4,17 +4,24 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.viewport.Viewport
 import ktx.ashley.allOf
 import ktx.ashley.get
-import tdt4240.tankathon.game.V_HEIGHT
-import tdt4240.tankathon.game.V_WIDTH
+import ktx.log.Logger
+import ktx.log.info
+import ktx.log.logger
+import tdt4240.tankathon.game.TankathonGame
+
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
 
-class FireSystem() : IteratingSystem(
+private var bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
+private val LOG: Logger = logger<FireSystem>()
+
+class FireSystem(private val engine: ECSengine)
+ : IteratingSystem(
         allOf(BulletComponent::class, VelocityComponent::class, SpriteComponent::class,
                 PositionComponent::class, TransformComponent::class).get()
 ){
@@ -31,8 +38,11 @@ class FireSystem() : IteratingSystem(
         val sprite = entity[SpriteComponent.mapper]
         require(sprite != null){ "Entity |entity| must have a SpriteComponent. entity=$entity"}
 
-        position.position.add(velocity.getVelocity().scl(deltaTime))
+        //val canon = entity[CanonComponent.mapper]
+        //require(canon != null){ "Entity |entity| must have a CanonComponent. entity=$entity"}
 
+        //position.position.add(velocity.getVelocity().scl(deltaTime))
+        //canon.timer -= deltaTime
 
     }
 }

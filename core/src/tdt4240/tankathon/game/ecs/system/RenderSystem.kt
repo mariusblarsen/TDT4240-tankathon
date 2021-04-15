@@ -2,7 +2,9 @@ package tdt4240.tankathon.game.ecs.system
 
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.SortedIteratingSystem
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.utils.viewport.Viewport
 import ktx.ashley.allOf
 import ktx.ashley.get
@@ -19,6 +21,8 @@ private val LOG: Logger = logger<RenderSystem>()
 class RenderSystem(
         private val batch: Batch,
         private val gameViewport: Viewport,
+        private val mapRenderer: OrthogonalTiledMapRenderer,
+        private val gameCamera: OrthographicCamera
         ): SortedIteratingSystem(
         allOf(SpriteComponent::class, PositionComponent::class).get(),
         compareBy { entity -> entity[SpriteComponent.mapper]}
@@ -27,7 +31,10 @@ class RenderSystem(
     override fun update(deltaTime: Float) {
         forceSort()
         gameViewport.apply()
-        batch.use(gameViewport.camera.combined){
+        mapRenderer.setView(gameCamera)
+        mapRenderer.render()
+
+        batch.use(gameCamera.combined){
             super.update(deltaTime)
         }
     }
