@@ -9,9 +9,10 @@ import ktx.ashley.mapperFor
 
 
 class AIComponent: Component, Pool.Poolable {
-    var enemies = listOf<Entity>()
+    var team=0
+
     override fun reset() {
-        enemies = listOf<Entity>()
+        team = 0
     }
     companion object{
         val mapper: ComponentMapper<AIComponent> = mapperFor()

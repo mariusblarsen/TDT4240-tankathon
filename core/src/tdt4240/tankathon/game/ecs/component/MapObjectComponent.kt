@@ -13,6 +13,7 @@ class MapObjectComponent : Component, Pool.Poolable{
         hitbox = Rectangle()
     }
 
+
     companion object{
         val mapper: ComponentMapper<MapObjectComponent> = mapperFor<MapObjectComponent>()
     }

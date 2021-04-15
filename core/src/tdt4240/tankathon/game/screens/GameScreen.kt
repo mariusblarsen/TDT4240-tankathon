@@ -10,9 +10,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
+import ktx.ashley.entity
+import ktx.ashley.with
 import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.TankathonGame
+import tdt4240.tankathon.game.ecs.component.ManagementComponent
+import tdt4240.tankathon.game.ecs.component.MapObjectComponent
 
 private val LOG = logger<GameScreen>()
 
@@ -37,7 +41,11 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
         val npcSpawnPoint = parseNpcSpawnpoint(renderer.map)
         /* Add entities */
         val player = engine.createPlayer(playerTexture, playerSpawnPoint)
-        val NPC = engine.createNPC(npcSpawnPoint, NPCTexture, listOf(player))
+
+        //Singleton
+        engine.addMangementComponent()
+
+        //val NPC = engine.createNPC(npcSpawnPoint, NPCTexture)
     }
 
 
