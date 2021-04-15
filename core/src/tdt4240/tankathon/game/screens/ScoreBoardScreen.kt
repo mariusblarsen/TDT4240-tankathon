@@ -48,9 +48,6 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
     }
 
     init {
-        //which stage that controls the input
-
-
         //ui-elementer
         buttonAtlas = TextureAtlas(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.atlas"));
         skin.addRegions(buttonAtlas)
