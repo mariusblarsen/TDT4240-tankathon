@@ -43,7 +43,8 @@ class ECSengine: PooledEngine() {
                 position.y = spawnPoint.y* MAP_SCALE
             }
             with<HealthComponent>{
-                health = 3f
+                maxHealth = 100f
+                health = maxHealth
             }
             with<CanonComponent>()
             with<PhysicsComponent>{
@@ -77,6 +78,13 @@ class ECSengine: PooledEngine() {
                 width = texture.width * UNIT_SCALE
                 height = texture.width * UNIT_SCALE  // To make it quadratic
             }
+            with<HealthComponent>{
+                maxHealth = 100f
+                health = maxHealth
+            }
+            with<DamageComponent>{
+                damage = 10f
+            }
         }
     }
 
@@ -100,6 +108,13 @@ class ECSengine: PooledEngine() {
             }
             with<PositionComponent> {
                 position = spawnPosition
+            }
+            with<PhysicsComponent>{
+                width = texture.width * UNIT_SCALE
+                height = texture.height * UNIT_SCALE  // To make it quadratic
+            }
+            with<DamageComponent>{
+                damage = 10f
             }
         }
     }
