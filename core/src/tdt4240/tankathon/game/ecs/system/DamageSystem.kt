@@ -20,7 +20,8 @@ private const val DEATH_EXPLOSION_DURATION = 0.9f
 
 private val LOG: Logger = logger<DamageSystem>()
 
-class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(allOf( AIComponent::class, TransformComponent::class, PositionComponent:: class).get()) {
+class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(
+        allOf(AIComponent::class, PositionComponent::class, PhysicsComponent::class).get()) {
     private val playerBoundingBox = Rectangle()
     private val enemyBoundingBox = Rectangle()
     private val bulletBoundingBox = Rectangle()
@@ -32,24 +33,24 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(allOf( A
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        
         val positionComponent = entity.get(PositionComponent.mapper)
-        require(positionComponent != null){ "Entity |entity| must have a TransformComponent. entity=$entity"}
-        val AIComponent = entity[AIComponent.mapper]
-        require(AIComponent != null){ "Entity |entity| must have a AIComponent. entity=$entity"}
+        require(positionComponent != null){ "Entity |entity| must have a positionComponent. entity=$entity"}
+        val physicsComponent = entity.get(PhysicsComponent.mapper)
+        require(physicsComponent != null){ "Entity |entity| must have a PhysicsComponent. entity=$entity"}
+
         enemyBoundingBox.set(
                 positionComponent.position.x,
                 positionComponent.position.y,
-                1f,
-                1f,
+                physicsComponent.width,
+                physicsComponent.height,
         )
         playerEntities.forEach{ player ->
             player[PositionComponent.mapper]?.let { playerPosition ->
                 playerBoundingBox.set(
                         playerPosition.position.x,
                         playerPosition.position.y,
-                        1f,
-                        1f
+                        player[PhysicsComponent.mapper]!!.width,
+                        player[PhysicsComponent.mapper]!!.height
                 )
                 if(playerBoundingBox.overlaps(enemyBoundingBox)){
                     enemyHit(player, entity)
@@ -61,21 +62,28 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(allOf( A
                 bulletBoundingBox.set(
                         bulletPosition.position.x,
                         bulletPosition.position.y,
-                        0.1f,
-                        0.1f
+                        bullet[PhysicsComponent.mapper]!!.width,
+                        bullet[PhysicsComponent.mapper]!!.height
                 )
                 if(bulletBoundingBox.overlaps(enemyBoundingBox)){
-                    bulletHit(bullet)
+                    bulletHit(bullet, entity)
                 }
             }
         }
     }
-    private fun bulletHit(bullet: Entity){
+    private fun bulletHit(bullet: Entity, enemy: Entity){
+        val bulletDamage = bullet.getComponent(DamageComponent::class.java).damage
+        enemy[HealthComponent.mapper]?.run {
+            health -= bulletDamage
+        }
         bullet.addComponent<RemoveComponent>(ecsEngine)
-        LOG.info { "BulletHit" }
     }
 
     private fun enemyHit(player: Entity, enemy: Entity){
+        val npcDamage = enemy.getComponent(DamageComponent::class.java).damage
+        player[HealthComponent.mapper]?.run {
+            health -= npcDamage
+        }
         enemy.addComponent<RemoveComponent>(ecsEngine)
         LOG.info { "EnemyHit" }
     }
