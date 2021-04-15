@@ -53,6 +53,7 @@ class MenuScreen(game: TankathonGame) : AbstractScreen(game) {
         startTextButton = TextButton("start", skin)
         startTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
+                menuStage.clear()
                 game.setScreen<GameScreen>()
             }
         })
@@ -146,6 +147,7 @@ class MenuScreen(game: TankathonGame) : AbstractScreen(game) {
         skin.dispose()
         menuStage.dispose()
         buttonAtlas.dispose()
+
     }
 
 }

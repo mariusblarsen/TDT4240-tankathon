@@ -63,6 +63,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
         backTextButton = TextButton("back", skin)
         backTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
+                menuStage.clear()
                 game.setScreen<MenuScreen>()
             }
         })
