@@ -20,9 +20,7 @@ import tdt4240.tankathon.game.ecs.system.FireSystem
 import tdt4240.tankathon.game.ecs.system.PlayerInputSystem
 import tdt4240.tankathon.game.ecs.system.RenderSystem
 import tdt4240.tankathon.game.ecs.system.*
-import tdt4240.tankathon.game.screens.AbstractScreen
-import tdt4240.tankathon.game.screens.GameScreen
-import tdt4240.tankathon.game.screens.MenuScreen
+import tdt4240.tankathon.game.screens.*
 
 const val V_WIDTH_PIXELS = 480  // TODO: Real value
 const val V_HEIGHT_PIXELS = 270  // TODO: Real value
@@ -44,6 +42,8 @@ class TankathonGame : KtxGame<AbstractScreen>() {
     val batch: Batch by lazy { SpriteBatch() }
     val renderer: OrthogonalTiledMapRenderer by lazy { OrthogonalTiledMapRenderer(TiledMap(), MAP_SCALE, batch) }
     val gameViewport = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat(), gameCamera)
+    val UIViewport = FitViewport(V_WIDTH_PIXELS.toFloat(), V_HEIGHT_PIXELS.toFloat())
+
     val engine: ECSengine by lazy {
         ECSengine().apply{
             addSystem(FireSystem(this))
@@ -66,6 +66,8 @@ class TankathonGame : KtxGame<AbstractScreen>() {
         LOG.info { "Create game instance" }
         addScreen(MenuScreen(this))
         addScreen(GameScreen(this))
+        addScreen(ScoreBoardScreen(this))
+        addScreen(SettingsScreen(this))
         setScreen<MenuScreen>()
     }
 
