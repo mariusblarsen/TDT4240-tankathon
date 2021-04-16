@@ -17,7 +17,8 @@ import tdt4240.tankathon.game.ecs.component.*
 private val LOG: Logger = logger<MovementSystem>()
 
 class MovementSystem(private val ecSengine: ECSengine) : IteratingSystem(
-        allOf(PositionComponent::class, VelocityComponent::class).get()
+        allOf(PositionComponent::class, VelocityComponent::class,
+        PhysicsComponent::class).get()
 ){
 
     private val mapObjects by lazy {
@@ -31,16 +32,12 @@ class MovementSystem(private val ecSengine: ECSengine) : IteratingSystem(
         require(velocity != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
         val physicsComponent = entity[PhysicsComponent.mapper]
-
+        require(physicsComponent != null){ "Entity |entity| must have a PhysicsComponent. entity=$entity"}
         val movingHitbox = Rectangle(
                 position.position.x,
                 position.position.y,
-                1f,  // TODO: Get physics for bullet
-                1f)
-        if (physicsComponent != null) {
-            movingHitbox.width = physicsComponent.width
-            movingHitbox.height = physicsComponent.height
-        }
+                physicsComponent.width,
+                physicsComponent.height)
 
         var collisionOnRight: Boolean
         var collisionOnLeft : Boolean
