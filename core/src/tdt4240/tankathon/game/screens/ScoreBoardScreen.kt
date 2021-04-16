@@ -80,7 +80,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
         //val sorted = getScores().toSortedMap()
         val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
 
-
+        scoreboardTable.reset()
         var number = 1
         for ((key, value) in sorted) {
             if(number-1==rows) break
@@ -95,6 +95,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
     }
 
     private fun addButtonToTable(){
+        uiTable.reset()
         uiTable.setDebug(false)
         uiTable.setSize(V_WIDTH_PIXELS.toFloat() * 0.7f, V_HEIGHT_PIXELS.toFloat() * 0.7f)
         uiTable.setPosition(V_WIDTH_PIXELS*0.15f, V_HEIGHT_PIXELS*0.15f)
