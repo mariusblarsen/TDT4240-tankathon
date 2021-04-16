@@ -54,7 +54,7 @@ class MenuScreen(game: TankathonGame) : AbstractScreen(game) {
         startTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 menuStage.clear()
-                game.setScreen<GameScreen>()
+                game.setScreen<LoadingScreen>()
             }
         })
 

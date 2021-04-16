@@ -26,8 +26,8 @@ const val V_WIDTH_PIXELS = 480  // TODO: Real value
 const val V_HEIGHT_PIXELS = 270  // TODO: Real value
 
 const val MAP_SCALE = 1/8f
-const val V_WIDTH = 16  // TODO: Real value
-const val V_HEIGHT = 9  // TODO: Real value
+const val V_WIDTH = 16*4  // TODO: Real value
+const val V_HEIGHT = 9*4  // TODO: Real value
 const val UNIT_SCALE = 1/64f  // TODO: May be too much scaling for smaller textures
 private val LOG: Logger = logger<TankathonGame>()
 
@@ -57,15 +57,15 @@ class TankathonGame : KtxGame<AbstractScreen>() {
             addSystem(AIsystem(this))
             addSystem(MovementSystem(this))
             addSystem(RemoveSystem())
-            addSystem(GameManagementSystem(this, renderer))
+            addSystem(GameManagementSystem(this@TankathonGame, renderer))
             addSystem(HealthSystem(this@TankathonGame))
         }
     }
 
     override fun create() {
         Gdx.app.logLevel = LOG_INFO
-        LOG.info { "Create game instance" }
         addScreen(MenuScreen(this))
+        addScreen(LoadingScreen(this))
         addScreen(GameScreen(this))
         addScreen(ScoreBoardScreen(this))
         addScreen(SettingsScreen(this))
