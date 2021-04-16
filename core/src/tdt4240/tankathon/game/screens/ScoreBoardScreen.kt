@@ -22,18 +22,10 @@ import tdt4240.tankathon.game.*
 
 private val LOG = logger<ScoreBoardScreen>()
 
-class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
-    //ui elementer
-    val font : BitmapFont = BitmapFont()
-    var touchPos : Vector3 = Vector3()
-    var skin : Skin = Skin()
-    var buttonAtlas : TextureAtlas
-    var uiTable : Table
-    var topLabel : Label
+class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     var scoreboardTable : Table
 
     //interaksjonselementer
-
     var backTextButton : TextButton
     var exitTextButton : TextButton
 
@@ -42,25 +34,21 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
     override fun show() {
         LOG.info { "ScoreBoardScreen" }
         Gdx.input.inputProcessor = menuStage
-        createScoreboardTable(20,true)
+        //lager er scoreboard table
+        createScoreboardTable(6,true)
+
         addButtonToTable()
         addActorsToStage()
     }
 
     init {
-        //ui-elementer
-        buttonAtlas = TextureAtlas(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.atlas"));
-        skin.addRegions(buttonAtlas)
-        skin.load(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.json"))
 
-        uiTable = Table(skin)
+        initUI()
+        topLabel?.setText("score board")
+        scoreboardTable = Table(uiSkin)
 
-        //interaction-elements
-        topLabel = Label("Scoreboard", skin)
 
-        scoreboardTable = Table(skin)
-
-        backTextButton = TextButton("back", skin)
+        backTextButton = TextButton("back", uiSkin)
         backTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 menuStage.clear()
@@ -68,7 +56,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
             }
         })
 
-        exitTextButton = TextButton("exit", skin)
+        exitTextButton = TextButton("exit", uiSkin)
         exitTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 Gdx.app.exit()
@@ -77,24 +65,29 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
     }
 
     private fun createScoreboardTable(rows:Int, demo:Boolean){
-        //val sorted = getScores().toSortedMap()
-        val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
-
-        scoreboardTable.reset()
-        var number = 1
-        for ((key, value) in sorted) {
-            if(number-1==rows) break
-            scoreboardTable.row()
-            scoreboardTable.add(number.toString()+": ")
-            scoreboardTable.add(key)
-            scoreboardTable.add(value.toString())
-            number++
+        if (demo){
+            val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
+            scoreboardTable.reset()
+            var number = 1
+            for ((key, value) in sorted) {
+                if(number-1==rows) break
+                scoreboardTable.row()
+                scoreboardTable.add(number.toString()+": ")
+                scoreboardTable.add(key)
+                scoreboardTable.add(value.toString())
+                number++
+            }
+        }else{
+            println("*******************non demo function not yet implemented*****************")
         }
-
-
     }
 
     private fun addButtonToTable(){
+        /**
+         * adds buttons and scoreboard table to uiTable, should be called
+         * after: create scoreBoardTable
+         * before: addActors
+         */
         uiTable.reset()
         uiTable.setDebug(false)
         uiTable.setSize(V_WIDTH_PIXELS.toFloat() * 0.7f, V_HEIGHT_PIXELS.toFloat() * 0.7f)
@@ -114,8 +107,6 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
 
     private fun addActorsToStage(){
         menuStage.addActor(uiTable)
-        //menuStage.addActor(exitTextButton)
-        //menuStage.addActor(backTextButton)
     }
 
     override fun render(delta: Float) {
@@ -127,7 +118,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
 
         batch.use {
             val str = "mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
-            font.draw(it, str, 0f, 20f)
+            uiFont.draw(it, str, 0f, 20f)
         }
 
             // process user input
@@ -160,8 +151,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
 
 
     override fun dispose() {
-        font.dispose()
-        skin.dispose()
+        uiDispose()
         menuStage.dispose()
         buttonAtlas.dispose()
     }

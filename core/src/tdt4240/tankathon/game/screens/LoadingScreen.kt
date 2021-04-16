@@ -15,7 +15,6 @@ import tdt4240.tankathon.game.TankathonGame
 private val LOG = logger<LoadingScreen>()
 
 class LoadingScreen(game: TankathonGame) : AbstractScreen(game){
-
     override fun show(){
         menuStage.clear()
         game.assetManager.load("map/tilemap.tmx", TiledMap::class.java)
