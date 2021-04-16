@@ -26,8 +26,6 @@ class MovementSystem(private val ecSengine: ECSengine) : IteratingSystem(
         ecSengine.getEntitiesFor(allOf(MapObjectComponent::class).get())
     }
     private val padding: Float = 0.1f
-    var collisionX: Boolean = false
-    var collisionY: Boolean = false
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val position = entity[PositionComponent.mapper]
