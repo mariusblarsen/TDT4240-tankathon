@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.math.MathUtils.random
 import com.badlogic.gdx.math.Polyline
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
@@ -79,6 +80,7 @@ class ECSengine: PooledEngine() {
             with<PositionComponent> {
                 position.x = spawnPosition.x * MAP_SCALE
                 position.y = spawnPosition.y * MAP_SCALE
+                position.z = random()
             }
             with<PhysicsComponent>{
                 width = texture.width * UNIT_SCALE
