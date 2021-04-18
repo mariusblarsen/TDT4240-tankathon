@@ -5,10 +5,12 @@ import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.math.MathUtils.random
 import com.badlogic.gdx.math.Polyline
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.Null
 import ktx.ashley.entity
 import ktx.ashley.with
 import ktx.log.Logger
@@ -24,8 +26,11 @@ private val LOG: Logger = logger<ECSengine>()
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
 * */
 class ECSengine: PooledEngine() {
+    val players = mutableListOf<Entity>()
+
+
     fun createPlayer(playerTexture: Texture, spawnPoint: Vector2): Entity {
-        return this.entity{
+        var player = entity{
             with<TransformComponent> ()
             with<SpriteComponent>{
                 sprite.run{
@@ -43,7 +48,8 @@ class ECSengine: PooledEngine() {
                 position.y = spawnPoint.y* MAP_SCALE
             }
             with<HealthComponent>{
-                health = 3f
+                maxHealth = 100f
+                health = maxHealth
             }
             with<CanonComponent>()
             with<PhysicsComponent>{
@@ -51,8 +57,10 @@ class ECSengine: PooledEngine() {
                 height = playerTexture.width * UNIT_SCALE  // To make it quadratic
             }
         }
+        players.add(player)
+        return player
     }
-    fun createNPC(spawnPosition: Vector2, texture: Texture,  enemiesIn: List<Entity>) : Entity {
+    fun createNPC(spawnPosition: Vector2, texture: Texture, inputTeam: Int=0) : Entity {
         return entity {
             with<TransformComponent> ()
             with<SpriteComponent> {
@@ -63,7 +71,7 @@ class ECSengine: PooledEngine() {
                 }
             }
             with<AIComponent>{
-                enemies = enemiesIn
+                team = inputTeam
             }
 
             with<VelocityComponent>{
@@ -72,10 +80,18 @@ class ECSengine: PooledEngine() {
             with<PositionComponent> {
                 position.x = spawnPosition.x * MAP_SCALE
                 position.y = spawnPosition.y * MAP_SCALE
+                position.z = random()
             }
             with<PhysicsComponent>{
                 width = texture.width * UNIT_SCALE
                 height = texture.width * UNIT_SCALE  // To make it quadratic
+            }
+            with<HealthComponent>{
+                maxHealth = 100f
+                health = maxHealth
+            }
+            with<DamageComponent>{
+                damage = 10f
             }
         }
     }
@@ -101,11 +117,18 @@ class ECSengine: PooledEngine() {
             with<PositionComponent> {
                 position = spawnPosition
             }
+            with<PhysicsComponent>{
+                width = texture.width * UNIT_SCALE
+                height = texture.height * UNIT_SCALE  // To make it quadratic
+            }
+            with<DamageComponent>{
+                damage = 10f
+            }
         }
     }
 
     fun addMapObject(mapObject: Rectangle): Entity{
-        return this.entity{
+        return entity{
             with<MapObjectComponent>{
                 hitbox = mapObject.apply {
                     x *= MAP_SCALE
@@ -116,4 +139,10 @@ class ECSengine: PooledEngine() {
             }
         }
     }
+    fun addMangementComponent(){
+    entity{
+        with<ManagementComponent>{}
+    }
+    }
+
 }
