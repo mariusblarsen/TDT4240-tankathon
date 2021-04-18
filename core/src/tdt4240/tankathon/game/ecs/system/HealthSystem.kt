@@ -6,14 +6,13 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import ktx.ashley.addComponent
 import ktx.ashley.allOf
+import ktx.ashley.contains
 import ktx.ashley.get
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.ecs.ECSengine
-import tdt4240.tankathon.game.ecs.component.HealthComponent
-import tdt4240.tankathon.game.ecs.component.PhysicsComponent
-import tdt4240.tankathon.game.ecs.component.PositionComponent
-import tdt4240.tankathon.game.ecs.component.RemoveComponent
+import tdt4240.tankathon.game.ecs.component.*
+import tdt4240.tankathon.game.screens.GameOverScreen
 import kotlin.math.max
 
 class HealthSystem(private val game: TankathonGame) : IteratingSystem(allOf(HealthComponent::class).get()) {
@@ -28,7 +27,11 @@ class HealthSystem(private val game: TankathonGame) : IteratingSystem(allOf(Heal
         val healthbarWidth = max(0f, 3f*healthPercentage)
 
         if (healthComponent.health <= 0){
+            if(entity.contains(PlayerComponent.mapper)){
+                game.setScreen<GameOverScreen>()
+            }
             entity.addComponent<RemoveComponent>(engine as ECSengine)
+            return
         }
 
         val position = entity[PositionComponent.mapper]

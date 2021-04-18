@@ -83,7 +83,7 @@ class PlayerInputSystem(
         /* Receives an Vector 2 representing the position of a touch.
         * Calculates the vector from center of right side of screen,
         * and sets the rotationDeg = angle of vector*/
-        val joyStick = Vector2(Gdx.graphics.width *3f/4f, Gdx.graphics.height /2f)
+        val joyStick = Vector2(Gdx.graphics.width *3f/4f, Gdx.graphics.height /2f)//prøvd å flytte joystick lenger ned og ut.tidligere verdier: (Gdx.graphics.width *3f/4f, Gdx.graphics.height /2f)
         gameViewport.unproject(joyStick)
         val direction = Vector2(input.x - joyStick.x, input.y - joyStick.y)
         val rotation = direction.angleDeg()-90
@@ -92,7 +92,7 @@ class PlayerInputSystem(
     }
     private fun setVelocityDirection(input: Vector2, velocity: VelocityComponent,
                                      position: PositionComponent, deltaTime: Float){
-        val joyStick = Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
+        val joyStick = Vector2(Gdx.graphics.width/4f, Gdx.graphics.height /2f) //prøvd å flytte joystick lenger ned og ut.tidligere verdier: Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
         gameViewport.unproject(joyStick)
         velocity.direction = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor()
 
