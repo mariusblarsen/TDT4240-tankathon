@@ -71,7 +71,7 @@ class TankathonGame : KtxGame<AbstractScreen>() {
         addScreen(ScoreBoardScreen(this))
         addScreen((GameOverScreen( this)))
         addScreen(SettingsScreen(this))
-        setScreen<MenuScreen>()
+        setScreen<GameOverScreen>()
     }
 
     override fun dispose() {

@@ -55,7 +55,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
             }
         })
         saveHighcoreTextButton = TextButton("save high score", uiSkin)
-        backTextButton.addListener(object : ChangeListener() {
+        saveHighcoreTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 saveHighScore()
             }
@@ -98,7 +98,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.setPosition(V_WIDTH_PIXELS *0.15f, V_HEIGHT_PIXELS *0.15f)
 
 
-        uiTable.row().colspan(1).fillX().center()
+        uiTable.row().colspan(3).fillX().center()
         uiTable.add(topLabel).fillX
 
         uiTable.row().colspan(2).expandX().fillX();
