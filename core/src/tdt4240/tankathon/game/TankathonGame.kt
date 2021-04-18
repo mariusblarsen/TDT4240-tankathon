@@ -79,4 +79,12 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
         assetManager.dispose()
         batch.dispose()
     }
+
+    fun sendScore(name: String, score: Int) {
+        FBIF.sendScore(name, score)
+    }
+
+    fun getTop10(): HashMap<String, Int> {
+        return FBIF.getTop10()
+    }
 }

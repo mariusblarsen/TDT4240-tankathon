@@ -77,8 +77,8 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
     }
 
     private fun createScoreboardTable(rows:Int, demo:Boolean){
-        //val sorted = getScores().toSortedMap()
-        val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
+        val sorted = game.getTop10().toList().sortedBy { (_,value) -> value}.reversed().toMap()
+        //val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
 
         scoreboardTable.reset()
         var number = 1
