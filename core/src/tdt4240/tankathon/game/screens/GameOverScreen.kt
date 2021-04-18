@@ -1,12 +1,12 @@
 package tdt4240.tankathon.game.screens
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener
 import com.badlogic.gdx.utils.Align
 import ktx.log.info
 import ktx.log.logger
@@ -27,11 +27,12 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     var saveHighcoreTextButton:TextButton
     var backTextButton : TextButton
 
-
     override fun show() {
-
+        menuStage.clear()
         LOG.info { "GameOver" }
         Gdx.input.inputProcessor = menuStage
+        Gdx.graphics.setTitle("game over")
+        addActorsToStage()
     }
 
     init {
@@ -40,11 +41,11 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         topLabel?.setText("GameOver")
         topLabel?.setAlignment(Align.center)
 
-        highscoreTextField = TextField("your score: ",uiSkin)
-        enteredHighscoreTextField = TextField(getHighScore(true),uiSkin)
+        highscoreTextField = TextField("your score: ", uiSkin)
+        enteredHighscoreTextField = TextField(getHighScore(true), uiSkin)
 
-        usernameTextField = TextField("your_username: ",uiSkin)
-        enteredUsernameTextfield = TextField("",uiSkin)
+        usernameTextField = TextField("your_username: ", uiSkin)
+        enteredUsernameTextfield = TextField("", uiSkin)
 
 
 
@@ -66,7 +67,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     }
 
 
-    private fun getHighScore(demo:Boolean=false):String{
+    private fun getHighScore(demo: Boolean = false):String{
         var highScore =0
         if(demo){
             highScore =  101
@@ -75,27 +76,26 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     }
 
     private fun saveHighScore(){
-        //TODO: lagre highscore i database
-        var username = enteredUsernameTextfield.messageText
-        println(username)
-        /*
+        //TODO: lagre highscore i database og sjekke om username er gyldig
+        var username = enteredUsernameTextfield.text
         //hvis man prøver å lagre uten å skirve navn returnerer man til hjemskjerm
-        if (username.equals(null) || username.toString().equals("your_username")){
-            game.setScreen<MenuScreen>()
+        if (username.equals(null) || username.toString().equals("your_username") || username.equals("")){
+            enteredUsernameTextfield.text="(unique username here)"
             LOG.info { "highscore not saved" }
         }else{
             LOG.info { "highscore pushed to firebase(not yet implemented" }
         }
-         */
+
 
 
 
     }
 
     private fun addButtonToTable(){
+
         uiTable.setDebug(false)
         uiTable.setSize(V_WIDTH_PIXELS.toFloat() * 0.7f, V_HEIGHT_PIXELS.toFloat() * 0.7f)
-        uiTable.setPosition(V_WIDTH_PIXELS *0.15f, V_HEIGHT_PIXELS *0.15f)
+        uiTable.setPosition(V_WIDTH_PIXELS * 0.15f, V_HEIGHT_PIXELS * 0.15f)
 
 
         uiTable.row().colspan(3).fillX().center()

@@ -30,6 +30,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
 
 
     override fun show() {
+        menuStage.clear()
         LOG.info { "ScoreBoardScreen" }
         Gdx.input.inputProcessor = menuStage
         //lager er scoreboard table
@@ -41,7 +42,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
 
     init {
         initUI()
-        topLabel?.setText("score board")
+        topLabel?.setText("scoreboard")
         scoreboardTable = Table(uiSkin)
 
         //createButton("back",MenuScreen)
@@ -93,13 +94,13 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         uiTable.setSize(V_WIDTH_PIXELS.toFloat() * 0.7f, V_HEIGHT_PIXELS.toFloat() * 0.7f)
         uiTable.setPosition(V_WIDTH_PIXELS*0.15f, V_HEIGHT_PIXELS*0.15f)
 
-        uiTable.row().colspan(1)
+        uiTable.row().colspan(2)
         uiTable.add(topLabel).fillX
 
         uiTable.row().colspan(2).expandX().fillX().center()
         uiTable.add(scroller)
 
-        uiTable.row().colspan(3).expandX().fillX();
+        uiTable.row().colspan(1).expandX().fillX();
         uiTable.add(backTextButton).fillX
         uiTable.add(exitTextButton).fillX
 

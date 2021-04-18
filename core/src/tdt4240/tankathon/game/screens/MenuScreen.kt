@@ -31,7 +31,10 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
 
     override fun show() {
         LOG.info { "Menu Screen" }
+        menuStage.clear()
         Gdx.input.inputProcessor = menuStage
+        Gdx.graphics.setTitle("main menu")
+        addActorsToStage()
     }
 
     init {
@@ -83,15 +86,15 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.setPosition(V_WIDTH_PIXELS.toFloat()*0.15f, V_HEIGHT_PIXELS.toFloat()*0.15f)
 
 
-        uiTable.row().colspan(3).expandX().fillX();
+        uiTable.row().colspan(2).expandX().fillX();
         uiTable.add(topLabel).fillX
-        uiTable.row().colspan(3).expandX().fillX();
+        uiTable.row().colspan(2).expandX().fillX();
         uiTable.add(startTextButton).fillX
-        uiTable.row().colspan(3).expandX().fillX();
+        uiTable.row().colspan(2).expandX().fillX();
         uiTable.add(scoreboardTextButton).fillX
-        uiTable.row().colspan(3).expandX().fillX();
+        uiTable.row().colspan(2).expandX().fillX();
         uiTable.add(settingsTextButton).fillX
-        uiTable.row().colspan(3).expandX().fillX();
+        uiTable.row().colspan(2).expandX().fillX();
         uiTable.add(exitTextButton).fillX
     }
 

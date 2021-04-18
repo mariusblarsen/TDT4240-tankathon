@@ -49,6 +49,10 @@ abstract class AbstractUI(
         //interaction-elements
         topLabel = Label("topLabel", uiSkin)
         topLabel?.setAlignment(Align.center)
+        topLabel?.setFontScale(1.4f,1.4f)
+
+        menuStage.draw()
+        menuStage.act()
 
     }
     fun uiDispose(){
