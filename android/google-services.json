@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1067408380465",
+    "project_id": "tdt4240-hackathon",
+    "storage_bucket": "tdt4240-hackathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067408380465:android:d3f0f9ee9e4215c14afb10",
+        "android_client_info": {
+          "package_name": "tdt4240.tankathon.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1067408380465-k82stq3dhbnqbe2frdpcai7uqdo09o02.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIlQGQO5Bw93ugSnVmTaTnSwrS7BHpFDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1067408380465-k82stq3dhbnqbe2frdpcai7uqdo09o02.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

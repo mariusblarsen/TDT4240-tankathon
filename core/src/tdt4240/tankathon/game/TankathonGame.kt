@@ -34,7 +34,9 @@ const val UNIT_SCALE = 1/64f  // TODO: May be too much scaling for smaller textu
 private val LOG: Logger = logger<TankathonGame>()
 
 
-class TankathonGame : KtxGame<AbstractScreen>() {
+class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
+
+    val FBIF = IF
 
     val assetManager: AssetManager by lazy { AssetManager().apply {
         setLoader(TiledMap::class.java, TmxMapLoader(fileHandleResolver))
