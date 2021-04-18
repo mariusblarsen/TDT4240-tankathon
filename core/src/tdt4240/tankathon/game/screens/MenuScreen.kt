@@ -100,25 +100,10 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
     }
 
     override fun render(delta: Float) {
-        //tømmer skjerm og setter bakgrunn
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        renderUi()
         update(delta)
-        menuStage.draw()
-
-
-        batch.use {
-            val str = "mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
-            uiFont.draw(it, str, 0f, 20f)
-        }
-        // process user input
-        /*if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX().toFloat(), Gdx.input.getY().toFloat(), 0f)
-        }
-         */
     }
     fun update(delta: Float) {menuStage.act(delta)}
-
     override fun resize(width: Int, height: Int) { }
     override fun hide() { }
     override fun pause() { }

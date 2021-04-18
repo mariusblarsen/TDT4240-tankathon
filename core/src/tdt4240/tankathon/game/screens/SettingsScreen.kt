@@ -22,24 +22,7 @@ import tdt4240.tankathon.game.V_WIDTH_PIXELS
 private val LOG = logger<SettingsScreen>()
 
 class SettingsScreen(game: TankathonGame) : AbstractUI(game) {
-    //ui elementer
-    /*
-    val font : BitmapFont = BitmapFont()
-    var touchPos : Vector3
-    var skin : Skin = Skin()
-    var buttonAtlas : TextureAtlas
-    var table : Table
-
-    //interaksjonselementer
-    */
-    //var topLabel : Label
-
-
-
     var backTextButton : TextButton
-
-
-
 
     override fun show() {
         LOG.info { "Settings" }
@@ -47,22 +30,8 @@ class SettingsScreen(game: TankathonGame) : AbstractUI(game) {
     }
 
     init {
-        initUI()
-        //which stage that controls the input
+        initUI() //must be run before abstractUI class can be used
 
-
-        //ui-elements
-        /*
-        buttonAtlas = TextureAtlas(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.atlas"));
-        skin.addRegions(buttonAtlas)
-        skin.load(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.json"))
-        table = Table(skin)
-
-
-
-        //interaction-elements
-        topLabel = Label("Settings", skin)
-        */
         topLabel?.setText("Settings")
         topLabel?.setAlignment(Align.center)
 
@@ -95,28 +64,11 @@ class SettingsScreen(game: TankathonGame) : AbstractUI(game) {
 
     private fun addActorsToStage(){
         menuStage.addActor(uiTable)
-        //menuStage.addActor(exitTextButton)
-        //menuStage.addActor(backTextButton)
     }
 
     override fun render(delta: Float) {
-        //tømmer skjerm og setter bakgrunn
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        renderUi()
         update(delta)
-        menuStage.draw()
-
-        batch.use {
-            val str = "mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
-            uiFont.draw(it, str, 0f, 20f)
-        }
-
-        // process user input
-        if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX().toFloat(), Gdx.input.getY().toFloat(), 0f)
-        }
-
-
     }
 
 

@@ -12,5 +12,4 @@ class PlayerComponent: Component, Pool.Poolable {
         val mapper = mapperFor<PlayerComponent>()
     }
     var team: Int = 1
-
 }

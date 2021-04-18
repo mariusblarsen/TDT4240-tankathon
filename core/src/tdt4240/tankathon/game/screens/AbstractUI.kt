@@ -1,19 +1,26 @@
 package tdt4240.tankathon.game.screens
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.Viewport
+import ktx.graphics.use
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.ecs.ECSengine
+import java.lang.reflect.Type
 
 abstract class AbstractUI(
         /**
@@ -49,6 +56,42 @@ abstract class AbstractUI(
         uiSkin.dispose()
         buttonAtlas.dispose()
         uiTable.clear()
+    }
+    fun renderUi(showPointerCoordinateOnScreen: Boolean =false){
+        //tømmer skjerm og setter bakgrunn
+        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        menuStage.draw()
+
+        if(showPointerCoordinateOnScreen){
+            batch.use {
+                val str = "mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
+                uiFont.draw(it, str, 0f, 20f)
+            }
+        }
+        //ikke sikkert vi trenger denne:
+        if (Gdx.input.isTouched()) {
+            touchPos.set(Gdx.input.getX().toFloat(), Gdx.input.getY().toFloat(), 0f)
+        }
+    }
+    fun createButton(buttontext:String,
+                     changeToscreen:Type,
+                     exitOnClick:Boolean=false,
+                     skin:Skin=uiSkin): TextButton {
+        var textButton = TextButton(buttontext, uiSkin)
+        textButton.addListener(object : ChangeListener() {
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                menuStage.clear()
+                if(exitOnClick){
+                    Gdx.app.exit()
+                }
+                else{
+                    //TODO får ikke til menuscreen, se scoreboardScreen for eksempel, vet ikke hva jeg skal ta inn som argument
+                    //game.setScreen<HER SKAL DET STÅ MENUSCREEN>()
+                }
+            }
+        })
+        return textButton
     }
 
 }

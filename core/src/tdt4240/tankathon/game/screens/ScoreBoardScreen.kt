@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
@@ -24,6 +21,7 @@ private val LOG = logger<ScoreBoardScreen>()
 
 class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     var scoreboardTable : Table
+    lateinit var scroller : ScrollPane
 
     //interaksjonselementer
     var backTextButton : TextButton
@@ -35,8 +33,8 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         LOG.info { "ScoreBoardScreen" }
         Gdx.input.inputProcessor = menuStage
         //lager er scoreboard table
-        createScoreboardTable(6,true)
-
+        createScoreboardTable(20,true)
+        scroller = ScrollPane(scoreboardTable)
         addButtonToTable()
         addActorsToStage()
     }
@@ -46,6 +44,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         topLabel?.setText("score board")
         scoreboardTable = Table(uiSkin)
 
+        //createButton("back",MenuScreen)
 
         backTextButton = TextButton("back", uiSkin)
         backTextButton.addListener(object : ChangeListener() {
@@ -54,6 +53,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
                 game.setScreen<MenuScreen>()
             }
         })
+
 
         exitTextButton = TextButton("exit", uiSkin)
         exitTextButton.addListener(object : ChangeListener() {
@@ -97,7 +97,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         uiTable.add(topLabel).fillX
 
         uiTable.row().colspan(2).expandX().fillX().center()
-        uiTable.add(scoreboardTable)
+        uiTable.add(scroller)
 
         uiTable.row().colspan(3).expandX().fillX();
         uiTable.add(backTextButton).fillX
@@ -110,32 +110,27 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     }
 
     override fun render(delta: Float) {
-        //tømmer skjerm og setter bakgrunn
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        renderUi()
         update(delta)
-        menuStage.draw()
-
-        batch.use {
-            val str = "mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
-            uiFont.draw(it, str, 0f, 20f)
-        }
-
-            // process user input
-        if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX().toFloat(), Gdx.input.getY().toFloat(), 0f)
-        }
-
-
     }
 
     fun getScores(): HashMap<String, Int> {
         val scores = hashMapOf<String,Int>(
                 "magnus" to 120,
-                "bjorn" to 1200,
+                "bjorn" to 120,
                 "johan" to 900,
                 "kristian" to 700,
-                "oeystein" to 1299
+                "oeystein" to 1299,
+                "magnus1" to 122,
+                "bjorn1" to 1202,
+                "johan1" to 902,
+                "kristian1" to 702,
+                "oeystein" to 1290,
+                "magnus2" to 121,
+                "bjorn2" to 1201,
+                "johan2" to 901,
+                "kristian2" to 800,
+                "oeystein2" to 299
         )
         return scores
     }

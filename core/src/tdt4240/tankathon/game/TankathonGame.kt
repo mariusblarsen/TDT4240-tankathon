@@ -1,6 +1,7 @@
 package tdt4240.tankathon.game
 
 import com.badlogic.gdx.Application.LOG_INFO
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -68,8 +69,9 @@ class TankathonGame : KtxGame<AbstractScreen>() {
         addScreen(LoadingScreen(this))
         addScreen(GameScreen(this))
         addScreen(ScoreBoardScreen(this))
+        addScreen((GameOverScreen( this)))
         addScreen(SettingsScreen(this))
-        setScreen<MenuScreen>()
+        setScreen<GameOverScreen>()
     }
 
     override fun dispose() {
