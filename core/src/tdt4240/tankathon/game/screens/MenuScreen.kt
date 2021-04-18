@@ -106,6 +106,7 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
         update(delta)
         menuStage.draw()
 
+
         batch.use {
             val str = "mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
             uiFont.draw(it, str, 0f, 20f)

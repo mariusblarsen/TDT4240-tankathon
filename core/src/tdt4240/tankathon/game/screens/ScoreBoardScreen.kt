@@ -42,7 +42,6 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     }
 
     init {
-
         initUI()
         topLabel?.setText("score board")
         scoreboardTable = Table(uiSkin)
@@ -65,6 +64,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     }
 
     private fun createScoreboardTable(rows:Int, demo:Boolean){
+
         if (demo){
             val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
             scoreboardTable.reset()
