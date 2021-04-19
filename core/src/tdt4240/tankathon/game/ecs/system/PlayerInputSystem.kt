@@ -27,12 +27,13 @@ class PlayerInputSystem(
         allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class,
                 CanonComponent::class, VelocityComponent::class).get()
 ){
-    private val inputVec = Vector2()
+    private val inputVecAim = Vector2()
+    private val inputVecMove = Vector2()
     private val screenWidth = Gdx.graphics.width
     private val bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
     private val threshold: Float = 0.1f  // For map-boundaries
     private val backgroundTexture = Texture(Gdx.files.internal("map.png"))  // TODO: Fetch somehow
-    private val playerTexture = Texture(Gdx.files.internal("tank.png"))  // TODO: Fetch somehow
+    private val playerTexture = Texture(Gdx.files.internal("tank.png"))  // TO DO: Fetch somehow
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transform = entity[TransformComponent.mapper]
@@ -48,17 +49,38 @@ class PlayerInputSystem(
         require(velocityComponent != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
         /* Handle input */
-        /* Aiming */
-        if (Gdx.input.x > screenWidth/2){
-            inputVec.x = Gdx.input.x.toFloat()
-            inputVec.y = Gdx.input.y.toFloat()
 
-            gameViewport.unproject(inputVec)
-            setRotation(inputVec, transform)
+        var pointer0x = Gdx.input.getX(0) //pointer 0 når det er flere inputs
+        var pointer0y = Gdx.input.getY(0)
+        var pointer1x = Gdx.input.getX(1)
+        var pointer1y = Gdx.input.getY(1)
+
+        //aim
+        if(pointer0x > screenWidth/2){
+            inputVecAim.set(pointer0x.toFloat(),pointer0y.toFloat())
+        } else if(pointer0x < screenWidth/2){
+            inputVecMove.set(pointer0x.toFloat(),pointer0y.toFloat())
+        }else if(pointer0x>0)
+        if(pointer1x > screenWidth/2){
+            inputVecAim.set(pointer1x.toFloat(),pointer1y.toFloat())
+        }
+        if(pointer1x < screenWidth/2){
+            inputVecMove.set(pointer1x.toFloat(),pointer1y.toFloat())
+        }
+
+
+
+        /* Aiming */
+        if (true){//Gdx.input.getX(0) > screenWidth/2){
+            //inputVec.x = Gdx.input.x.toFloat()    gammel kode
+            //inputVec.y = Gdx.input.y.toFloat()    gammel kode
+
+            gameViewport.unproject(inputVecAim)
+            setRotation(inputVecAim, transform)
             canon.timer -= deltaTime
             val bulletPosition = Vector3(Gdx.graphics.width/2f, Gdx.graphics.height/2f, 0f)
             gameViewport.unproject(bulletPosition)
-            val direction = setRotation(inputVec, transform).nor()
+            val direction = setRotation(inputVecAim, transform).nor()
             if (canon.timer < 0){
                 canon.timer = canon.fireRate
                 engine.addBullet(bulletTexture, bulletPosition, direction)  // TODO (Marius): Move? Not sure where
@@ -66,11 +88,12 @@ class PlayerInputSystem(
 
         }
         /* Control tank */
-        if (Gdx.input.x < screenWidth / 2) {
-            inputVec.x = Gdx.input.x.toFloat()
-            inputVec.y = Gdx.input.y.toFloat()
-            gameViewport.unproject(inputVec)
-            setVelocityDirection(inputVec, velocityComponent, position, deltaTime)
+
+        if (true){//Gdx.input.getX(1) < screenWidth / 2) {
+            //inputVec.x = Gdx.input.x.toFloat()  gammel kode
+            //inputVec.y = Gdx.input.y.toFloat() gammel kode
+            gameViewport.unproject(inputVecMove)
+            setVelocityDirection(inputVecMove, velocityComponent, position, deltaTime)
         } else {
             velocityComponent.direction.set(0f, 0f, 0f)
         }
@@ -79,7 +102,8 @@ class PlayerInputSystem(
     }
 
 
-    private fun setRotation(input: Vector2, transform: TransformComponent): Vector2{
+    private fun setRotation(input: Vector2,
+                            transform: TransformComponent): Vector2{
         /* Receives an Vector 2 representing the position of a touch.
         * Calculates the vector from center of right side of screen,
         * and sets the rotationDeg = angle of vector*/
@@ -90,8 +114,10 @@ class PlayerInputSystem(
         transform.rotationDeg = rotation
         return direction
     }
-    private fun setVelocityDirection(input: Vector2, velocity: VelocityComponent,
-                                     position: PositionComponent, deltaTime: Float){
+    private fun setVelocityDirection(input: Vector2,
+                                     velocity: VelocityComponent,
+                                     position: PositionComponent,
+                                     deltaTime: Float){
         val joyStick = Vector2(Gdx.graphics.width/4f, Gdx.graphics.height /2f) //prøvd å flytte joystick lenger ned og ut.tidligere verdier: Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
         gameViewport.unproject(joyStick)
         velocity.direction = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor()
