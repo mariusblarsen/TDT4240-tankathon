@@ -51,7 +51,6 @@ class PlayerInputSystem(
         var pointer0onLeft = false
         var pointer1onLeft = false
 
-<<<<<<< Updated upstream
         if (pointer0touched){
             if(pointer0x > screenWidth/2){
                 inputVecAim.set(pointer0x.toFloat(),pointer0y.toFloat())
@@ -66,7 +65,6 @@ class PlayerInputSystem(
             } else {
                 pointer1onLeft = true
                 inputVecMove.set(pointer1x.toFloat(),pointer1y.toFloat())
-=======
         //aim
         if (Gdx.input.isTouched(0)){
 
@@ -84,7 +82,6 @@ class PlayerInputSystem(
             }
             if(pointer1.x < screenWidth/2){
                 inputVecMove.set(pointer1.x,pointer1.y)
->>>>>>> Stashed changes
             }
         }
 
@@ -103,11 +100,8 @@ class PlayerInputSystem(
             }
         }
         /* Control tank */
-<<<<<<< Updated upstream
         if ((pointer0touched && pointer0onLeft) || (pointer1touched && pointer1onLeft)){
-=======
         if (true){//Gdx.input.getX(1) < screenWidth / 2) {
->>>>>>> Stashed changes
             gameViewport.unproject(inputVecMove)
             setVelocityDirection(inputVecMove, velocityComponent)
         } else {
@@ -136,5 +130,5 @@ class PlayerInputSystem(
         gameViewport.unproject(joyStick)
         velocity.direction = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor()
     }
-}
+
 
