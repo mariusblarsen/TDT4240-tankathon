@@ -4,13 +4,11 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.math.MathUtils.*
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.Viewport
 import ktx.ashley.allOf
 import ktx.ashley.get
-import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
@@ -29,9 +27,6 @@ class PlayerInputSystem(
     private val inputVecMove = Vector2()
     private val screenWidth = Gdx.graphics.width
     private val bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
-    private val threshold: Float = 0.1f  // For map-boundaries
-    private val backgroundTexture = Texture(Gdx.files.internal("map.png"))  // TODO: Fetch somehow
-    private val playerTexture = Texture(Gdx.files.internal("tank.png"))  // TO DO: Fetch somehow
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transform = entity[TransformComponent.mapper]
@@ -47,32 +42,34 @@ class PlayerInputSystem(
         require(velocityComponent != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
         /* Handle input */
+        val pointer0x = Gdx.input.getX(0)  // pointer 0 first input
+        val pointer0y = Gdx.input.getY(0)
+        val pointer1x = Gdx.input.getX(1)  // point 1 second input
+        val pointer1y = Gdx.input.getY(1)
+        val pointer0touched = Gdx.input.isTouched(0)
+        val pointer1touched = Gdx.input.isTouched(1)
+        var pointer0onLeft = false
+        var pointer1onLeft = false
 
-        var pointer0x = Gdx.input.getX(0) //pointer 0 når det er flere inputs
-        var pointer0y = Gdx.input.getY(0)
-        var pointer1x = Gdx.input.getX(1)
-        var pointer1y = Gdx.input.getY(1)
-
-        //aim
-        if(pointer0x > screenWidth/2){
-            inputVecAim.set(pointer0x.toFloat(),pointer0y.toFloat())
-        } else if(pointer0x < screenWidth/2){
-            inputVecMove.set(pointer0x.toFloat(),pointer0y.toFloat())
-        }else if(pointer0x>0)
-        if(pointer1x > screenWidth/2){
-            inputVecAim.set(pointer1x.toFloat(),pointer1y.toFloat())
+        if (pointer0touched){
+            if(pointer0x > screenWidth/2){
+                inputVecAim.set(pointer0x.toFloat(),pointer0y.toFloat())
+            } else {
+                pointer0onLeft = true
+                inputVecMove.set(pointer0x.toFloat(),pointer0y.toFloat())
+            }
         }
-        if(pointer1x < screenWidth/2){
-            inputVecMove.set(pointer1x.toFloat(),pointer1y.toFloat())
+        if (pointer1touched){
+            if(pointer1x > screenWidth/2){
+                inputVecAim.set(pointer1x.toFloat(),pointer1y.toFloat())
+            } else {
+                pointer1onLeft = true
+                inputVecMove.set(pointer1x.toFloat(),pointer1y.toFloat())
+            }
         }
-
-
 
         /* Aiming */
-        if (true){//Gdx.input.getX(0) > screenWidth/2){
-            //inputVec.x = Gdx.input.x.toFloat()    gammel kode
-            //inputVec.y = Gdx.input.y.toFloat()    gammel kode
-
+        if ((pointer0touched && !pointer0onLeft) || (pointer1touched && !pointer1onLeft)){
             gameViewport.unproject(inputVecAim)
             setRotation(inputVecAim, transform)
             canon.timer -= deltaTime
@@ -85,16 +82,13 @@ class PlayerInputSystem(
             }
         }
         /* Control tank */
-
-        if (true){//Gdx.input.getX(1) < screenWidth / 2) {
-            //inputVec.x = Gdx.input.x.toFloat()  gammel kode
-            //inputVec.y = Gdx.input.y.toFloat() gammel kode
+        if ((pointer0touched && pointer0onLeft) || (pointer1touched && pointer1onLeft)){
             gameViewport.unproject(inputVecMove)
-            setVelocityDirection(inputVecMove, velocityComponent, position, deltaTime)
+            setVelocityDirection(inputVecMove, velocityComponent)
         } else {
             velocityComponent.direction.set(0f, 0f, 0f)
         }
-        /* Move camera */
+        /* Move camera to player position */
         gameViewport.camera.position.set(position.position)
     }
 
@@ -112,32 +106,10 @@ class PlayerInputSystem(
         return direction
     }
     private fun setVelocityDirection(input: Vector2,
-                                     velocity: VelocityComponent,
-                                     position: PositionComponent,
-                                     deltaTime: Float){
-        val joyStick = Vector2(Gdx.graphics.width/4f, Gdx.graphics.height /2f) //prøvd å flytte joystick lenger ned og ut.tidligere verdier: Vector2(Gdx.graphics.width *1f/4f, Gdx.graphics.height /2f)
+                                     velocity: VelocityComponent){
+        val joyStick = Vector2(Gdx.graphics.width/4f, Gdx.graphics.height /2f)
         gameViewport.unproject(joyStick)
         velocity.direction = Vector3(input.x - joyStick.x, input.y - joyStick.y,0f).nor()
-
-        /* TODO: Move to collison-system
-        /* Check for map-boundaries */
-        /* TODO: How to fetch these values from entities? */
-        val height = backgroundTexture.height * UNIT_SCALE
-        val width = backgroundTexture.width * UNIT_SCALE
-        val playerSize = playerTexture.width * UNIT_SCALE
-
-        val nextPos = position.position.cpy().add(velocity.getVelocity().scl(deltaTime))
-        /* x-direction */
-        if (nextPos.x > threshold &&
-                nextPos.x < width - playerSize - threshold){
-            position.position.x = nextPos.x
-        }
-        /* y-direction */
-        if (nextPos.y > threshold &&
-                nextPos.y < height - playerSize - threshold){
-            position.position.y = nextPos.y
-        }
-        */
     }
 }
 
