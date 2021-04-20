@@ -34,7 +34,7 @@ class AIsystem : IteratingSystem(
 
         //Velocity set to chaze playe
         var distance=999999999999999f
-        var closestEnemy = (engine as ECSengine).players.first()
+        var closestEnemy = playerEntities.first()
         playerEntities.forEach{ player ->
             player[PositionComponent.mapper]?.let {
                 if (distance>it.position.dst(position.position)){
