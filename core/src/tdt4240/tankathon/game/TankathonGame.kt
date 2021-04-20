@@ -48,7 +48,7 @@ class TankathonGame : KtxGame<AbstractScreen>() {
     val engine: ECSengine by lazy {
         ECSengine().apply{
             addSystem(FireSystem(this))
-            addSystem(PlayerInputSystem(gameViewport, this, FireSystem(this)))
+            addSystem(PlayerInputSystem(gameViewport))
             addSystem(RenderSystem(
                     batch,
                     gameViewport,

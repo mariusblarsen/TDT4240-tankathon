@@ -20,9 +20,7 @@ import tdt4240.tankathon.game.ecs.component.VelocityComponent
 
 
 class PlayerInputSystem(
-        private val gameViewport: Viewport,
-        private val engine: ECSengine,
-        private val fireSystem: FireSystem)
+        private val gameViewport: Viewport)
     : IteratingSystem(
         allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class,
                 CanonComponent::class, VelocityComponent::class).get()
@@ -83,9 +81,8 @@ class PlayerInputSystem(
             val direction = setRotation(inputVecAim, transform).nor()
             if (canon.timer < 0){
                 canon.timer = canon.fireRate
-                engine.addBullet(bulletTexture, bulletPosition, direction)  // TODO (Marius): Move? Not sure where
+                (engine as ECSengine).addBullet(bulletTexture, bulletPosition, direction)
             }
-
         }
         /* Control tank */
 
