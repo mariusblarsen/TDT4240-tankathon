@@ -56,6 +56,9 @@ class ECSengine: PooledEngine() {
                 width = playerTexture.width * UNIT_SCALE
                 height = playerTexture.width * UNIT_SCALE  // To make it quadratic
             }
+            with<EnemyScoreComponent>(){
+                isScored=true
+            }
         }
         players.add(player)
         return player
@@ -92,6 +95,12 @@ class ECSengine: PooledEngine() {
             }
             with<DamageComponent>{
                 damage = 10f
+            }
+            with<EnemyScoreComponent>{
+                scoreGiven=200f
+                scorePercentage=1.0F
+                isDead= false
+                isScored=false
             }
         }
     }

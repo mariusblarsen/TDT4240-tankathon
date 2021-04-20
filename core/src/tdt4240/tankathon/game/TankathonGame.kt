@@ -59,6 +59,7 @@ class TankathonGame : KtxGame<AbstractScreen>() {
             addSystem(RemoveSystem())
             addSystem(GameManagementSystem(this@TankathonGame, renderer))
             addSystem(HealthSystem(this@TankathonGame))
+            addSystem(ScoreSystem(this@TankathonGame, this))
         }
     }
 

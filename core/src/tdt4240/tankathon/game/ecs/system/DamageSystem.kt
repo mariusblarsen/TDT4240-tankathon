@@ -13,10 +13,9 @@ import ktx.log.logger
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
+import tdt4240.tankathon.game.ecs.system.ScoreSystem
 
-private const val DAMAGE_AREA_HEIGHT= 2f
-private const val DAMAGE_PER_SECOND = 25f
-private const val DEATH_EXPLOSION_DURATION = 0.9f
+
 
 private val LOG: Logger = logger<DamageSystem>()
 
@@ -76,6 +75,7 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(
         enemy[HealthComponent.mapper]?.run {
             health -= bulletDamage
         }
+
         bullet.addComponent<RemoveComponent>(ecsEngine)
     }
 
@@ -85,7 +85,6 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(
             health -= npcDamage
         }
         enemy.addComponent<RemoveComponent>(ecsEngine)
-        LOG.info { "EnemyHit" }
     }
 
 }
