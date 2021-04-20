@@ -69,7 +69,6 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         //val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
 
         if (demo){
-            val sorted = getScores(true).toList().sortedBy { (_,value) -> value}.reversed().toMap()
             scoreboardTable.reset()
             var number = 1
             for ((key, value) in sorted) {
