@@ -1,3 +1,4 @@
+apply plugin: 'com.google.gms.google-services'
 android {
     buildToolsVersion "30.0.3"
     compileSdkVersion 30
@@ -22,6 +23,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -87,6 +89,12 @@ task run(type: Exec) {
 
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'tdt4240.tankathon.game/tdt4240.tankathon.game.AndroidLauncher'
+}
+
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:27.0.0')
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+
 }
 
 eclipse.project.name = appName + "-android"

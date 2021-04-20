@@ -12,6 +12,6 @@ object DesktopLauncher {
         val config = LwjglApplicationConfiguration()
         config.height = V_HEIGHT*32
         config.width = V_WIDTH*32
-        LwjglApplication(TankathonGame(), config)
+        LwjglApplication(TankathonGame(DesktopInterface()), config)
     }
 }

@@ -65,6 +65,19 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     }
 
     private fun createScoreboardTable(rows:Int, demo:Boolean){
+        val sorted = game.getTop10().toList().sortedBy { (_,value) -> value}.reversed().toMap()
+        //val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
+
+        scoreboardTable.reset()
+        var number = 1
+        for ((key, value) in sorted) {
+            if(number-1==rows) break
+            scoreboardTable.row()
+            scoreboardTable.add(number.toString()+": ")
+            scoreboardTable.add(key)
+            scoreboardTable.add(value.toString())
+            number++
+        }
 
         if (demo){
             val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
