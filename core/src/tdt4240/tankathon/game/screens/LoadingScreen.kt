@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import ktx.graphics.use
 import ktx.log.info
@@ -53,7 +54,7 @@ class LoadingScreen(game: TankathonGame) : AbstractUI(game){
         }
         for (mapObject: MapObject in collisionObjects){
             if (mapObject is RectangleMapObject){
-                game.engine.addMapObject(mapObject.rectangle)
+                game.engine.addMapObject(Rectangle(mapObject.rectangle))
             }
             else {
                 LOG.info { "MapObject not supported!" }
