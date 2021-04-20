@@ -19,6 +19,7 @@ private val LOG = logger<LoadingScreen>()
 class LoadingScreen(game: TankathonGame) : AbstractUI(game){
     override fun show(){
         menuStage.clear()
+        engine.removeAllEntities()
         game.assetManager.load("map/tilemap.tmx", TiledMap::class.java)
         game.assetManager.finishLoading()
         renderer.map = game.assetManager.get("map/tilemap.tmx", TiledMap::class.java)

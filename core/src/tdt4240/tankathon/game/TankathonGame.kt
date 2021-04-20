@@ -57,7 +57,7 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
                     renderer,
                     gameCamera))
             addSystem(DamageSystem(this))
-            addSystem(AIsystem(this))
+            addSystem(AIsystem())
             addSystem(MovementSystem())
             addSystem(RemoveSystem())
             addSystem(GameManagementSystem(this@TankathonGame, renderer))
