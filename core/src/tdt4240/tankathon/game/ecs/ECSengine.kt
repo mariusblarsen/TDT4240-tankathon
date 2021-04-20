@@ -108,7 +108,7 @@ class ECSengine: PooledEngine() {
             with<BulletComponent>()
             with<VelocityComponent> {
                 direction = Vector3(fireDirection, 0f)
-                speed = 9f
+                speed = 12f
             }
             with<PositionComponent> {
                 position = spawnPosition
