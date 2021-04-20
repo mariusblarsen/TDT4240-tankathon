@@ -42,7 +42,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         topLabel?.setAlignment(Align.center)
 
         highscoreTextField = TextField("your score: ", uiSkin)
-        enteredHighscoreTextField = TextField(getHighScore(true), uiSkin)
+        enteredHighscoreTextField = TextField(getHighScore(true).toString(), uiSkin)
 
         usernameTextField = TextField("your_username: ", uiSkin)
         enteredUsernameTextfield = TextField("", uiSkin)
@@ -67,12 +67,12 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     }
 
 
-    private fun getHighScore(demo: Boolean = false):String{
+    private fun getHighScore(demo: Boolean = false):Int{
         var highScore =0
         if(demo){
-            highScore =  101
+            highScore =  (0..2000).random()
         }
-        return highScore.toString()
+        return highScore
     }
 
     private fun saveHighScore(){
@@ -83,7 +83,8 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
             enteredUsernameTextfield.text="(unique username here)"
             LOG.info { "highscore not saved" }
         }else{
-            LOG.info { "highscore pushed to firebase(not yet implemented" }
+            game.sendScore(username,getHighScore())
+            LOG.info { "highscore pushed to firebase " }
         }
 
 

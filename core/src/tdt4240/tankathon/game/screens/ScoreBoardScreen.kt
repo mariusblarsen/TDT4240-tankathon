@@ -68,19 +68,8 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         val sorted = game.getTop10().toList().sortedBy { (_,value) -> value}.reversed().toMap()
         //val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
 
-        scoreboardTable.reset()
-        var number = 1
-        for ((key, value) in sorted) {
-            if(number-1==rows) break
-            scoreboardTable.row()
-            scoreboardTable.add(number.toString()+": ")
-            scoreboardTable.add(key)
-            scoreboardTable.add(value.toString())
-            number++
-        }
-
         if (demo){
-            val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
+            val sorted = getScores(true).toList().sortedBy { (_,value) -> value}.reversed().toMap()
             scoreboardTable.reset()
             var number = 1
             for ((key, value) in sorted) {
@@ -92,7 +81,18 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
                 number++
             }
         }else{
-            println("*******************non demo function not yet implemented*****************")
+            val sorted = getScores(false).toList().sortedBy { (_,value) -> value}.reversed().toMap()
+            scoreboardTable.reset()
+            var number = 1
+            for ((key, value) in sorted) {
+                if(number-1==rows) break
+                scoreboardTable.row()
+                scoreboardTable.add(number.toString()+": ")
+                scoreboardTable.add(key)
+                scoreboardTable.add(value.toString())
+                number++
+
+            }
         }
     }
 
@@ -128,7 +128,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         update(delta)
     }
 
-    fun getScores(): HashMap<String, Int> {
+    fun getScores(demo: Boolean=false): HashMap<String, Int> {
         val scores = hashMapOf<String,Int>(
                 "magnus" to 120,
                 "bjorn" to 120,
@@ -146,7 +146,12 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
                 "kristian2" to 800,
                 "oeystein2" to 299
         )
-        return scores
+        if (demo){
+            return scores
+        }else{
+            return game.getTop10()
+        }
+
     }
 
 
