@@ -26,9 +26,6 @@ private val LOG: Logger = logger<ECSengine>()
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
 * */
 class ECSengine: PooledEngine() {
-    val players = mutableListOf<Entity>()
-
-
     fun createPlayer(playerTexture: Texture, spawnPoint: Vector2): Entity {
         var player = entity{
             with<TransformComponent> ()
@@ -57,7 +54,6 @@ class ECSengine: PooledEngine() {
                 height = playerTexture.width * UNIT_SCALE  // To make it quadratic
             }
         }
-        players.add(player)
         return player
     }
     fun createNPC(spawnPosition: Vector2, texture: Texture, inputTeam: Int=0) : Entity {
@@ -112,7 +108,7 @@ class ECSengine: PooledEngine() {
             with<BulletComponent>()
             with<VelocityComponent> {
                 direction = Vector3(fireDirection, 0f)
-                speed = 9f
+                speed = 12f
             }
             with<PositionComponent> {
                 position = spawnPosition
@@ -139,10 +135,10 @@ class ECSengine: PooledEngine() {
             }
         }
     }
-    fun addMangementComponent(){
-    entity{
-        with<ManagementComponent>{}
-    }
+    fun addMangementComponent(): Entity{
+        return entity{
+            with<ManagementComponent>()
+        }
     }
 
 }
