@@ -13,6 +13,7 @@ import ktx.log.logger
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.V_HEIGHT_PIXELS
 import tdt4240.tankathon.game.V_WIDTH_PIXELS
+import kotlin.random.Random
 
 private val LOG = logger<GameOverScreen>()
 
@@ -42,7 +43,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         topLabel?.setAlignment(Align.center)
 
         highscoreTextField = TextField("your score: ", uiSkin)
-        enteredHighscoreTextField = TextField(getHighScore(true), uiSkin)
+        enteredHighscoreTextField = TextField(getHighScore(true).toString(), uiSkin)
 
         usernameTextField = TextField("your_username: ", uiSkin)
         enteredUsernameTextfield = TextField("", uiSkin)
@@ -67,28 +68,27 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     }
 
 
-    private fun getHighScore(demo: Boolean = false):String{
+    //TODO:  implementer henting av score fra game.
+    private fun getHighScore(demo: Boolean = false):Int{
         var highScore =0
         if(demo){
-            highScore =  101
+            highScore = (0..100).random()
         }
-        return highScore.toString()
+        return highScore
     }
 
     private fun saveHighScore(){
         //TODO: lagre highscore i database og sjekke om username er gyldig
         var username = enteredUsernameTextfield.text
         //hvis man prøver å lagre uten å skirve navn returnerer man til hjemskjerm
+
         if (username.equals(null) || username.toString().equals("your_username") || username.equals("")){
             enteredUsernameTextfield.text="(unique username here)"
             LOG.info { "highscore not saved" }
         }else{
-            LOG.info { "highscore pushed to firebase(not yet implemented" }
+            game.sendScore(username,getHighScore(true))
+            LOG.info { "highscore pushed to firebase" }
         }
-
-
-
-
     }
 
     private fun addButtonToTable(){

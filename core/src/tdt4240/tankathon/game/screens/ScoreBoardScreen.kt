@@ -146,7 +146,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
                 "kristian2" to 800,
                 "oeystein2" to 299
         )
-        return scores
+        return game.getTop10()
     }
 
 

@@ -51,6 +51,7 @@ class PlayerInputSystem(
         var pointer0onLeft = false
         var pointer1onLeft = false
 
+<<<<<<< Updated upstream
         if (pointer0touched){
             if(pointer0x > screenWidth/2){
                 inputVecAim.set(pointer0x.toFloat(),pointer0y.toFloat())
@@ -65,8 +66,28 @@ class PlayerInputSystem(
             } else {
                 pointer1onLeft = true
                 inputVecMove.set(pointer1x.toFloat(),pointer1y.toFloat())
+=======
+        //aim
+        if (Gdx.input.isTouched(0)){
+
+            if(pointer0.x > screenWidth/2){
+                inputVecAim.set(pointer0.x,pointer0.y)
+            }
+            if(pointer0.x < screenWidth/2){
+                inputVecMove.set(pointer0.x,pointer0.y)
             }
         }
+        if (Gdx.input.isTouched(1)){
+
+            if(pointer1.x > screenWidth/2){
+                inputVecAim.set(pointer1.x,pointer1.y)
+            }
+            if(pointer1.x < screenWidth/2){
+                inputVecMove.set(pointer1.x,pointer1.y)
+>>>>>>> Stashed changes
+            }
+        }
+
 
         /* Aiming */
         if ((pointer0touched && !pointer0onLeft) || (pointer1touched && !pointer1onLeft)){
@@ -82,7 +103,11 @@ class PlayerInputSystem(
             }
         }
         /* Control tank */
+<<<<<<< Updated upstream
         if ((pointer0touched && pointer0onLeft) || (pointer1touched && pointer1onLeft)){
+=======
+        if (true){//Gdx.input.getX(1) < screenWidth / 2) {
+>>>>>>> Stashed changes
             gameViewport.unproject(inputVecMove)
             setVelocityDirection(inputVecMove, velocityComponent)
         } else {
