@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
@@ -22,45 +19,35 @@ import tdt4240.tankathon.game.*
 
 private val LOG = logger<ScoreBoardScreen>()
 
-class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
-    //ui elementer
-    val font : BitmapFont = BitmapFont()
-    var touchPos : Vector3 = Vector3()
-    var skin : Skin = Skin()
-    var buttonAtlas : TextureAtlas
-    var uiTable : Table
-    var topLabel : Label
+class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     var scoreboardTable : Table
+    lateinit var scroller : ScrollPane
 
     //interaksjonselementer
-
     var backTextButton : TextButton
     var exitTextButton : TextButton
 
 
 
     override fun show() {
+        menuStage.clear()
         LOG.info { "ScoreBoardScreen" }
         Gdx.input.inputProcessor = menuStage
+        //lager er scoreboard table
         createScoreboardTable(20,true)
+        scroller = ScrollPane(scoreboardTable)
         addButtonToTable()
         addActorsToStage()
     }
 
     init {
-        //ui-elementer
-        buttonAtlas = TextureAtlas(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.atlas"));
-        skin.addRegions(buttonAtlas)
-        skin.load(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.json"))
+        initUI()
+        topLabel?.setText("scoreboard")
+        scoreboardTable = Table(uiSkin)
 
-        uiTable = Table(skin)
+        //createButton("back",MenuScreen)
 
-        //interaction-elements
-        topLabel = Label("Scoreboard", skin)
-
-        scoreboardTable = Table(skin)
-
-        backTextButton = TextButton("back", skin)
+        backTextButton = TextButton("back", uiSkin)
         backTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 menuStage.clear()
@@ -68,7 +55,8 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
             }
         })
 
-        exitTextButton = TextButton("exit", skin)
+
+        exitTextButton = TextButton("exit", uiSkin)
         exitTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 Gdx.app.exit()
@@ -91,22 +79,41 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
             number++
         }
 
-
+        if (demo){
+            val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
+            scoreboardTable.reset()
+            var number = 1
+            for ((key, value) in sorted) {
+                if(number-1==rows) break
+                scoreboardTable.row()
+                scoreboardTable.add(number.toString()+": ")
+                scoreboardTable.add(key)
+                scoreboardTable.add(value.toString())
+                number++
+            }
+        }else{
+            println("*******************non demo function not yet implemented*****************")
+        }
     }
 
     private fun addButtonToTable(){
+        /**
+         * adds buttons and scoreboard table to uiTable, should be called
+         * after: create scoreBoardTable
+         * before: addActors
+         */
         uiTable.reset()
         uiTable.setDebug(false)
         uiTable.setSize(V_WIDTH_PIXELS.toFloat() * 0.7f, V_HEIGHT_PIXELS.toFloat() * 0.7f)
         uiTable.setPosition(V_WIDTH_PIXELS*0.15f, V_HEIGHT_PIXELS*0.15f)
 
-        uiTable.row().colspan(1)
+        uiTable.row().colspan(2)
         uiTable.add(topLabel).fillX
 
         uiTable.row().colspan(2).expandX().fillX().center()
-        uiTable.add(scoreboardTable)
+        uiTable.add(scroller)
 
-        uiTable.row().colspan(3).expandX().fillX();
+        uiTable.row().colspan(1).expandX().fillX();
         uiTable.add(backTextButton).fillX
         uiTable.add(exitTextButton).fillX
 
@@ -114,37 +121,30 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
 
     private fun addActorsToStage(){
         menuStage.addActor(uiTable)
-        //menuStage.addActor(exitTextButton)
-        //menuStage.addActor(backTextButton)
     }
 
     override fun render(delta: Float) {
-        //tømmer skjerm og setter bakgrunn
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        renderUi()
         update(delta)
-        menuStage.draw()
-
-        batch.use {
-            val str = "mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
-            font.draw(it, str, 0f, 20f)
-        }
-
-            // process user input
-        if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX().toFloat(), Gdx.input.getY().toFloat(), 0f)
-        }
-
-
     }
 
     fun getScores(): HashMap<String, Int> {
         val scores = hashMapOf<String,Int>(
                 "magnus" to 120,
-                "bjorn" to 1200,
+                "bjorn" to 120,
                 "johan" to 900,
                 "kristian" to 700,
-                "oeystein" to 1299
+                "oeystein" to 1299,
+                "magnus1" to 122,
+                "bjorn1" to 1202,
+                "johan1" to 902,
+                "kristian1" to 702,
+                "oeystein" to 1290,
+                "magnus2" to 121,
+                "bjorn2" to 1201,
+                "johan2" to 901,
+                "kristian2" to 800,
+                "oeystein2" to 299
         )
         return scores
     }
@@ -160,8 +160,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractScreen(game){
 
 
     override fun dispose() {
-        font.dispose()
-        skin.dispose()
+        uiDispose()
         menuStage.dispose()
         buttonAtlas.dispose()
     }

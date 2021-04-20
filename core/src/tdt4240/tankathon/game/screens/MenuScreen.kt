@@ -18,17 +18,12 @@ import tdt4240.tankathon.game.*
 
 private val LOG = logger<MenuScreen>()
 
-class MenuScreen(game: TankathonGame) : AbstractScreen(game) {
+class MenuScreen(game: TankathonGame) : AbstractUI(game) {
     //ui elements
-    val font : BitmapFont = BitmapFont()
-    var touchPos : Vector3
-    var skin : Skin = Skin()
-    var buttonAtlas :  TextureAtlas
-    var table : Table
+
 
 
     //interaction elements
-    var topLabel : Label
     var startTextButton : TextButton
     var settingsTextButton : TextButton
     var scoreboardTextButton : TextButton
@@ -36,21 +31,18 @@ class MenuScreen(game: TankathonGame) : AbstractScreen(game) {
 
     override fun show() {
         LOG.info { "Menu Screen" }
+        menuStage.clear()
         Gdx.input.inputProcessor = menuStage
+        Gdx.graphics.setTitle("main menu")
+        addActorsToStage()
     }
 
     init {
-        //ui-elementes
-        buttonAtlas = TextureAtlas(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.atlas"))
-        skin.addRegions(buttonAtlas)
-        skin.load(Gdx.files.internal("Neon_UI_Skin/neonui/neon-ui.json"))
-        table = Table(skin)
-
+        initUI()
         //interaction-elements
-        topLabel = Label("Main Menu", skin)
-        topLabel.setAlignment(Align.center)
+        topLabel?.setText("main menu")
 
-        startTextButton = TextButton("start", skin)
+        startTextButton = TextButton("start", uiSkin)
         startTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 menuStage.clear()
@@ -58,21 +50,21 @@ class MenuScreen(game: TankathonGame) : AbstractScreen(game) {
             }
         })
 
-        scoreboardTextButton = TextButton("ScoreBoard", skin)
+        scoreboardTextButton = TextButton("ScoreBoard", uiSkin)
         scoreboardTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 game.setScreen<ScoreBoardScreen>()
             }
         })
 
-        settingsTextButton = TextButton("settings", skin)
+        settingsTextButton = TextButton("settings", uiSkin)
         settingsTextButton.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     game.setScreen<SettingsScreen>()
                 }
             })
 
-        exitTextButton = TextButton("exit", skin)
+        exitTextButton = TextButton("exit", uiSkin)
         exitTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 Gdx.app.exit()
@@ -89,62 +81,38 @@ class MenuScreen(game: TankathonGame) : AbstractScreen(game) {
 
 
     private fun addButtonToTable(){
-        table.setDebug(false)
-        table.setSize(V_WIDTH_PIXELS.toFloat() * 0.7f, V_HEIGHT_PIXELS.toFloat() * 0.7f)
-        table.setPosition(V_WIDTH_PIXELS.toFloat()*0.15f, V_HEIGHT_PIXELS.toFloat()*0.15f)
+        uiTable.setDebug(false)
+        uiTable.setSize(V_WIDTH_PIXELS.toFloat() * 0.7f, V_HEIGHT_PIXELS.toFloat() * 0.7f)
+        uiTable.setPosition(V_WIDTH_PIXELS.toFloat()*0.15f, V_HEIGHT_PIXELS.toFloat()*0.15f)
 
 
-        table.row().colspan(3).expandX().fillX();
-        table.add(topLabel).fillX
-        table.row().colspan(3).expandX().fillX();
-        table.add(startTextButton).fillX
-        table.row().colspan(3).expandX().fillX();
-        table.add(scoreboardTextButton).fillX
-        table.row().colspan(3).expandX().fillX();
-        table.add(settingsTextButton).fillX
-        table.row().colspan(3).expandX().fillX();
-        table.add(exitTextButton).fillX
+        uiTable.row().colspan(2).expandX().fillX();
+        uiTable.add(topLabel).fillX
+        uiTable.row().colspan(2).expandX().fillX();
+        uiTable.add(startTextButton).fillX
+        uiTable.row().colspan(2).expandX().fillX();
+        uiTable.add(scoreboardTextButton).fillX
+        uiTable.row().colspan(2).expandX().fillX();
+        uiTable.add(settingsTextButton).fillX
+        uiTable.row().colspan(2).expandX().fillX();
+        uiTable.add(exitTextButton).fillX
     }
 
     fun addActorsToStage(){
-        menuStage.addActor(table)
+        menuStage.addActor(uiTable)
     }
 
     override fun render(delta: Float) {
-        //tømmer skjerm og setter bakgrunn
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        renderUi()
         update(delta)
-        menuStage.draw()
-
-        batch.use {
-            val str = "mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
-            font.draw(it, str, 0f, 20f)
-        }
-        // process user input
-        /*if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX().toFloat(), Gdx.input.getY().toFloat(), 0f)
-        }
-         */
     }
-
-    fun printCoordinates(){
-        println("\n skjermbredde: " + Gdx.graphics.width + " skjermhøyde: " + Gdx.graphics.height)
-        println("tablebredde: " + table.width + " table høyde: " + table.height)
-        println("table_x: " + table.x + " table_y: " + table.y)
-        println("viewport bredde/høyde ikke pixel?:"+gameViewport.screenWidth+"/"+gameViewport.screenHeight)
-    }
-
     fun update(delta: Float) {menuStage.act(delta)}
-
-
     override fun resize(width: Int, height: Int) { }
     override fun hide() { }
     override fun pause() { }
     override fun resume() { }
     override fun dispose() {
-        font.dispose()
-        skin.dispose()
+        uiDispose()
         menuStage.dispose()
         buttonAtlas.dispose()
 

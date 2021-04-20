@@ -8,11 +8,11 @@ import ktx.ashley.mapperFor
 
 
 class VelocityComponent : Component, Pool.Poolable{
-    var direction = Vector3(1f,1f, 0f)
+    var direction = Vector3(0f,0f, 0f)
     var speed = 1f
 
     override fun reset() {
-        direction.set(1f,1f, 0f)
+        direction.set(0f,0f, 0f)
         speed = 1f
     }
 

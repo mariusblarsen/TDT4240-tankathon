@@ -1,6 +1,7 @@
 package tdt4240.tankathon.game
 
 import com.badlogic.gdx.Application.LOG_INFO
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -49,7 +50,7 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
     val engine: ECSengine by lazy {
         ECSengine().apply{
             addSystem(FireSystem(this))
-            addSystem(PlayerInputSystem(gameViewport, this, FireSystem(this)))
+            addSystem(PlayerInputSystem(gameViewport))
             addSystem(RenderSystem(
                     batch,
                     gameViewport,
@@ -70,6 +71,7 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
         addScreen(LoadingScreen(this))
         addScreen(GameScreen(this))
         addScreen(ScoreBoardScreen(this))
+        addScreen((GameOverScreen( this)))
         addScreen(SettingsScreen(this))
         setScreen<MenuScreen>()
     }

@@ -8,14 +8,15 @@ import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
+import ktx.graphics.use
 import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.TankathonGame
+import tdt4240.tankathon.game.V_HEIGHT_PIXELS
 
 private val LOG = logger<LoadingScreen>()
 
-class LoadingScreen(game: TankathonGame) : AbstractScreen(game){
-
+class LoadingScreen(game: TankathonGame) : AbstractUI(game){
     override fun show(){
         menuStage.clear()
         game.assetManager.load("map/tilemap.tmx", TiledMap::class.java)
@@ -36,6 +37,10 @@ class LoadingScreen(game: TankathonGame) : AbstractScreen(game){
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        batch.use {
+            val str = "Loading... \n mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
+            uiFont.draw(it, str, 0f, 40f)
+        }
     }
 
     private fun parseCollision(tiledMap: TiledMap){
