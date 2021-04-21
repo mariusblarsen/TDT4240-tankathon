@@ -37,11 +37,12 @@ class ScoreSystem(private val game:TankathonGame, private val ecsEngine: ECSengi
             playerScore+= enemyScore
 
 
+
         }
         enemy[EnemyScoreComponent.mapper]?.run{
             isScored = true
         }
-        LOG.info{"Score oppdatert med "+ enemyScore+ "og er nå "+score  }
+        LOG.info{"Score oppdatert med "+ enemyScore+ "og er nå "+ player.getComponent(PlayerScoreComponent::class.java).playerScore }
 
 
 

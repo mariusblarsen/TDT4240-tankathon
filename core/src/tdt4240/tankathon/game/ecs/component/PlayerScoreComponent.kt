@@ -11,11 +11,6 @@ class PlayerScoreComponent: Component, Pool.Poolable {
         playerScore=0f
     }
 
-    fun addScore(enemyScore:Float){
-        playerScore+=enemyScore
-    }
-
-
 
     companion object{
         val mapper:ComponentMapper<PlayerScoreComponent> = mapperFor<PlayerScoreComponent>()
