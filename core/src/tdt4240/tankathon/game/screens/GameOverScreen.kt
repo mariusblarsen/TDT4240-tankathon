@@ -17,6 +17,11 @@ import tdt4240.tankathon.game.V_WIDTH_PIXELS
 private val LOG = logger<GameOverScreen>()
 
 class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
+    companion object {
+        var playerHighscore : Float = 0f
+        fun getHighscore():Float { return playerHighscore }
+        fun setHigscore(highscore:Float){ playerHighscore=highscore}
+    }
 
     var highscoreTextField : TextField
     var enteredHighscoreTextField : TextField
@@ -42,7 +47,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         topLabel?.setAlignment(Align.center)
 
         highscoreTextField = TextField("your score: ", uiSkin)
-        enteredHighscoreTextField = TextField(getHighScore(true), uiSkin)
+        enteredHighscoreTextField = TextField(getHighScore(), uiSkin)
 
         usernameTextField = TextField("your_username: ", uiSkin)
         enteredUsernameTextfield = TextField("", uiSkin)
@@ -68,9 +73,11 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
 
 
     private fun getHighScore(demo: Boolean = false):String{
-        var highScore =0
+        var highScore = 0f
         if(demo){
-            highScore =  101
+            highScore =  101f
+        }else{
+            highScore = playerHighscore
         }
         return highScore.toString()
     }
