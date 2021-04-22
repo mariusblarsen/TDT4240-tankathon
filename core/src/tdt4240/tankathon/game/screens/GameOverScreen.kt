@@ -52,8 +52,6 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         usernameTextField = TextField("your_username: ", uiSkin)
         enteredUsernameTextfield = TextField("", uiSkin)
 
-
-
         backTextButton = TextButton("back", uiSkin)
         backTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -70,7 +68,6 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         addActorsToStage()
         touchPos = Vector3()
     }
-
 
     private fun getHighScore(demo: Boolean = false):String{
         var highScore = 0f
@@ -90,12 +87,10 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
             enteredUsernameTextfield.text="(unique username here)"
             LOG.info { "highscore not saved" }
         }else{
-            LOG.info { "highscore pushed to firebase(not yet implemented" }
+            LOG.info { "highscore pushed to firebase"}
+            //game.sendScore(username,getHighScore().toInt())
+            game.setScreen<ScoreBoardScreen>()
         }
-
-
-
-
     }
 
     private fun addButtonToTable(){
@@ -126,14 +121,10 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     private fun addActorsToStage(){
         menuStage.addActor(uiTable)
     }
-
-
     override fun render(delta: Float) {
         renderUi()
         update(delta)
     }
-
-
     fun update(delta: Float) {
         menuStage.act(delta)
     }
@@ -141,8 +132,6 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     override fun hide() { }
     override fun pause() { }
     override fun resume() { }
-
-
     override fun dispose() {
         uiFont.dispose()
         uiSkin.dispose()

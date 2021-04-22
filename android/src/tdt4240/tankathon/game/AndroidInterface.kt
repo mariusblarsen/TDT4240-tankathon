@@ -34,7 +34,7 @@ class AndroidInterface: FirebaseInterface {
                             scoreBoard.put(name, score)
                         }
                         else {
-                            println("Could not get scoreboard")
+                            println("****************************Could not get scoreboard******************************")
                         }
                     }
                 }

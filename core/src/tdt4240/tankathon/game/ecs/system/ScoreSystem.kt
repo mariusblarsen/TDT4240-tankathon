@@ -39,8 +39,10 @@ class ScoreSystem(private val game:TankathonGame, private val ecsEngine: ECSengi
             isScored = true
         }
         val playerScore = player.getComponent(PlayerScoreComponent::class.java).playerScore
+
         GameOverScreen.setHigscore(playerScore)
         LOG.info{"Score oppdatert med "+ enemyScore+ "og er nå "+ playerScore}
+        println("gamOverScore:"+GameOverScreen.getHighscore().toString())
 
     }
 }
