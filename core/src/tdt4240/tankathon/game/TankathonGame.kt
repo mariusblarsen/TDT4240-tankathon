@@ -36,11 +36,7 @@ private val LOG: Logger = logger<TankathonGame>()
 class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
 
     val FBIF = IF
-
-    val assetManager: AssetManager by lazy { AssetManager().apply {
-        setLoader(TiledMap::class.java, TmxMapLoader(fileHandleResolver))
-    } }
-    val gameManager: GameManager = GameManager(this, assetManager)
+    val gameManager: GameManager = GameManager(this)
     val gameCamera: OrthographicCamera by lazy { OrthographicCamera() }
     val batch: Batch by lazy { SpriteBatch() }
     val renderer: OrthogonalTiledMapRenderer by lazy { OrthogonalTiledMapRenderer(TiledMap(), MAP_SCALE, batch) }
@@ -80,7 +76,7 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
 
     override fun dispose() {
         super.dispose()
-        assetManager.dispose()
+        gameManager.dispose()
         batch.dispose()
     }
 

@@ -1,6 +1,8 @@
 package tdt4240.tankathon.game
 
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
 
 abstract class Character {
     var maxHealth: Float = 0f
@@ -12,7 +14,7 @@ abstract class Character {
 
 class HeavyCharacter : Character() {
     init {
-        maxHealth = 1500f
+        maxHealth = 150f
         speed = 4f
         damage = 50f
         fireRate = 0.3f
@@ -21,7 +23,7 @@ class HeavyCharacter : Character() {
 }
 class LightCharacter : Character() {
     init {
-        maxHealth = 800f
+        maxHealth = 80f
         speed = 10f
         damage = 8f
         fireRate = 0.05f
@@ -29,10 +31,12 @@ class LightCharacter : Character() {
     }
 }
 
-class GameManager (
-        val game: TankathonGame,
-        val assetManager: AssetManager,
+
+class GameManager (val game: TankathonGame
 ) {
+    val assetManager: AssetManager by lazy { AssetManager().apply {
+        setLoader(TiledMap::class.java, TmxMapLoader(fileHandleResolver))
+    } }
     private var character: Character = LightCharacter()
     private val playerTextures: Array<String> = arrayOf("tank.png", "guy_teal.png")
 
@@ -51,4 +55,7 @@ class GameManager (
         character = LightCharacter()
     }
 
+    fun dispose(){
+        assetManager.dispose()
+    }
 }
