@@ -53,6 +53,7 @@ class SelectionScreen(gameManager: GameManager) : AbstractUI(gameManager) {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 gameManager.setLightCharacter()
                 game.setScreen<LoadingScreen>()
+                menuStage.clear()
             }
         })
 
@@ -61,6 +62,7 @@ class SelectionScreen(gameManager: GameManager) : AbstractUI(gameManager) {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     gameManager.setHeavyCharacter()
                     game.setScreen<LoadingScreen>()
+                    menuStage.clear()
                 }
             })
 
