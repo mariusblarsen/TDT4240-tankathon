@@ -128,17 +128,19 @@ class ECSengine: PooledEngine() {
     }
 
     fun addMapObject(mapObject: Rectangle): Entity{
-        return entity{
-            with<MapObjectComponent>{
-                hitbox = mapObject.apply {
-                    x *= MAP_SCALE
-                    y *= MAP_SCALE
-                    width *= MAP_SCALE
-                    height *= MAP_SCALE
-                }
+        return entity {
+            with<PositionComponent> {
+                position.x = mapObject.x * MAP_SCALE
+                position.y = mapObject.y * MAP_SCALE
             }
+            with<PhysicsComponent> {
+                width = mapObject.width * MAP_SCALE
+                height = mapObject.height * MAP_SCALE
+            }
+            with<MapObjectComponent>()
         }
     }
+
     fun addMangementComponent(): Entity{
         return entity{
             with<ManagementComponent>()

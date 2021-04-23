@@ -8,10 +8,7 @@ import com.badlogic.gdx.utils.Pool
 import ktx.ashley.mapperFor
 
 class MapObjectComponent : Component, Pool.Poolable{
-    var hitbox: Rectangle = Rectangle()
-    override fun reset() {
-        hitbox = Rectangle()
-    }
+    override fun reset() {}
 
 
     companion object{
