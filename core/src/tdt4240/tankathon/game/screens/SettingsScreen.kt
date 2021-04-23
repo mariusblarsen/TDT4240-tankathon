@@ -15,13 +15,14 @@ import com.badlogic.gdx.utils.Align
 import ktx.graphics.use
 import ktx.log.info
 import ktx.log.logger
+import tdt4240.tankathon.game.GameManager
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.V_HEIGHT_PIXELS
 import tdt4240.tankathon.game.V_WIDTH_PIXELS
 
 private val LOG = logger<SettingsScreen>()
 
-class SettingsScreen(game: TankathonGame) : AbstractUI(game) {
+class SettingsScreen(gameManager: GameManager) : AbstractUI(gameManager) {
     var backTextButton : TextButton
 
     override fun show() {

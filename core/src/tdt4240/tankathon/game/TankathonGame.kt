@@ -40,7 +40,7 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
     val assetManager: AssetManager by lazy { AssetManager().apply {
         setLoader(TiledMap::class.java, TmxMapLoader(fileHandleResolver))
     } }
-
+    val gameManager: GameManager = GameManager(this, assetManager)
     val gameCamera: OrthographicCamera by lazy { OrthographicCamera() }
     val batch: Batch by lazy { SpriteBatch() }
     val renderer: OrthogonalTiledMapRenderer by lazy { OrthogonalTiledMapRenderer(TiledMap(), MAP_SCALE, batch) }
@@ -68,12 +68,12 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
 
     override fun create() {
         Gdx.app.logLevel = LOG_INFO
-        addScreen(MenuScreen(this))
-        addScreen(LoadingScreen(this))
-        addScreen(GameScreen(this))
-        addScreen(ScoreBoardScreen(this))
-        addScreen((GameOverScreen( this)))
-        addScreen(SettingsScreen(this))
+        addScreen(MenuScreen(gameManager))
+        addScreen(LoadingScreen(gameManager))
+        addScreen(GameScreen(gameManager))
+        addScreen(ScoreBoardScreen(gameManager))
+        addScreen((GameOverScreen( gameManager)))
+        addScreen(SettingsScreen(gameManager))
         setScreen<MenuScreen>()
     }
 

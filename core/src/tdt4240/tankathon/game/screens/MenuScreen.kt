@@ -18,7 +18,7 @@ import tdt4240.tankathon.game.*
 
 private val LOG = logger<MenuScreen>()
 
-class MenuScreen(game: TankathonGame) : AbstractUI(game) {
+class MenuScreen(gameManager: GameManager) : AbstractUI(gameManager) {
     //ui elements
 
 

@@ -10,13 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener
 import com.badlogic.gdx.utils.Align
 import ktx.log.info
 import ktx.log.logger
+import tdt4240.tankathon.game.GameManager
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.V_HEIGHT_PIXELS
 import tdt4240.tankathon.game.V_WIDTH_PIXELS
 
 private val LOG = logger<GameOverScreen>()
 
-class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
+class GameOverScreen(gameManager: GameManager) : AbstractUI(gameManager) {
 
     var highscoreTextField : TextField
     var enteredHighscoreTextField : TextField
