@@ -21,12 +21,13 @@ class PlayerInputSystem(
         private val gameViewport: Viewport)
     : IteratingSystem(
         allOf(PlayerComponent::class, TransformComponent::class, PositionComponent::class,
-                CanonComponent::class, VelocityComponent::class).get()
+                CanonComponent::class, VelocityComponent::class, PhysicsComponent::class).get()
 ){
     private val inputVecAim = Vector2()
     private val inputVecMove = Vector2()
     private val screenWidth = Gdx.app.graphics.width
     private val bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
+
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transform = entity[TransformComponent.mapper]
@@ -39,8 +40,8 @@ class PlayerInputSystem(
         require(canon != null){ "Entity |entity| must have a CanonComponent. entity=$entity"}
         val velocityComponent = entity[VelocityComponent.mapper]
         require(velocityComponent != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
-        val spriteComponent = entity[SpriteComponent.mapper]
-        require(spriteComponent != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
+        val size = entity[PhysicsComponent.mapper]
+        require(size != null){ "Entity |entity| must have a PhysicsComponent. entity=$entity"}
 
         /* Handle input */
         val pointer0x = Gdx.input.getX(0)  // pointer 0 first input
@@ -69,22 +70,18 @@ class PlayerInputSystem(
             }
         }
 
-        /* Aiming */
+        /* Aiming and shooting */
         if ((pointer0touched && !pointer0onLeft) || (pointer1touched && !pointer1onLeft)){
             gameViewport.unproject(inputVecAim)
             val direction = setRotation(inputVecAim, transform).nor()
             canon.timer -= deltaTime
             val playerPos = Vector2(position.position.x, position.position.y)
             gameViewport.project(playerPos)
-            val bulletPosition = Vector3(
-                    playerPos.x + spriteComponent.sprite.vertices[0],
-                    playerPos.y - spriteComponent.sprite.vertices[1],
-                    0f
-            )
+            val bulletPosition = Vector3(Gdx.app.graphics.width/2f, Gdx.app.graphics.height/2f, 0f)
             gameViewport.unproject(bulletPosition)
             if (canon.timer < 0){
                 canon.timer = canon.fireRate
-                (engine as ECSengine).addBullet(bulletTexture, bulletPosition, direction)
+                (engine as ECSengine).addBullet(bulletTexture, bulletPosition, direction, canon.damage)
             }
         }
         /* Control tank */
@@ -94,8 +91,10 @@ class PlayerInputSystem(
         } else {
             velocityComponent.direction.set(0f, 0f, 0f)
         }
-        /* Move camera to player position */
-        gameViewport.camera.position.set(position.position)
+        /* Move camera to center of player */
+        val camPos = Vector3(position.position.x + size.width/2f, position.position.y + size.height/2f, 0f)
+
+        gameViewport.camera.position.set(camPos)
     }
 
 

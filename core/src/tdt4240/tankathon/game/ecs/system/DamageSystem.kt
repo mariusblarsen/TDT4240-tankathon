@@ -19,16 +19,18 @@ import tdt4240.tankathon.game.ecs.system.ScoreSystem
 
 private val LOG: Logger = logger<DamageSystem>()
 
-class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(
+class DamageSystem : IteratingSystem(
         allOf(AIComponent::class, PositionComponent::class, PhysicsComponent::class).get()) {
     private val playerBoundingBox = Rectangle()
     private val enemyBoundingBox = Rectangle()
     private val bulletBoundingBox = Rectangle()
-    private val playerEntities by lazy { ecsEngine.getEntitiesFor(
-            allOf(PlayerComponent::class).get()) }
-    private val bulletEntities by lazy { ecsEngine.getEntitiesFor(
-            allOf(BulletComponent::class).get()
-    )
+    private val playerEntities by lazy {
+        engine.getEntitiesFor(
+            allOf(PlayerComponent::class).get())
+    }
+    private val bulletEntities by lazy {
+        engine.getEntitiesFor(
+            allOf(BulletComponent::class).get())
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
@@ -76,7 +78,7 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(
             health -= bulletDamage
         }
 
-        bullet.addComponent<RemoveComponent>(ecsEngine)
+        bullet.addComponent<RemoveComponent>(engine as ECSengine)
     }
 
     private fun enemyHit(player: Entity, enemy: Entity){
@@ -84,7 +86,7 @@ class DamageSystem( private val ecsEngine: ECSengine) : IteratingSystem(
         player[HealthComponent.mapper]?.run {
             health -= npcDamage
         }
-        enemy.addComponent<RemoveComponent>(ecsEngine)
+        enemy.addComponent<RemoveComponent>(engine as ECSengine)
     }
 
 }
