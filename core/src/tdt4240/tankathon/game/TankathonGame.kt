@@ -17,30 +17,25 @@ import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.system.DamageSystem
-import tdt4240.tankathon.game.ecs.system.FireSystem
 import tdt4240.tankathon.game.ecs.system.PlayerInputSystem
 import tdt4240.tankathon.game.ecs.system.RenderSystem
 import tdt4240.tankathon.game.ecs.system.*
 import tdt4240.tankathon.game.screens.*
 
-const val V_WIDTH_PIXELS = 480  // TODO: Real value
-const val V_HEIGHT_PIXELS = 270  // TODO: Real value
+const val V_WIDTH_PIXELS = 480
+const val V_HEIGHT_PIXELS = 270
 
 const val MAP_SCALE = 1/8f
-const val V_WIDTH = 16  // TODO: Real value
-const val V_HEIGHT = 9  // TODO: Real value
-const val UNIT_SCALE = 1/64f  // TODO: May be too much scaling for smaller textures
+const val V_WIDTH = 16
+const val V_HEIGHT = 9
+const val UNIT_SCALE = 1/64f
 private val LOG: Logger = logger<TankathonGame>()
 
 
 class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
 
     val FBIF = IF
-
-    val assetManager: AssetManager by lazy { AssetManager().apply {
-        setLoader(TiledMap::class.java, TmxMapLoader(fileHandleResolver))
-    } }
-
+    val gameManager: GameManager = GameManager(this)
     val gameCamera: OrthographicCamera by lazy { OrthographicCamera() }
     val batch: Batch by lazy { SpriteBatch() }
     val renderer: OrthogonalTiledMapRenderer by lazy { OrthogonalTiledMapRenderer(TiledMap(), MAP_SCALE, batch) }
@@ -49,20 +44,19 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
 
     val engine: ECSengine by lazy {
         ECSengine().apply{
-            addSystem(FireSystem(this))
             addSystem(PlayerInputSystem(gameViewport))
             addSystem(RenderSystem(
                     batch,
                     gameViewport,
                     renderer,
                     gameCamera))
-            addSystem(DamageSystem(this))
+            addSystem(DamageSystem())
             addSystem(AIsystem())
             addSystem(MovementSystem())
             addSystem(RemoveSystem())
             addSystem(GameManagementSystem(this@TankathonGame, renderer))
             addSystem(HealthSystem(this@TankathonGame))
-            addSystem(ScoreSystem(this@TankathonGame, this))
+            addSystem(ScoreSystem())
         }
     }
 
@@ -74,12 +68,13 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
         addScreen(ScoreBoardScreen(this))
         addScreen((GameOverScreen( this)))
         addScreen(SettingsScreen(this))
+        addScreen(SelectionScreen(this))
         setScreen<MenuScreen>()
     }
 
     override fun dispose() {
         super.dispose()
-        assetManager.dispose()
+        gameManager.dispose()
         batch.dispose()
     }
 
