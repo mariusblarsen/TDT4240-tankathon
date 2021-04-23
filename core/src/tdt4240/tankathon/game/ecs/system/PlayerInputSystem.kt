@@ -25,7 +25,7 @@ class PlayerInputSystem(
 ){
     private val inputVecAim = Vector2()
     private val inputVecMove = Vector2()
-    private val screenWidth = Gdx.graphics.width
+    private val screenWidth = Gdx.app.graphics.width
     private val bulletTexture = Texture(Gdx.files.internal("bullet_green.png"))
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
@@ -37,9 +37,10 @@ class PlayerInputSystem(
         require(position != null){ "Entity |entity| must have a PositionComponent. entity=$entity"}
         val canon = entity[CanonComponent.mapper]
         require(canon != null){ "Entity |entity| must have a CanonComponent. entity=$entity"}
-
         val velocityComponent = entity[VelocityComponent.mapper]
         require(velocityComponent != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
+        val spriteComponent = entity[SpriteComponent.mapper]
+        require(spriteComponent != null){ "Entity |entity| must have a VelocityComponent. entity=$entity"}
 
         /* Handle input */
         val pointer0x = Gdx.input.getX(0)  // pointer 0 first input
@@ -71,11 +72,16 @@ class PlayerInputSystem(
         /* Aiming */
         if ((pointer0touched && !pointer0onLeft) || (pointer1touched && !pointer1onLeft)){
             gameViewport.unproject(inputVecAim)
-            setRotation(inputVecAim, transform)
-            canon.timer -= deltaTime
-            val bulletPosition = Vector3(Gdx.graphics.width/2f, Gdx.graphics.height/2f, 0f)
-            gameViewport.unproject(bulletPosition)
             val direction = setRotation(inputVecAim, transform).nor()
+            canon.timer -= deltaTime
+            val playerPos = Vector2(position.position.x, position.position.y)
+            gameViewport.project(playerPos)
+            val bulletPosition = Vector3(
+                    playerPos.x + spriteComponent.sprite.vertices[0],
+                    playerPos.y - spriteComponent.sprite.vertices[1],
+                    0f
+            )
+            gameViewport.unproject(bulletPosition)
             if (canon.timer < 0){
                 canon.timer = canon.fireRate
                 (engine as ECSengine).addBullet(bulletTexture, bulletPosition, direction)
