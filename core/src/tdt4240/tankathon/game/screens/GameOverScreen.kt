@@ -17,7 +17,7 @@ import tdt4240.tankathon.game.V_WIDTH_PIXELS
 
 private val LOG = logger<GameOverScreen>()
 
-class GameOverScreen(gameManager: GameManager) : AbstractUI(gameManager) {
+class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
 
     var highscoreTextField : TextField
     var enteredHighscoreTextField : TextField

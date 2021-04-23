@@ -19,7 +19,7 @@ import tdt4240.tankathon.game.*
 
 private val LOG = logger<ScoreBoardScreen>()
 
-class ScoreBoardScreen(gameManager: GameManager) : AbstractUI(gameManager){
+class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     var scoreboardTable : Table
     lateinit var scroller : ScrollPane
 

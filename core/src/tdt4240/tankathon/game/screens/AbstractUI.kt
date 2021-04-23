@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Align
 import ktx.graphics.use
 import tdt4240.tankathon.game.GameManager
+import tdt4240.tankathon.game.TankathonGame
 import java.lang.reflect.Type
 
 abstract class AbstractUI(
@@ -21,7 +22,7 @@ abstract class AbstractUI(
          * should implement uiInit() and dispose()
          */
     //ui elementer
-    val uiGame : GameManager,
+    val uiGame : TankathonGame,
     val uiFont : BitmapFont = BitmapFont(),
     var touchPos : Vector3 = Vector3(),
     var uiSkin : Skin = Skin(),

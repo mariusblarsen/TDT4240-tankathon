@@ -22,7 +22,7 @@ import tdt4240.tankathon.game.V_WIDTH_PIXELS
 
 private val LOG = logger<SettingsScreen>()
 
-class SettingsScreen(gameManager: GameManager) : AbstractUI(gameManager) {
+class SettingsScreen(game: TankathonGame) : AbstractUI(game) {
     var backTextButton : TextButton
 
     override fun show() {

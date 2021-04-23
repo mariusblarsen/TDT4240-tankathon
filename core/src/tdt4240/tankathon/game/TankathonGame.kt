@@ -22,13 +22,13 @@ import tdt4240.tankathon.game.ecs.system.RenderSystem
 import tdt4240.tankathon.game.ecs.system.*
 import tdt4240.tankathon.game.screens.*
 
-const val V_WIDTH_PIXELS = 480  // TODO: Real value
-const val V_HEIGHT_PIXELS = 270  // TODO: Real value
+const val V_WIDTH_PIXELS = 480
+const val V_HEIGHT_PIXELS = 270
 
 const val MAP_SCALE = 1/8f
-const val V_WIDTH = 16  // TODO: Real value
-const val V_HEIGHT = 9  // TODO: Real value
-const val UNIT_SCALE = 1/64f  // TODO: May be too much scaling for smaller textures
+const val V_WIDTH = 16
+const val V_HEIGHT = 9
+const val UNIT_SCALE = 1/64f
 private val LOG: Logger = logger<TankathonGame>()
 
 
@@ -43,32 +43,32 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
     val UIViewport = FitViewport(V_WIDTH_PIXELS.toFloat(), V_HEIGHT_PIXELS.toFloat())
 
     val engine: ECSengine by lazy {
-        ECSengine(gameManager).apply{
+        ECSengine().apply{
             addSystem(PlayerInputSystem(gameViewport))
             addSystem(RenderSystem(
                     batch,
                     gameViewport,
                     renderer,
                     gameCamera))
-            addSystem(DamageSystem(this))
+            addSystem(DamageSystem())
             addSystem(AIsystem())
             addSystem(MovementSystem())
             addSystem(RemoveSystem())
             addSystem(GameManagementSystem(this@TankathonGame, renderer))
             addSystem(HealthSystem(this@TankathonGame))
-            addSystem(ScoreSystem(this@TankathonGame, this))
+            addSystem(ScoreSystem())
         }
     }
 
     override fun create() {
         Gdx.app.logLevel = LOG_INFO
-        addScreen(MenuScreen(gameManager))
-        addScreen(LoadingScreen(gameManager))
-        addScreen(GameScreen(gameManager))
-        addScreen(ScoreBoardScreen(gameManager))
-        addScreen((GameOverScreen( gameManager)))
-        addScreen(SettingsScreen(gameManager))
-        addScreen(SelectionScreen(gameManager))
+        addScreen(MenuScreen(this))
+        addScreen(LoadingScreen(this))
+        addScreen(GameScreen(this))
+        addScreen(ScoreBoardScreen(this))
+        addScreen((GameOverScreen( this)))
+        addScreen(SettingsScreen(this))
+        addScreen(SelectionScreen(this))
         setScreen<MenuScreen>()
     }
 

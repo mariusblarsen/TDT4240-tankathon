@@ -11,13 +11,13 @@ import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.ecs.ECSengine
 
 abstract class AbstractScreen(
-        val gameManager: GameManager,
+        val game: TankathonGame,
+        val gameManager: GameManager = game.gameManager,
         val assetManager: AssetManager = gameManager.assetManager,
-        val game: TankathonGame = gameManager.game,
-        val batch: Batch = gameManager.game.batch,
-        val engine: ECSengine = gameManager.game.engine,
-        val gameViewport: Viewport = gameManager.game.gameViewport,
-        val renderer: OrthogonalTiledMapRenderer = gameManager.game.renderer,
+        val batch: Batch = game.batch,
+        val engine: ECSengine = game.engine,
+        val gameViewport: Viewport = game.gameViewport,
+        val renderer: OrthogonalTiledMapRenderer = game.renderer,
         val menuStage: Stage = Stage(gameManager.game.UIViewport)
 
 ) : KtxScreen {

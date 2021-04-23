@@ -18,7 +18,7 @@ import tdt4240.tankathon.game.*
 
 private val LOG = logger<SelectionScreen>()
 
-class SelectionScreen(gameManager: GameManager) : AbstractUI(gameManager) {
+class SelectionScreen(game: TankathonGame) : AbstractUI(game) {
     //ui elements
     //interaction elements
     private var lightPlayerTextButton : TextButton

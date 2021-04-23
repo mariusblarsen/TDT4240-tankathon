@@ -18,7 +18,7 @@ import tdt4240.tankathon.game.V_HEIGHT_PIXELS
 
 private val LOG = logger<LoadingScreen>()
 
-class LoadingScreen(gameManager: GameManager) : AbstractUI(gameManager){
+class LoadingScreen(game: TankathonGame) : AbstractUI(game){
     override fun show(){
         menuStage.clear()
         engine.removeAllEntities()
@@ -36,7 +36,7 @@ class LoadingScreen(gameManager: GameManager) : AbstractUI(gameManager){
         val playerSpawnPoint = parsePlayerSpawnpoint(renderer.map)
         val playerTexture = assetManager.get(gameManager.getTexturePath(), Texture::class.java)
         /* Add entities */
-        engine.createPlayer(playerTexture, playerSpawnPoint)
+        engine.createPlayer(playerTexture, playerSpawnPoint, gameManager.getPlayer())
         game.setScreen<GameScreen>()
     }
 
