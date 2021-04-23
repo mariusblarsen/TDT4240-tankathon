@@ -27,13 +27,16 @@ class LoadingScreen(gameManager: GameManager) : AbstractUI(gameManager){
         renderer.map = gameManager.assetManager.get("map/tilemap.tmx", TiledMap::class.java)
         parseCollision(renderer.map)
 
+        /* Load assets to be used during game */
         assetManager.load("tank.png", Texture::class.java)
+        assetManager.load("guy_teal.png", Texture::class.java)
         assetManager.load("enemy.png", Texture::class.java)
         assetManager.finishLoading()
 
         val playerSpawnPoint = parsePlayerSpawnpoint(renderer.map)
+        val playerTexture = assetManager.get(gameManager.getTexturePath(), Texture::class.java)
         /* Add entities */
-        engine.createPlayer(assetManager.get("tank.png"), playerSpawnPoint)
+        engine.createPlayer(playerTexture, playerSpawnPoint)
         game.setScreen<GameScreen>()
     }
 

@@ -48,7 +48,7 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
     val UIViewport = FitViewport(V_WIDTH_PIXELS.toFloat(), V_HEIGHT_PIXELS.toFloat())
 
     val engine: ECSengine by lazy {
-        ECSengine().apply{
+        ECSengine(gameManager).apply{
             addSystem(FireSystem(this))
             addSystem(PlayerInputSystem(gameViewport))
             addSystem(RenderSystem(
@@ -74,6 +74,7 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
         addScreen(ScoreBoardScreen(gameManager))
         addScreen((GameOverScreen( gameManager)))
         addScreen(SettingsScreen(gameManager))
+        addScreen(SelectionScreen(gameManager))
         setScreen<MenuScreen>()
     }
 
