@@ -17,7 +17,6 @@ import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.system.DamageSystem
-import tdt4240.tankathon.game.ecs.system.FireSystem
 import tdt4240.tankathon.game.ecs.system.PlayerInputSystem
 import tdt4240.tankathon.game.ecs.system.RenderSystem
 import tdt4240.tankathon.game.ecs.system.*
@@ -45,7 +44,6 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
 
     val engine: ECSengine by lazy {
         ECSengine(gameManager).apply{
-            addSystem(FireSystem(this))
             addSystem(PlayerInputSystem(gameViewport))
             addSystem(RenderSystem(
                     batch,
