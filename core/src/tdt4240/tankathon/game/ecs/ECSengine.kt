@@ -52,10 +52,6 @@ class ECSengine: PooledEngine() {
                 height = playerTexture.width * UNIT_SCALE  // To make it quadratic
             }
             with<PlayerScoreComponent>()
-            with<EnemyScoreComponent>(){
-                isScored=true
-            }
-
         }
         return player
     }
@@ -95,8 +91,6 @@ class ECSengine: PooledEngine() {
             with<EnemyScoreComponent>{
                 scoreGiven=200f
                 scorePercentage=1.0F
-                isDead= false
-                isScored=false
             }
         }
     }
@@ -118,7 +112,7 @@ class ECSengine: PooledEngine() {
             with<BulletComponent>()
             with<VelocityComponent> {
                 direction = Vector3(fireDirection, 0f)
-                speed = 12f
+                speed = 14f
             }
             with<PositionComponent> {
                 position = spawnPosition
