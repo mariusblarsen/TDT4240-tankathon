@@ -54,7 +54,7 @@ class ECSengine: PooledEngine() {
         }
         return player
     }
-    fun createNPC(spawnPosition: Vector2, texture: Texture, inputTeam: Int=0) : Entity {
+    fun createNPC(spawnPosition: Vector2, texture: Texture, inputTeam: Int=0, factor: Float) : Entity {
         return entity {
             with<TransformComponent> ()
             with<SpriteComponent> {
@@ -69,7 +69,7 @@ class ECSengine: PooledEngine() {
             }
 
             with<VelocityComponent>{
-                speed = 1f
+                speed = 1f * factor
             }
             with<PositionComponent> {
                 position.x = spawnPosition.x * MAP_SCALE
@@ -81,15 +81,15 @@ class ECSengine: PooledEngine() {
                 height = texture.width * UNIT_SCALE  // To make it quadratic
             }
             with<HealthComponent>{
-                maxHealth = 100f
+                maxHealth = 100f * factor
                 health = maxHealth
             }
             with<DamageComponent>{
-                damage = 10f
+                damage = 10f * factor
             }
             with<EnemyScoreComponent>{
-                scoreGiven=200f
-                scorePercentage=1.0F
+                baseScore = 200f
+                scorePercentage = factor
             }
         }
     }

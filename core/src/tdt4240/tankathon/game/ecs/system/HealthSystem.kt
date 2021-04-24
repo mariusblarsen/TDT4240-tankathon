@@ -27,9 +27,6 @@ class HealthSystem(private val game: TankathonGame) : IteratingSystem(allOf(Heal
 
         val healthPercentage = healthComponent.health/healthComponent.maxHealth
         val healthbarWidth = max(0f, 3f*healthPercentage)
-        entity[EnemyScoreComponent.mapper]?.run{
-            scorePercentage = healthPercentage
-        }
 
 
         if (healthComponent.health <= 0){
