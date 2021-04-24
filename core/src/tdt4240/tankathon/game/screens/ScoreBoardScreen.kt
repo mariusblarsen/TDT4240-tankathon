@@ -34,7 +34,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         LOG.info { "ScoreBoardScreen" }
         Gdx.input.inputProcessor = menuStage
         //lager er scoreboard table
-        createScoreboardTable(20,true)
+        createScoreboardTable(20,false)
         scroller = ScrollPane(scoreboardTable)
         addButtonToTable()
         addActorsToStage()

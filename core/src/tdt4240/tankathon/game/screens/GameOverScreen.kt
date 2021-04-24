@@ -92,8 +92,9 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
             LOG.info { "highscore not saved" }
         }else{
             LOG.info { "highscore pushed to firebase"}
-            game.sendScore(username,getHighScore().toInt())
-            game.setScreen<ScoreBoardScreen>()
+            game.sendScore(username,getHighScore().toFloat().toInt())
+            game.getTop10()
+            game.setScreen<MenuScreen>()
         }
     }
 
