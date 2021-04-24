@@ -116,27 +116,6 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
 
 
     }
-
-    private fun addActorsToStage(){
-        menuStage.addActor(uiTable)
-    }
-
-
-    override fun render(delta: Float) {
-        renderUi()
-        update(delta)
-    }
-
-
-    fun update(delta: Float) {
-        menuStage.act(delta)
-    }
-    override fun resize(width: Int, height: Int) { }
-    override fun hide() { }
-    override fun pause() { }
-    override fun resume() { }
-
-
     override fun dispose() {
         uiFont.dispose()
         uiSkin.dispose()

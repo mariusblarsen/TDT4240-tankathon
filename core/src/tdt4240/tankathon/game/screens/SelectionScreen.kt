@@ -92,19 +92,6 @@ class SelectionScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.add(heavyPlayerLabel).fillX
     }
 
-    private fun addActorsToStage(){
-        menuStage.addActor(uiTable)
-    }
-
-    override fun render(delta: Float) {
-        renderUi()
-        update(delta)
-    }
-
-    private fun update(delta: Float) {
-        menuStage.act(delta)
-    }
-
     override fun dispose() {
         uiDispose()
         menuStage.dispose()

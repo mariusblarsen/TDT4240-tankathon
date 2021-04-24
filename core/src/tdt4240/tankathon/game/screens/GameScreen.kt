@@ -16,7 +16,6 @@ class GameScreen(game: TankathonGame) : AbstractScreen(game){
     override fun render(delta: Float) {
         menuStage.clear()
         engine.update(delta)
-
     }
 
 
