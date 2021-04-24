@@ -73,24 +73,4 @@ abstract class AbstractUI(
             touchPos.set(Gdx.input.getX().toFloat(), Gdx.input.getY().toFloat(), 0f)
         }
     }
-    fun createButton(buttontext:String,
-                     changeToscreen:Type,
-                     exitOnClick:Boolean=false,
-                     skin:Skin=uiSkin): TextButton {
-        var textButton = TextButton(buttontext, uiSkin)
-        textButton.addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                menuStage.clear()
-                if(exitOnClick){
-                    Gdx.app.exit()
-                }
-                else{
-                    //TODO får ikke til menuscreen, se scoreboardScreen for eksempel, vet ikke hva jeg skal ta inn som argument
-                    //game.setScreen<HER SKAL DET STÅ MENUSCREEN>()
-                }
-            }
-        })
-        return textButton
-    }
-
 }

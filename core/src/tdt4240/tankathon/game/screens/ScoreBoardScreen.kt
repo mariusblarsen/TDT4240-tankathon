@@ -25,7 +25,7 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
 
     //interaksjonselementer
     var backTextButton : TextButton
-    var exitTextButton : TextButton
+
 
 
 
@@ -52,14 +52,6 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 menuStage.clear()
                 game.setScreen<MenuScreen>()
-            }
-        })
-
-
-        exitTextButton = TextButton("exit", uiSkin)
-        exitTextButton.addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                Gdx.app.exit()
             }
         })
     }
@@ -113,9 +105,9 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         uiTable.row().colspan(2).expandX().fillX().center()
         uiTable.add(scroller)
 
-        uiTable.row().colspan(1).expandX().fillX();
+        uiTable.row().colspan(2).expandX().fillX();
         uiTable.add(backTextButton).fillX
-        uiTable.add(exitTextButton).fillX
+
 
     }
 

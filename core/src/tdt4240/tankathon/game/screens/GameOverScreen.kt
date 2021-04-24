@@ -24,12 +24,8 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         fun setCompanionHigscore(highscore:Float){ playerHighscore=highscore}
     }
 
-    var highscoreTextField : TextField
-    var enteredHighscoreTextField : TextField
-
-    var usernameTextField : TextField
+    var enteredScoreTextField : TextField
     var enteredUsernameTextfield : TextField
-
     var saveHighcoreTextButton:TextButton
     var backTextButton : TextButton
 
@@ -38,22 +34,18 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         LOG.info { "GameOver" }
         Gdx.input.inputProcessor = menuStage
         Gdx.graphics.setTitle("game over")
+        enteredScoreTextField.text= getCompanionHighscore().toString()
+        addButtonToTable()
         addActorsToStage()
-        enteredHighscoreTextField.text= getCompanionHighscore().toString()
     }
 
     init {
         initUI() //must be run before abstractUI class can be used
 
-        topLabel?.setText("GameOver")
+        topLabel?.setText("game over")
         topLabel?.setAlignment(Align.center)
-        //hisgchore skrift
-        highscoreTextField = TextField("your score: ", uiSkin)
-        //highscore fra spill
-        enteredHighscoreTextField = TextField(getHighScore(), uiSkin)
-        //username text
-        usernameTextField = TextField("your_username: ", uiSkin)
-        //username spiller skrive inn
+
+        enteredScoreTextField = TextField("",uiSkin)
         enteredUsernameTextfield = TextField("", uiSkin)
 
         backTextButton = TextButton("back", uiSkin)
@@ -62,14 +54,12 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
                 game.setScreen<MenuScreen>()
             }
         })
-        saveHighcoreTextButton = TextButton("save high score", uiSkin)
+        saveHighcoreTextButton = TextButton("save score", uiSkin)
         saveHighcoreTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 saveHighScoreToScoreBoard()
             }
         })
-        addButtonToTable()
-        addActorsToStage()
         touchPos = Vector3()
     }
 
@@ -105,20 +95,20 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.setPosition(V_WIDTH_PIXELS * 0.15f, V_HEIGHT_PIXELS * 0.15f)
 
 
-        uiTable.row().colspan(3).fillX().center()
-        uiTable.add(topLabel).fillX
+        uiTable.row().colspan(4).fillX().center()
+        uiTable.add(topLabel)
 
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(highscoreTextField).fillX
-        uiTable.add(enteredHighscoreTextField).fillX
+        uiTable.add("your score:")
+        uiTable.add(enteredScoreTextField)
 
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(usernameTextField).fillX
-        uiTable.add(enteredUsernameTextfield).fillX
+        uiTable.add("username to save:")
+        uiTable.add(enteredUsernameTextfield)
 
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(backTextButton).fillX
-        uiTable.add(saveHighcoreTextButton).fillX
+        uiTable.add(backTextButton)
+        uiTable.add(saveHighcoreTextButton)
 
 
     }
