@@ -16,17 +16,17 @@ import tdt4240.tankathon.game.screens.SettingsScreen
 
 private val LOG = logger<ScoreSystem>()
 
-class ScoreSystem : IteratingSystem(allOf(AIComponent:: class, EnemyScoreComponent:: class).get()) {
+class ScoreSystem : IteratingSystem(
+        allOf(AIComponent:: class, EnemyScoreComponent:: class).get()
+) {
     private val playerEntities by lazy { (engine as ECSengine).getEntitiesFor(
             allOf(PlayerComponent::class).get()) }
 
-
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val enemyScoreComponent = entity.get(EnemyScoreComponent.mapper)
+        val enemyScoreComponent = entity[EnemyScoreComponent.mapper]
         require(enemyScoreComponent != null) {"Entity |entity| must have a enemyScoreComponent. entity =$entity"}
-        val enemyScore = entity.getComponent(EnemyScoreComponent::class.java).scoreGiven
         if(enemyScoreComponent.isDead){
-            updateScore(enemyScore, playerEntities[0], entity )
+            updateScore(enemyScoreComponent.scoreGiven, playerEntities[0])
         }
     }
 
@@ -42,6 +42,5 @@ class ScoreSystem : IteratingSystem(allOf(AIComponent:: class, EnemyScoreCompone
         GameOverScreen.setCompanionHigscore(playerScore)
         LOG.info{"Score oppdatert med "+ enemyScore+ "og er nå "+ playerScore}
         println("gamOverScore:"+GameOverScreen.getCompanionHighscore().toString())
-
     }
 }

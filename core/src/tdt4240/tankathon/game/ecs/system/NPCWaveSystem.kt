@@ -11,38 +11,41 @@ import com.badlogic.gdx.math.MathUtils.random
 import com.badlogic.gdx.math.Vector2
 import ktx.ashley.allOf
 import ktx.ashley.get
-import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
 
-private val LOG = logger<GameManagementSystem>()
+private val LOG = logger<NPCWaveSystem>()
 
-//Takes care of adding NPCs to the game
-class GameManagementSystem(private val game: TankathonGame, private var renderer: OrthogonalTiledMapRenderer)
+/**
+ * Adds NPCs to the game for each wave.
+ */
+class NPCWaveSystem(private val game: TankathonGame, private var renderer: OrthogonalTiledMapRenderer)
     : IteratingSystem(
-        allOf(ManagementComponent::class).get()
+        allOf(NPCWaveComponent::class).get()
 )
 {
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val man = entity[ManagementComponent.mapper]
-        require(man != null){ "Entity |entity| must have a MangagementComponent. entity=$entity"}
-        man.countDown -=deltaTime
+        val wave = entity[NPCWaveComponent.mapper]
+        require(wave != null){ "Entity |entity| must have a MangagementComponent. entity=$entity"}
+        wave.countDown -=deltaTime
 
-        if (man.countDown>0 || man.remaingNumberOfWaves<0){
+        if (wave.countDown>0 || wave.remaingNumberOfWaves<0){
             return
          }
-        LOG.info{"Running"  }
 
-        for (i in 0 .. man.numberOfNPCInWave){
+        for (i in 0 .. wave.numberOfNPCInWave){
             (engine as ECSengine).createNPC(parseNpcSpawnpoint(renderer.map), game.gameManager.assetManager.get("enemy.png"))
-            LOG.info {i.toString()  }
         }
-        man.remaingNumberOfWaves-=1
-        man.countDown=man.deltaTimeWaves
+        wave.remaingNumberOfWaves -= 1
+        wave.countDown = wave.deltaTimeWaves
     }
-    //Returns coordinates within one random NPCSpawn of type rectangle or eclipse. If there are no areas return (1,1)
+
+    /**
+     * Returns coordinates within one random NPCSpawn of type rectangle.
+     * If there are no areas, return (1,1)
+     * */
     private fun parseNpcSpawnpoint(tiledMap: TiledMap) : Vector2 {
         val spawnLayer: MapLayer = tiledMap.layers.get("spawnpoint")
         val spawnObjects = spawnLayer.objects ?: return Vector2(1f, 1f)

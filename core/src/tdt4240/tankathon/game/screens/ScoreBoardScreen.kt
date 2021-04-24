@@ -111,15 +111,6 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
 
     }
 
-    private fun addActorsToStage(){
-        menuStage.addActor(uiTable)
-    }
-
-    override fun render(delta: Float) {
-        renderUi()
-        update(delta)
-    }
-
     fun getScores(): HashMap<String, Int> {
         val scores = hashMapOf<String,Int>(
                 "magnus" to 120,
@@ -140,15 +131,6 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
         )
         return scores
     }
-
-
-    fun update(delta: Float) {
-        menuStage.act(delta)
-    }
-    override fun resize(width: Int, height: Int) { }
-    override fun hide() { }
-    override fun pause() { }
-    override fun resume() { }
 
 
     override fun dispose() {

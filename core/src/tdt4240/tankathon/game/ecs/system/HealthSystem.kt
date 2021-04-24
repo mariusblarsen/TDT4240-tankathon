@@ -22,31 +22,28 @@ class HealthSystem(private val game: TankathonGame) : IteratingSystem(allOf(Heal
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val healthComponent = entity[HealthComponent.mapper]
         require(healthComponent != null){ "Entity |entity| must have a healthComponent. entity=$entity"}
-        val enemyScoreComponent =entity[EnemyScoreComponent.mapper]
-        require(enemyScoreComponent != null){ "Entity |entity| must have a healthComponent. entity=$entity"}
+        val enemyScoreComponent = entity[EnemyScoreComponent.mapper]
+        //require(enemyScoreComponent != null){ "Entity |entity| must have a healthComponent. entity=$entity"}
 
         val healthPercentage = healthComponent.health/healthComponent.maxHealth
         val healthbarWidth = max(0f, 3f*healthPercentage)
         entity[EnemyScoreComponent.mapper]?.run{
-            scorePercentage= healthPercentage
+            scorePercentage = healthPercentage
         }
 
 
         if (healthComponent.health <= 0){
-            entity[EnemyScoreComponent.mapper]?.run{
-                isDead= true
-            }
-            if(enemyScoreComponent.isScored) {
-                entity.addComponent<RemoveComponent>(engine as ECSengine)
+            enemyScoreComponent?.run {
+                isDead = true
             }
             if(entity.contains(PlayerComponent.mapper)){
                 game.setScreen<GameOverScreen>()
             }
             entity.addComponent<RemoveComponent>(engine as ECSengine)
             return
-            
         }
 
+        /* Healthbar */
         val position = entity[PositionComponent.mapper]
         val size = entity[PhysicsComponent.mapper]
         if (position != null && size != null && healthPercentage < 1){

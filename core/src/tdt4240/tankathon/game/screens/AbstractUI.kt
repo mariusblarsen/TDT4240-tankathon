@@ -73,4 +73,16 @@ abstract class AbstractUI(
             touchPos.set(Gdx.input.getX().toFloat(), Gdx.input.getY().toFloat(), 0f)
         }
     }
+
+    fun addActorsToStage(){
+        menuStage.addActor(uiTable)
+    }
+
+    override fun render(delta: Float) {
+        renderUi()
+        update(delta)
+    }
+    fun update(delta: Float) {
+        menuStage.act(delta)
+    }
 }

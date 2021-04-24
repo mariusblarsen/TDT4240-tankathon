@@ -64,18 +64,26 @@ class MovementSystem : IteratingSystem(
         }
 
         mapObjects.forEach { objectEntity ->
-            objectEntity[MapObjectComponent.mapper]?.let { mapComponent ->
-                val obstacle = mapComponent.hitbox
-
-                collisionX = hitX.overlaps(obstacle) || collisionX
-                collisionY = hitY.overlaps(obstacle) || collisionY
-
-                if ((collisionX || collisionY) && entity.contains(BulletComponent.mapper)) {
-                    entity.addComponent<RemoveComponent>(engine)
+            val obstacle = Rectangle()
+            objectEntity[PositionComponent.mapper]?.let { position ->
+                objectEntity[PhysicsComponent.mapper]?.let { size ->
+                    obstacle.run {
+                            x = position.position.x
+                            y = position.position.y
+                            width = size.width
+                            height = size.height
+                    }
                 }
-                if (collisionX && collisionY) {
-                    return@forEach
-                }
+            }
+
+            collisionX = hitX.overlaps(obstacle) || collisionX
+            collisionY = hitY.overlaps(obstacle) || collisionY
+
+            if ((collisionX || collisionY) && entity.contains(BulletComponent.mapper)) {
+                entity.addComponent<RemoveComponent>(engine)
+            }
+            if (collisionX && collisionY) {
+                return@forEach
             }
         }
         if (!collisionX) {

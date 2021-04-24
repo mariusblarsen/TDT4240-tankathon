@@ -28,8 +28,8 @@ class LoadingScreen(game: TankathonGame) : AbstractUI(game){
         parseCollision(renderer.map)
 
         /* Load assets to be used during game */
-        assetManager.load("tank.png", Texture::class.java)
-        assetManager.load("guy_teal.png", Texture::class.java)
+        assetManager.load("heavyweight_tank.png", Texture::class.java)
+        assetManager.load("lightweight_tank.png", Texture::class.java)
         assetManager.load("enemy.png", Texture::class.java)
         assetManager.finishLoading()
 
@@ -44,7 +44,7 @@ class LoadingScreen(game: TankathonGame) : AbstractUI(game){
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         batch.use {
-            val str = "Loading... \n mousePos x,y: "+Gdx.input.getX().toString()+","+Gdx.input.getY().toString()
+            val str = "Loading..."
             uiFont.draw(it, str, 0f, 40f)
         }
     }
