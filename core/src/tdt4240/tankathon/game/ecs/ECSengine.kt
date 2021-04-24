@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils.random
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import ktx.ashley.allOf
 import ktx.ashley.entity
 import ktx.ashley.with
 import ktx.log.Logger
@@ -20,6 +21,10 @@ private val LOG: Logger = logger<ECSengine>()
 * Source: https://github.com/libgdx/ashley/wiki/Efficient-Entity-Systems-with-pooling
 * */
 class ECSengine: PooledEngine() {
+    private val wave by lazy {
+        getEntitiesFor(allOf(NPCWaveComponent::class).get())
+    }
+
     fun createPlayer(playerTexture: Texture, spawnPoint: Vector2, attributes: Character): Entity {
         var player = entity{
             with<TransformComponent> ()
@@ -140,9 +145,17 @@ class ECSengine: PooledEngine() {
         }
     }
 
+    /**
+     * Implemented as a singleton.
+     */
     fun addWaves(): Entity{
-        return entity{
-            with<NPCWaveComponent>()
+        val waveExists = wave.firstOrNull() != null
+        return if (waveExists){
+            wave.first()
+        } else {
+            entity{
+                with<NPCWaveComponent>()
+            }
         }
     }
 
