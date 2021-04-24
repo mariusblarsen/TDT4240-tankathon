@@ -25,13 +25,14 @@ class ScoreSystem : IteratingSystem(
         val enemyScoreComponent = entity[EnemyScoreComponent.mapper]
         require(enemyScoreComponent != null) {"Entity |entity| must have a enemyScoreComponent. entity =$entity"}
         if(enemyScoreComponent.isDead){
-            updateScore(enemyScoreComponent.scoreGiven, playerEntities[0])
+            val score = enemyScoreComponent.baseScore * enemyScoreComponent.scorePercentage
+            updateScore(score, playerEntities[0])
         }
     }
 
     private fun updateScore(enemyScore: Float, player:Entity){
         player[PlayerScoreComponent.mapper]?.run{
-            playerScore+= enemyScore
+            playerScore += enemyScore
         }
         val playerScore = player.getComponent(PlayerScoreComponent::class.java).playerScore
 

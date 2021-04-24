@@ -29,14 +29,20 @@ class NPCWaveSystem(private val game: TankathonGame, private var renderer: Ortho
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val wave = entity[NPCWaveComponent.mapper]
         require(wave != null){ "Entity |entity| must have a MangagementComponent. entity=$entity"}
+
+        val waveNumber = wave.numberOfWaves - wave.remaingNumberOfWaves
+        val enemyDifficultyFactor = 1 + (waveNumber * 0.1f)
         wave.countDown -=deltaTime
 
         if (wave.countDown>0 || wave.remaingNumberOfWaves<0){
             return
          }
-
-        for (i in 0 .. wave.numberOfNPCInWave){
-            (engine as ECSengine).createNPC(parseNpcSpawnpoint(renderer.map), game.gameManager.assetManager.get("enemy.png"))
+        val adjustedNumberOfNpcs = (wave.numberOfNPCInWave * enemyDifficultyFactor).toInt()
+        for (i in 0 .. adjustedNumberOfNpcs){
+            (engine as ECSengine).createNPC(
+                    parseNpcSpawnpoint(renderer.map),
+                    game.gameManager.assetManager.get("enemy.png"),
+                    factor = enemyDifficultyFactor)
         }
         wave.remaingNumberOfWaves -= 1
         wave.countDown = wave.deltaTimeWaves
