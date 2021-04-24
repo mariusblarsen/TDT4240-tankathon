@@ -1,6 +1,5 @@
 package tdt4240.tankathon.game.ecs.system
 
-import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.graphics.Color
@@ -9,7 +8,6 @@ import ktx.ashley.addComponent
 import ktx.ashley.allOf
 import ktx.ashley.contains
 import ktx.ashley.get
-import ktx.ashley.has
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.ecs.ECSengine

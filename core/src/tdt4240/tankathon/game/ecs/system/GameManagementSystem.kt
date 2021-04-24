@@ -36,7 +36,7 @@ class GameManagementSystem(private val game: TankathonGame, private var renderer
         LOG.info{"Running"  }
 
         for (i in 0 .. man.numberOfNPCInWave){
-            (engine as ECSengine).createNPC(parseNpcSpawnpoint(renderer.map), game.assetManager.get("enemy.png"))
+            (engine as ECSengine).createNPC(parseNpcSpawnpoint(renderer.map), game.gameManager.assetManager.get("enemy.png"))
             LOG.info {i.toString()  }
         }
         man.remaingNumberOfWaves-=1

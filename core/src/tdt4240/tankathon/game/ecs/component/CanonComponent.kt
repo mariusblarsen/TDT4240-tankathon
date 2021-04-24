@@ -8,10 +8,12 @@ import ktx.ashley.mapperFor
 class CanonComponent:  Component, Pool.Poolable {
     var fireRate = 0.1f //number of seconds before canon can refire
     var timer = 0f //countdown from fireRate downwards, can fire when timer < 0
+    var damage = 0f
 
 
     override fun reset() {
-        timer=0f
+        timer = 0f
+        damage = 0f
 
     }
 

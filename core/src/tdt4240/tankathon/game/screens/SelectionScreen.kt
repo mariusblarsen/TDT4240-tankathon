@@ -16,17 +16,24 @@ import ktx.log.logger
 import tdt4240.tankathon.game.*
 
 
-private val LOG = logger<MenuScreen>()
+private val LOG = logger<SelectionScreen>()
 
-class MenuScreen(game: TankathonGame) : AbstractUI(game) {
+class SelectionScreen(game: TankathonGame) : AbstractUI(game) {
     //ui elements
-
-
     //interaction elements
-    var startTextButton : TextButton
-    var settingsTextButton : TextButton
-    var scoreboardTextButton : TextButton
-    var exitTextButton : TextButton
+    private var lightPlayerTextButton : TextButton
+    private var heavyPlayerTextButton : TextButton
+    private val lightPlayerLabel : Label by lazy { Label("", uiSkin).apply {
+        setText("Fast, rapid fire with low health.")
+        setAlignment(Align.center)
+        setFontScale(1.4f,1.4f)
+    } }
+    private val heavyPlayerLabel : Label by lazy { Label("", uiSkin).apply {
+        setText("Slow, heavy hitter with high health.")
+        setAlignment(Align.center)
+        setFontScale(1.4f,1.4f)
+    } }
+
 
     override fun show() {
         LOG.info { "Menu Screen" }
@@ -39,37 +46,25 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
     init {
         initUI()
         //interaction-elements
-        topLabel?.setText("main menu")
+        topLabel?.setText("Select characters")
 
-        startTextButton = TextButton("start", uiSkin)
-        startTextButton.addListener(object : ChangeListener() {
+        lightPlayerTextButton = TextButton("Lightweight", uiSkin)
+        lightPlayerTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
+                gameManager.setLightCharacter()
+                game.setScreen<LoadingScreen>()
                 menuStage.clear()
-                game.setScreen<SelectionScreen>()
             }
         })
 
-        scoreboardTextButton = TextButton("ScoreBoard", uiSkin)
-        scoreboardTextButton.addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                game.setScreen<ScoreBoardScreen>()
-            }
-        })
-
-        settingsTextButton = TextButton("settings", uiSkin)
-        settingsTextButton.addListener(object : ChangeListener() {
+        heavyPlayerTextButton = TextButton("Heavyweight", uiSkin)
+        heavyPlayerTextButton.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
-                    game.setScreen<SettingsScreen>()
+                    gameManager.setHeavyCharacter()
+                    game.setScreen<LoadingScreen>()
+                    menuStage.clear()
                 }
             })
-
-        exitTextButton = TextButton("exit", uiSkin)
-        exitTextButton.addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                Gdx.app.exit()
-            }
-        })
-
 
         //creates table
         addButtonToTable()
@@ -88,16 +83,16 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.row().colspan(2).expandX().fillX();
         uiTable.add(topLabel).fillX
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(startTextButton).fillX
+        uiTable.add(lightPlayerTextButton).fillX
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(scoreboardTextButton).fillX
-        uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(settingsTextButton).fillX
-        uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(exitTextButton).fillX
+        uiTable.add(lightPlayerLabel).fillX
+        uiTable.row().colspan(4).expandX().fillX();
+        uiTable.add(heavyPlayerTextButton).fillX
+        uiTable.row().colspan(4).expandX().fillX();
+        uiTable.add(heavyPlayerLabel).fillX
     }
 
-    fun addActorsToStage(){
+    private fun addActorsToStage(){
         menuStage.addActor(uiTable)
     }
 
@@ -105,11 +100,11 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
         renderUi()
         update(delta)
     }
-    fun update(delta: Float) {menuStage.act(delta)}
-    override fun resize(width: Int, height: Int) { }
-    override fun hide() { }
-    override fun pause() { }
-    override fun resume() { }
+
+    private fun update(delta: Float) {
+        menuStage.act(delta)
+    }
+
     override fun dispose() {
         uiDispose()
         menuStage.dispose()

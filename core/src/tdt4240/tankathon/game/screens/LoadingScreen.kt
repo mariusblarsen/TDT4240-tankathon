@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2
 import ktx.graphics.use
 import ktx.log.info
 import ktx.log.logger
+import tdt4240.tankathon.game.GameManager
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.V_HEIGHT_PIXELS
 
@@ -21,18 +22,21 @@ class LoadingScreen(game: TankathonGame) : AbstractUI(game){
     override fun show(){
         menuStage.clear()
         engine.removeAllEntities()
-        game.assetManager.load("map/tilemap.tmx", TiledMap::class.java)
-        game.assetManager.finishLoading()
-        renderer.map = game.assetManager.get("map/tilemap.tmx", TiledMap::class.java)
+        assetManager.load("map/tilemap.tmx", TiledMap::class.java)
+        assetManager.finishLoading()
+        renderer.map = gameManager.assetManager.get("map/tilemap.tmx", TiledMap::class.java)
         parseCollision(renderer.map)
 
-        game.assetManager.load("tank.png", Texture::class.java)
-        game.assetManager.load("enemy.png", Texture::class.java)
-        game.assetManager.finishLoading()
+        /* Load assets to be used during game */
+        assetManager.load("tank.png", Texture::class.java)
+        assetManager.load("guy_teal.png", Texture::class.java)
+        assetManager.load("enemy.png", Texture::class.java)
+        assetManager.finishLoading()
 
         val playerSpawnPoint = parsePlayerSpawnpoint(renderer.map)
+        val playerTexture = assetManager.get(gameManager.getTexturePath(), Texture::class.java)
         /* Add entities */
-        engine.createPlayer(game.assetManager.get("tank.png"), playerSpawnPoint)
+        engine.createPlayer(playerTexture, playerSpawnPoint, gameManager.getPlayer())
         game.setScreen<GameScreen>()
     }
 
@@ -54,7 +58,7 @@ class LoadingScreen(game: TankathonGame) : AbstractUI(game){
         }
         for (mapObject: MapObject in collisionObjects){
             if (mapObject is RectangleMapObject){
-                game.engine.addMapObject(Rectangle(mapObject.rectangle))
+                engine.addMapObject(Rectangle(mapObject.rectangle))
             }
             else {
                 LOG.info { "MapObject not supported!" }
