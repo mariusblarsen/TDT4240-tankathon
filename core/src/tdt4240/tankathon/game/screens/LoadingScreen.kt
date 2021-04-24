@@ -28,8 +28,8 @@ class LoadingScreen(game: TankathonGame) : AbstractUI(game){
         parseCollision(renderer.map)
 
         /* Load assets to be used during game */
-        assetManager.load("tank.png", Texture::class.java)
-        assetManager.load("guy_teal.png", Texture::class.java)
+        assetManager.load("heavyweight_tank.png", Texture::class.java)
+        assetManager.load("lightweight_tank.png", Texture::class.java)
         assetManager.load("enemy.png", Texture::class.java)
         assetManager.finishLoading()
 

@@ -52,10 +52,6 @@ class ECSengine: PooledEngine() {
                 height = playerTexture.width * UNIT_SCALE  // To make it quadratic
             }
             with<PlayerScoreComponent>()
-            with<EnemyScoreComponent>(){
-                isScored=true
-            }
-
         }
         return player
     }
@@ -95,8 +91,6 @@ class ECSengine: PooledEngine() {
             with<EnemyScoreComponent>{
                 scoreGiven=200f
                 scorePercentage=1.0F
-                isDead= false
-                isScored=false
             }
         }
     }
@@ -118,7 +112,7 @@ class ECSengine: PooledEngine() {
             with<BulletComponent>()
             with<VelocityComponent> {
                 direction = Vector3(fireDirection, 0f)
-                speed = 12f
+                speed = 14f
             }
             with<PositionComponent> {
                 position = spawnPosition
@@ -134,17 +128,19 @@ class ECSengine: PooledEngine() {
     }
 
     fun addMapObject(mapObject: Rectangle): Entity{
-        return entity{
-            with<MapObjectComponent>{
-                hitbox = mapObject.apply {
-                    x *= MAP_SCALE
-                    y *= MAP_SCALE
-                    width *= MAP_SCALE
-                    height *= MAP_SCALE
-                }
+        return entity {
+            with<PositionComponent> {
+                position.x = mapObject.x * MAP_SCALE
+                position.y = mapObject.y * MAP_SCALE
             }
+            with<PhysicsComponent> {
+                width = mapObject.width * MAP_SCALE
+                height = mapObject.height * MAP_SCALE
+            }
+            with<MapObjectComponent>()
         }
     }
+
     fun addMangementComponent(): Entity{
         return entity{
             with<ManagementComponent>()
