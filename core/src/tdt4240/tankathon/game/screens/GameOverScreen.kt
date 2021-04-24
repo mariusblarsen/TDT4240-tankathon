@@ -19,9 +19,9 @@ private val LOG = logger<GameOverScreen>()
 
 class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     companion object {
-        var playerHighscore : Float = 0f
-        fun getHighscore():Float { return playerHighscore }
-        fun setHigscore(highscore:Float){ playerHighscore=highscore}
+        var playerHighscore : Float = -1f
+        fun getCompanionHighscore():Float { return playerHighscore }
+        fun setCompanionHigscore(highscore:Float){ playerHighscore=highscore}
     }
 
     var highscoreTextField : TextField
@@ -39,6 +39,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         Gdx.input.inputProcessor = menuStage
         Gdx.graphics.setTitle("game over")
         addActorsToStage()
+        enteredHighscoreTextField.text= getCompanionHighscore().toString()
     }
 
     init {
@@ -46,11 +47,13 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
 
         topLabel?.setText("GameOver")
         topLabel?.setAlignment(Align.center)
-
+        //hisgchore skrift
         highscoreTextField = TextField("your score: ", uiSkin)
+        //highscore fra spill
         enteredHighscoreTextField = TextField(getHighScore(), uiSkin)
-
+        //username text
         usernameTextField = TextField("your_username: ", uiSkin)
+        //username spiller skrive inn
         enteredUsernameTextfield = TextField("", uiSkin)
 
         backTextButton = TextButton("back", uiSkin)
@@ -62,7 +65,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         saveHighcoreTextButton = TextButton("save high score", uiSkin)
         saveHighcoreTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                saveHighScore()
+                saveHighScoreToScoreBoard()
             }
         })
         addButtonToTable()
@@ -75,12 +78,12 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         if(demo){
             highScore =  101f
         }else{
-            highScore = playerHighscore
+            return getCompanionHighscore().toString()
         }
         return highScore.toString()
     }
 
-    private fun saveHighScore(){
+    private fun saveHighScoreToScoreBoard(){
         //TODO: lagre highscore i database og sjekke om username er gyldig
         var username = enteredUsernameTextfield.text
         //hvis man prøver å lagre uten å skirve navn returnerer man til hjemskjerm
@@ -89,7 +92,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
             LOG.info { "highscore not saved" }
         }else{
             LOG.info { "highscore pushed to firebase"}
-            //game.sendScore(username,getHighScore().toInt())
+            game.sendScore(username,getHighScore().toInt())
             game.setScreen<ScoreBoardScreen>()
         }
     }

@@ -39,9 +39,9 @@ class ScoreSystem : IteratingSystem(allOf(AIComponent:: class, EnemyScoreCompone
         }
         val playerScore = player.getComponent(PlayerScoreComponent::class.java).playerScore
 
-        GameOverScreen.setHigscore(playerScore)
+        GameOverScreen.setCompanionHigscore(playerScore)
         LOG.info{"Score oppdatert med "+ enemyScore+ "og er nå "+ playerScore}
-        println("gamOverScore:"+GameOverScreen.getHighscore().toString())
+        println("gamOverScore:"+GameOverScreen.getCompanionHighscore().toString())
 
     }
 }
