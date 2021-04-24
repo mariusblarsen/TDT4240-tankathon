@@ -20,21 +20,19 @@ import tdt4240.tankathon.game.*
 private val LOG = logger<ScoreBoardScreen>()
 
 class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
+    private val FBIF = game.getInterface()
     var scoreboardTable : Table
     lateinit var scroller : ScrollPane
 
     //interaksjonselementer
     var backTextButton : TextButton
 
-
-
-
     override fun show() {
         menuStage.clear()
         LOG.info { "ScoreBoardScreen" }
         Gdx.input.inputProcessor = menuStage
         //lager er scoreboard table
-        createScoreboardTable(20,false)
+        createScoreboardTable(100,false)
         scroller = ScrollPane(scoreboardTable)
         addButtonToTable()
         addActorsToStage()
@@ -42,10 +40,8 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
 
     init {
         initUI()
-        topLabel?.setText("scoreboard")
+        topLabel?.setText("scoreboard | top 100")
         scoreboardTable = Table(uiSkin)
-
-        //createButton("back",MenuScreen)
 
         backTextButton = TextButton("back", uiSkin)
         backTextButton.addListener(object : ChangeListener() {
@@ -57,20 +53,6 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
     }
 
     private fun createScoreboardTable(rows:Int, demo:Boolean){
-        val sorted = game.getTop10().toList().sortedBy { (_,value) -> value}.reversed().toMap()
-        //val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
-
-        scoreboardTable.reset()
-        var number = 1
-        for ((key, value) in sorted) {
-            if(number-1==rows) break
-            scoreboardTable.row()
-            scoreboardTable.add(number.toString()+": ")
-            scoreboardTable.add(key)
-            scoreboardTable.add(value.toString())
-            number++
-        }
-
         if (demo){
             val sorted = getScores().toList().sortedBy { (_,value) -> value}.reversed().toMap()
             scoreboardTable.reset()
@@ -84,7 +66,17 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
                 number++
             }
         }else{
-            println("*******************non demo function not yet implemented*****************")
+            val sorted = FBIF.getTop10().toList().sortedBy { (_,value) -> value}.reversed().toMap()
+            scoreboardTable.reset()
+            var number = 1
+            for ((key, value) in sorted) {
+                if(number-1==rows) break
+                scoreboardTable.row()
+                scoreboardTable.add(number.toString()+": ")
+                scoreboardTable.add(key)
+                scoreboardTable.add(value.toString())
+                number++
+            }
         }
     }
 
