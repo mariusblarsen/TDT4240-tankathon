@@ -12,7 +12,6 @@ import tdt4240.tankathon.game.ecs.component.AIComponent
 import tdt4240.tankathon.game.ecs.component.EnemyScoreComponent
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
 import tdt4240.tankathon.game.screens.GameOverScreen
-import tdt4240.tankathon.game.screens.SettingsScreen
 
 private val LOG = logger<ScoreSystem>()
 
@@ -30,12 +29,9 @@ class ScoreSystem : IteratingSystem(
         }
     }
 
-    private fun updateScore(enemyScore: Float, player:Entity, enemy: Entity){
+    private fun updateScore(enemyScore: Float, player:Entity){
         player[PlayerScoreComponent.mapper]?.run{
             playerScore+= enemyScore
-        }
-        enemy[EnemyScoreComponent.mapper]?.run{
-            isScored = true
         }
         val playerScore = player.getComponent(PlayerScoreComponent::class.java).playerScore
 

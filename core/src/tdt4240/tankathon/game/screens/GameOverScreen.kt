@@ -31,6 +31,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
 
     override fun show() {
         menuStage.clear()
+        uiTable.clear()
         LOG.info { "GameOver" }
         Gdx.input.inputProcessor = menuStage
         Gdx.graphics.setTitle("game over")
