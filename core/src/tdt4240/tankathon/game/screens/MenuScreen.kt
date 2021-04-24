@@ -97,19 +97,6 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.add(exitTextButton).fillX
     }
 
-    fun addActorsToStage(){
-        menuStage.addActor(uiTable)
-    }
-
-    override fun render(delta: Float) {
-        renderUi()
-        update(delta)
-    }
-    fun update(delta: Float) {menuStage.act(delta)}
-    override fun resize(width: Int, height: Int) { }
-    override fun hide() { }
-    override fun pause() { }
-    override fun resume() { }
     override fun dispose() {
         uiDispose()
         menuStage.dispose()

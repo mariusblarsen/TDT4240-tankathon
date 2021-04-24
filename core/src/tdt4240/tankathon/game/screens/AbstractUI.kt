@@ -92,5 +92,15 @@ abstract class AbstractUI(
         })
         return textButton
     }
+    fun addActorsToStage(){
+        menuStage.addActor(uiTable)
+    }
 
+    override fun render(delta: Float) {
+        renderUi()
+        update(delta)
+    }
+    fun update(delta: Float) {
+        menuStage.act(delta)
+    }
 }
