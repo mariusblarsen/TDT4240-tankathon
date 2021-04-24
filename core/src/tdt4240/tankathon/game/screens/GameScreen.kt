@@ -9,7 +9,7 @@ private val LOG = logger<GameScreen>()
 class GameScreen(game: TankathonGame) : AbstractScreen(game){
     override fun show() {
         //Singleton
-        engine.addMangementComponent()
+        engine.addWaves()
     }
 
 

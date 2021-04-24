@@ -140,7 +140,7 @@ class ECSengine: PooledEngine() {
         }
     }
 
-    fun addMangementComponent(): Entity{
+    fun addWaves(): Entity{
         return entity{
             with<NPCWaveComponent>()
         }
