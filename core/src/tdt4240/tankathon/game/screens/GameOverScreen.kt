@@ -24,6 +24,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         fun setCompanionHigscore(highscore:Float){ playerHighscore=highscore}
     }
 
+    private val FBIF = game.getInterface()
     var enteredScoreTextField : TextField
     var enteredUsernameTextfield : TextField
     var saveHighcoreTextButton:TextButton
@@ -35,7 +36,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         LOG.info { "GameOver" }
         Gdx.input.inputProcessor = menuStage
         Gdx.graphics.setTitle("game over")
-        enteredScoreTextField.text= getCompanionHighscore().toString()
+        enteredScoreTextField.text= getCompanionHighscore().toInt().toString()
         addButtonToTable()
         addActorsToStage()
     }
@@ -49,7 +50,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         enteredScoreTextField = TextField("",uiSkin)
         enteredUsernameTextfield = TextField("", uiSkin)
 
-        backTextButton = TextButton("back", uiSkin)
+        backTextButton = TextButton("main menu", uiSkin)
         backTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 game.setScreen<MenuScreen>()
@@ -64,27 +65,27 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         touchPos = Vector3()
     }
 
-    private fun getHighScore(demo: Boolean = false):String{
-        var highScore = 0f
+    private fun getHighScore(demo: Boolean = false):Int{
+        var highScore = 0
         if(demo){
-            highScore =  101f
+            highScore =  101
         }else{
-            return getCompanionHighscore().toString()
+            highScore = getCompanionHighscore().toInt()
         }
-        return highScore.toString()
+        return highScore
     }
 
     private fun saveHighScoreToScoreBoard(){
         //TODO: lagre highscore i database og sjekke om username er gyldig
-        var username = enteredUsernameTextfield.text
+        val username = enteredUsernameTextfield.text
         //hvis man prøver å lagre uten å skirve navn returnerer man til hjemskjerm
         if (username.equals(null) || username.toString().equals("your_username") || username.equals("")){
             enteredUsernameTextfield.text="(unique username here)"
             LOG.info { "highscore not saved" }
         }else{
             LOG.info { "highscore pushed to firebase"}
-            game.sendScore(username,getHighScore().toFloat().toInt())
-            game.getTop10()
+            FBIF.sendScore(username,getHighScore())
+            FBIF.getTop10()
             game.setScreen<MenuScreen>()
         }
     }
@@ -104,7 +105,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.add(enteredScoreTextField)
 
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add("username to save:")
+        uiTable.add("username:")
         uiTable.add(enteredUsernameTextfield)
 
         uiTable.row().colspan(2).expandX().fillX();

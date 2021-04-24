@@ -35,8 +35,8 @@ class AndroidInterface: FirebaseInterface {
 
     private fun pullFromFirebase(){
         var name = " "
-        var score = 0
-        db.collection("scores").orderBy("score", Query.Direction.DESCENDING).limit(10).get()
+        var score = -1
+        db.collection("scores").orderBy("score", Query.Direction.DESCENDING).limit(100).get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         val entry = document.data
@@ -54,11 +54,11 @@ class AndroidInterface: FirebaseInterface {
                                 break
                             }
                         }
-                        if (name != " " && score != 0) {
+                        if (name != " " && score != -1) {
                             scoreBoard.put(name, score)
                         }
                         else {
-                            println("Could not get scoreboard")
+                            println("Invalid entry")
                         }
                     }
                 }
