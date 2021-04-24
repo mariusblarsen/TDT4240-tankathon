@@ -18,37 +18,36 @@ import tdt4240.tankathon.game.V_WIDTH_PIXELS
 private val LOG = logger<GameOverScreen>()
 
 class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
+    companion object {
+        var playerHighscore : Float = -1f
+        fun getCompanionHighscore():Float { return playerHighscore }
+        fun setCompanionHigscore(highscore:Float){ playerHighscore=highscore}
+    }
 
-    var highscoreTextField : TextField
-    var enteredHighscoreTextField : TextField
-
-    var usernameTextField : TextField
+    var enteredScoreTextField : TextField
     var enteredUsernameTextfield : TextField
-
     var saveHighcoreTextButton:TextButton
     var backTextButton : TextButton
 
     override fun show() {
         menuStage.clear()
+        uiTable.clear()
         LOG.info { "GameOver" }
         Gdx.input.inputProcessor = menuStage
         Gdx.graphics.setTitle("game over")
+        enteredScoreTextField.text= getCompanionHighscore().toString()
+        addButtonToTable()
         addActorsToStage()
     }
 
     init {
         initUI() //must be run before abstractUI class can be used
 
-        topLabel?.setText("GameOver")
+        topLabel?.setText("game over")
         topLabel?.setAlignment(Align.center)
 
-        highscoreTextField = TextField("your score: ", uiSkin)
-        enteredHighscoreTextField = TextField(getHighScore(true), uiSkin)
-
-        usernameTextField = TextField("your_username: ", uiSkin)
+        enteredScoreTextField = TextField("",uiSkin)
         enteredUsernameTextfield = TextField("", uiSkin)
-
-
 
         backTextButton = TextButton("back", uiSkin)
         backTextButton.addListener(object : ChangeListener() {
@@ -56,27 +55,26 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
                 game.setScreen<MenuScreen>()
             }
         })
-        saveHighcoreTextButton = TextButton("save high score", uiSkin)
+        saveHighcoreTextButton = TextButton("save score", uiSkin)
         saveHighcoreTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                saveHighScore()
+                saveHighScoreToScoreBoard()
             }
         })
-        addButtonToTable()
-        addActorsToStage()
         touchPos = Vector3()
     }
 
-
     private fun getHighScore(demo: Boolean = false):String{
-        var highScore =0
+        var highScore = 0f
         if(demo){
-            highScore =  101
+            highScore =  101f
+        }else{
+            return getCompanionHighscore().toString()
         }
         return highScore.toString()
     }
 
-    private fun saveHighScore(){
+    private fun saveHighScoreToScoreBoard(){
         //TODO: lagre highscore i database og sjekke om username er gyldig
         var username = enteredUsernameTextfield.text
         //hvis man prøver å lagre uten å skirve navn returnerer man til hjemskjerm
@@ -84,12 +82,11 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
             enteredUsernameTextfield.text="(unique username here)"
             LOG.info { "highscore not saved" }
         }else{
-            LOG.info { "highscore pushed to firebase(not yet implemented" }
+            LOG.info { "highscore pushed to firebase"}
+            game.sendScore(username,getHighScore().toFloat().toInt())
+            game.getTop10()
+            game.setScreen<MenuScreen>()
         }
-
-
-
-
     }
 
     private fun addButtonToTable(){
@@ -99,23 +96,24 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.setPosition(V_WIDTH_PIXELS * 0.15f, V_HEIGHT_PIXELS * 0.15f)
 
 
-        uiTable.row().colspan(3).fillX().center()
-        uiTable.add(topLabel).fillX
+        uiTable.row().colspan(4).fillX().center()
+        uiTable.add(topLabel)
 
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(highscoreTextField).fillX
-        uiTable.add(enteredHighscoreTextField).fillX
+        uiTable.add("your score:")
+        uiTable.add(enteredScoreTextField)
 
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(usernameTextField).fillX
-        uiTable.add(enteredUsernameTextfield).fillX
+        uiTable.add("username to save:")
+        uiTable.add(enteredUsernameTextfield)
 
         uiTable.row().colspan(2).expandX().fillX();
-        uiTable.add(backTextButton).fillX
-        uiTable.add(saveHighcoreTextButton).fillX
+        uiTable.add(backTextButton)
+        uiTable.add(saveHighcoreTextButton)
 
 
     }
+
     override fun dispose() {
         uiFont.dispose()
         uiSkin.dispose()

@@ -49,7 +49,7 @@ class MenuScreen(game: TankathonGame) : AbstractUI(game) {
             }
         })
 
-        scoreboardTextButton = TextButton("ScoreBoard", uiSkin)
+        scoreboardTextButton = TextButton("scoreboard", uiSkin)
         scoreboardTextButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 game.setScreen<ScoreBoardScreen>()
