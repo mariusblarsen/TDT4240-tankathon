@@ -38,7 +38,7 @@ class GameManager (val game: TankathonGame
         setLoader(TiledMap::class.java, TmxMapLoader(fileHandleResolver))
     } }
     private var character: Character = LightCharacter()
-    private val playerTextures: Array<String> = arrayOf("tank.png", "guy_teal.png")
+    private val playerTextures: Array<String> = arrayOf("heavyweight_tank.png", "lightweight_tank.png")
 
     fun getPlayer() : Character {
         return character
