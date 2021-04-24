@@ -2,7 +2,6 @@ package tdt4240.tankathon.game.ecs
 
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.PooledEngine
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.MathUtils.random
 import com.badlogic.gdx.math.Rectangle
@@ -143,7 +142,7 @@ class ECSengine: PooledEngine() {
 
     fun addMangementComponent(): Entity{
         return entity{
-            with<ManagementComponent>()
+            with<NPCWaveComponent>()
         }
     }
 

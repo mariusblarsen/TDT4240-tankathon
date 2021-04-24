@@ -1,19 +1,15 @@
 package tdt4240.tankathon.game
 
 import com.badlogic.gdx.Application.LOG_INFO
-import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 import ktx.app.KtxGame
 import ktx.log.Logger
-import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.system.DamageSystem
@@ -54,7 +50,7 @@ class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
             addSystem(AIsystem())
             addSystem(MovementSystem())
             addSystem(RemoveSystem())
-            addSystem(GameManagementSystem(this@TankathonGame, renderer))
+            addSystem(NPCWaveSystem(this@TankathonGame, renderer))
             addSystem(HealthSystem(this@TankathonGame))
             addSystem(ScoreSystem())
         }

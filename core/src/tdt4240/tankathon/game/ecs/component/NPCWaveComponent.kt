@@ -2,11 +2,10 @@ package tdt4240.tankathon.game.ecs.component
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.ComponentMapper
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.utils.Pool
 import ktx.ashley.mapperFor
 
-class ManagementComponent : Component, Pool.Poolable{
+class NPCWaveComponent : Component, Pool.Poolable{
     var numberOfWaves: Int = 5
     var remaingNumberOfWaves: Int = numberOfWaves
     var numberOfNPCInWave: Int = 40
@@ -22,6 +21,6 @@ class ManagementComponent : Component, Pool.Poolable{
 
 
     companion object{
-        val mapper: ComponentMapper<ManagementComponent> = mapperFor<ManagementComponent>()
+        val mapper: ComponentMapper<NPCWaveComponent> = mapperFor<NPCWaveComponent>()
     }
 }
