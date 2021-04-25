@@ -12,11 +12,15 @@ import ktx.app.KtxGame
 import ktx.log.Logger
 import ktx.log.logger
 import tdt4240.tankathon.game.ecs.ECSengine
-import tdt4240.tankathon.game.ecs.system.DamageSystem
-import tdt4240.tankathon.game.ecs.system.PlayerInputSystem
-import tdt4240.tankathon.game.ecs.system.RenderSystem
 import tdt4240.tankathon.game.ecs.system.*
-import tdt4240.tankathon.game.screens.*
+import tdt4240.tankathon.game.gamescreens.AbstractScreen
+import tdt4240.tankathon.game.menuscreens.GameOverScreen
+import tdt4240.tankathon.game.gamescreens.GameScreen
+import tdt4240.tankathon.game.gamescreens.LoadingScreen
+import tdt4240.tankathon.game.menuscreens.MenuScreen
+import tdt4240.tankathon.game.menuscreens.ScoreBoardScreen
+import tdt4240.tankathon.game.menuscreens.SelectionScreen
+import tdt4240.tankathon.game.menuscreens.SettingsScreen
 
 const val V_WIDTH_PIXELS = 480
 const val V_HEIGHT_PIXELS = 270

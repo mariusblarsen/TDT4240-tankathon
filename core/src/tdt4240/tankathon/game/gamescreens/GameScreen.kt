@@ -1,4 +1,4 @@
-package tdt4240.tankathon.game.screens
+package tdt4240.tankathon.game.gamescreens
 
 import ktx.log.logger
 import tdt4240.tankathon.game.GameManager

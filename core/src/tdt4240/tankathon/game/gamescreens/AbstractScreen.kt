@@ -1,4 +1,4 @@
-package tdt4240.tankathon.game.screens
+package tdt4240.tankathon.game.gamescreens
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.Batch

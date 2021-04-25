@@ -12,7 +12,7 @@ import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
-import tdt4240.tankathon.game.screens.GameOverScreen
+import tdt4240.tankathon.game.menuscreens.GameOverScreen
 import kotlin.math.max
 
 class HealthSystem(private val game: TankathonGame) : IteratingSystem(allOf(HealthComponent::class).get()) {
