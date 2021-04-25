@@ -1,6 +1,5 @@
 package tdt4240.tankathon.game.ecs.system
 
-import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.math.Rectangle
@@ -9,9 +8,7 @@ import ktx.ashley.allOf
 import ktx.ashley.contains
 import ktx.ashley.get
 import ktx.log.Logger
-import ktx.log.info
 import ktx.log.logger
-import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
 import kotlin.math.sign
 

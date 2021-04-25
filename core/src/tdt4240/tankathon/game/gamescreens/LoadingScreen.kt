@@ -12,8 +12,6 @@ import com.badlogic.gdx.math.Vector2
 import ktx.log.info
 import ktx.log.logger
 import tdt4240.tankathon.game.TankathonGame
-import tdt4240.tankathon.game.gamescreens.AbstractScreen
-import tdt4240.tankathon.game.gamescreens.GameScreen
 
 private val LOG = logger<LoadingScreen>()
 

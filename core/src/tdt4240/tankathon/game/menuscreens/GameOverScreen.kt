@@ -35,6 +35,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         Gdx.input.inputProcessor = menuStage
         Gdx.graphics.setTitle("game over")
         enteredScoreTextField.text= getCompanionHighscore().toInt().toString()
+        enteredScoreTextField.isDisabled = true
         addButtonToTable()
         addActorsToStage()
     }
@@ -77,12 +78,13 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
         //TODO: lagre highscore i database og sjekke om username er gyldig
         val username = enteredUsernameTextfield.text
         //hvis man prøver å lagre uten å skirve navn returnerer man til hjemskjerm
-        if (username.equals(null) || username.toString().equals("your_username") || username.equals("")){
+        if (username.equals(null) || username.toString().equals("(unique username here)") || username.equals("")){
             enteredUsernameTextfield.text="(unique username here)"
             LOG.info { "highscore not saved" }
         }else{
             LOG.info { "highscore pushed to firebase"}
             FBIF.sendScore(username,getHighScore())
+            Thread.sleep(1_000)
             FBIF.getTop10()
             game.setScreen<MenuScreen>()
         }

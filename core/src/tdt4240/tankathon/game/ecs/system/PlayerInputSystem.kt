@@ -10,7 +10,8 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import ktx.ashley.allOf
 import ktx.ashley.get
 import tdt4240.tankathon.game.ecs.ECSengine
-import tdt4240.tankathon.game.ecs.component.*
+import tdt4240.tankathon.game.ecs.component.CanonComponent
+import tdt4240.tankathon.game.ecs.component.PhysicsComponent
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
 import tdt4240.tankathon.game.ecs.component.PositionComponent
 import tdt4240.tankathon.game.ecs.component.TransformComponent

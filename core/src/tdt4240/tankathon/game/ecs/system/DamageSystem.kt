@@ -7,14 +7,9 @@ import ktx.ashley.addComponent
 import ktx.ashley.allOf
 import ktx.ashley.get
 import ktx.log.Logger
-import ktx.log.debug
-import ktx.log.info
 import ktx.log.logger
-import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.*
-import tdt4240.tankathon.game.ecs.system.ScoreSystem
-
 
 
 private val LOG: Logger = logger<DamageSystem>()

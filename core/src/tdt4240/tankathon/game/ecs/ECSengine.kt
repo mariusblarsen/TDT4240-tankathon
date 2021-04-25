@@ -12,7 +12,9 @@ import ktx.ashley.entity
 import ktx.ashley.with
 import ktx.log.Logger
 import ktx.log.logger
-import tdt4240.tankathon.game.*
+import tdt4240.tankathon.game.Character
+import tdt4240.tankathon.game.MAP_SCALE
+import tdt4240.tankathon.game.UNIT_SCALE
 import tdt4240.tankathon.game.ecs.component.*
 
 private val LOG: Logger = logger<ECSengine>()

@@ -3,7 +3,6 @@ package tdt4240.tankathon.game.ecs.system
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.systems.IteratingSystem
 import ktx.ashley.allOf
-import tdt4240.tankathon.game.ecs.component.PlayerScoreComponent
 import ktx.ashley.get
 import ktx.log.info
 import ktx.log.logger
@@ -11,6 +10,7 @@ import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.AIComponent
 import tdt4240.tankathon.game.ecs.component.EnemyScoreComponent
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
+import tdt4240.tankathon.game.ecs.component.PlayerScoreComponent
 import tdt4240.tankathon.game.menuscreens.GameOverScreen
 
 private val LOG = logger<ScoreSystem>()

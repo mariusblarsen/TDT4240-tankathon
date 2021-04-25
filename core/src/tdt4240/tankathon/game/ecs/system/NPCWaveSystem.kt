@@ -14,7 +14,7 @@ import ktx.ashley.get
 import ktx.log.logger
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.ecs.ECSengine
-import tdt4240.tankathon.game.ecs.component.*
+import tdt4240.tankathon.game.ecs.component.NPCWaveComponent
 
 private val LOG = logger<NPCWaveSystem>()
 

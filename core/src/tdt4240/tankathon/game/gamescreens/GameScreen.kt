@@ -1,7 +1,6 @@
 package tdt4240.tankathon.game.gamescreens
 
 import ktx.log.logger
-import tdt4240.tankathon.game.GameManager
 import tdt4240.tankathon.game.TankathonGame
 
 private val LOG = logger<GameScreen>()

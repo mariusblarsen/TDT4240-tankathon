@@ -2,11 +2,15 @@ package tdt4240.tankathon.game.menuscreens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import ktx.log.info
 import ktx.log.logger
-import tdt4240.tankathon.game.*
+import tdt4240.tankathon.game.TankathonGame
+import tdt4240.tankathon.game.V_HEIGHT_PIXELS
+import tdt4240.tankathon.game.V_WIDTH_PIXELS
 
 private val LOG = logger<ScoreBoardScreen>()
 

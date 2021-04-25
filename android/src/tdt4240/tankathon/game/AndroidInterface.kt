@@ -2,12 +2,15 @@ package tdt4240.tankathon.game
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import ktx.log.info
+import ktx.log.logger
+
+private val LOG = logger<AndroidInterface>()
 
 class AndroidInterface: FirebaseInterface {
 
     private val db = FirebaseFirestore.getInstance()
+    private val ref = db.collection("scores")
     private var scoreBoard = hashMapOf<String, Int>()
 
     init {
@@ -19,13 +22,21 @@ class AndroidInterface: FirebaseInterface {
                 "name" to name,
                 "score" to score
         )
-        db.collection("scores").add(newScore)
-                .addOnSuccessListener {
-            println("score: " + score.toString() + " added for " + name)
+        ref.whereEqualTo("name", name).get()
+                .addOnSuccessListener { documents ->
+                    if(!documents.isEmpty) {
+                        for (document in documents) {
+                            if (document.data["score"].toString().toInt() < score) {
+                                ref.document(document.id).set(newScore)
+                            }
+                        }
+                    }
+                    else {
+                        ref.add(newScore).addOnFailureListener {
+                            LOG.info {"Could not send score" }
+                        }
+                    }
         }
-                .addOnFailureListener{
-                    println("Could not send score")
-                }
     }
 
     override fun getTop10(): HashMap<String, Int> {
@@ -36,7 +47,7 @@ class AndroidInterface: FirebaseInterface {
     private fun pullFromFirebase(){
         var name = " "
         var score = -1
-        db.collection("scores").orderBy("score", Query.Direction.DESCENDING).limit(100).get()
+        ref.orderBy("score", Query.Direction.DESCENDING).limit(100).get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         val entry = document.data
@@ -58,12 +69,12 @@ class AndroidInterface: FirebaseInterface {
                             scoreBoard.put(name, score)
                         }
                         else {
-                            println("Invalid entry")
+                            LOG.info { "invalid entry" }
                         }
                     }
                 }
                 .addOnFailureListener{
-                    println("Could not read scoreboard")
+                    LOG.info { "Could not read scoreboard" }
                 }
     }
 }
