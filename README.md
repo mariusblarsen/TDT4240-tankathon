@@ -1,50 +1,79 @@
- 
-#Tankathon
+# Tankathon
+[![firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?&styleflat&logo=firebase)](https://firebase.google.com/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.4.31-red.svg)](http://kotlinlang.org/)
+[![LibGDX](https://img.shields.io/badge/libgdx-1.9.14-green.svg)](https://libgdx.badlogicgames.com/)
+[![LibKTX](https://img.shields.io/badge/libktx-1.9.14--b1-blue.svg)](https://libktx.github.io/)
 
-This Project has been developed by:
+This Project has been developed by
 ```
-Marius Bæver Larsen          gulleik.olsen@startntnu.no        Student @ NTNU
-Johan M E Johnsen        jmjohnse@stud.ntnu.no        Student @ NTNU
+Marius Bæver Larsen     mariubla@stud.ntnu.no   Student @ NTNU
+Johan M E Johnsen       jmjohnse@stud.ntnu.no   Student @ NTNU
 Kristian Flock          krisfloc@ntnu.no        Student @ NTNU
-Øystein Morken Linde  oysteiml@stud.ntnu.no Student @ NTNU
-Bjørn Nygard Lerberg    btlerber@stud.ntnu.no    Student@ NTNU 
+Øystein Morken Linde    oysteiml@stud.ntnu.no   Student @ NTNU
+Bjørn Nygard Lerberg    btlerber@stud.ntnu.no   Student @ NTNU 
 ```
 
-## Project Description
+## Run the game
+### Prerequisites
+One of
+- Android phone
+- Android emulator
+  - For mac we suggest Bluestack
 
-### Background
+### Installation
+1. Download the [latest release](https://github.com/mariusblarsen/TDT4240-tankathon/releases/) of the APK.
+2. Install the APK on your device/emulator.
+3. Enjoy!
+
+
+## Background
 Tankathon is an Android game built while taking NTNU’s software architecture course, TDT4240, taught by Alf Inge Wang. Therefore the background for the  development process has been to learn about architectural design.
 
-### The game
+## The game
 The objective of the game is to have fun, and be able to compete with your friends at the highscore list.   
 
-### The technologies
-The game is developed in using Kotling with the gamedevelopment framwork LibGDX and KTX. The LibDGX framework provides useful utilities and KTX provides Kotlin extension for the framework. Firebase is used as the database to keep track of highscores. 
-
-## Running
-### Release version
-The release version of the application can be found in releases of this repository. It is found at this link https://github.com/mariusblarsen/TDT4240-tankathon/releases/.
-
-Use your desired way of running the apk file. 
-
-For mac we suggest Bluestack. 
+## The technologies
+The game is developed in using Kotling with the gamedevelopment framwork LibGDX and LibKTX. The LibDGX framework provides useful utilities and LibKTX provides Kotlin extension for the framework. Firebase is used as the database to keep track of highscores. 
 
 
- 
-## Rules of GitHub
-- Merges to dev and master must be approved by minimum 1 code reviewer.
-- Code is written using branches.
-  - One person writing code per branch at once. 
+## Structure
+Main folders of the project
 
+    .
+    ├── android         # Code and assets for specific for android and firebase
+    ├── core            # Main implementation
+    ├── desktop         # Contains desktop launcher, only used during development
+    └── README.md
 
-### How to push
-- git add [files to add to commit]
-  - To push all changed files:  git add -A 
-  - To push a single file: git add MenuState.ktx
-- git commit -m [commit message]
-  - git commit -m "Make changes to MenuState"
-- git push
-  - To push to certain branch: git push origin [branchname]
+### Entity Component System
+    .
+    ├── ...
+    ├── core/src/tdt4240/tankathon/game/ecs
+    │   ├── component       # All components
+    │   ├── system          # All systems
+    │   └── ECSengine.kt    # Custom pooled engine to handle entities
+    └── ...
+
+### Firebase
+    .
+    ├── ...
+    ├── android/src/tdt4240/tankathon/game
+    │   └── AndroidInterface.kt             # Implementation of the FirebaseInterface
+    ├── core/src/tdt4240/tankathon/game
+    │   └── FirebaseInterface.kt            # Interface for firebase logic
+    └── ...
+
+### Assets
+    .
+    ├── ...
+    ├── android
+    │   ├── assets
+    │   │   ├── Neon_UI_Skin            # Assets used for UI
+    │   │   ├── map                     # Tilemaps and responding tilesets
+    │   │   └── ...                     # Rest of sprites used for the game objects
+    │   └── ...
+    └── ...
+
 
 
 
