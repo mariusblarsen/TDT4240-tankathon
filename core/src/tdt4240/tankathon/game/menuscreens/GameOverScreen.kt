@@ -1,4 +1,4 @@
-package tdt4240.tankathon.game.screens
+package tdt4240.tankathon.game.menuscreens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector3
@@ -6,11 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener
 import com.badlogic.gdx.utils.Align
 import ktx.log.info
 import ktx.log.logger
-import tdt4240.tankathon.game.GameManager
 import tdt4240.tankathon.game.TankathonGame
 import tdt4240.tankathon.game.V_HEIGHT_PIXELS
 import tdt4240.tankathon.game.V_WIDTH_PIXELS
@@ -21,7 +19,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     companion object {
         var playerHighscore : Float = -1f
         fun getCompanionHighscore():Float { return playerHighscore }
-        fun setCompanionHigscore(highscore:Float){ playerHighscore=highscore}
+        fun setCompanionHigscore(highscore:Float){ playerHighscore =highscore}
     }
 
     private val FBIF = game.getInterface()

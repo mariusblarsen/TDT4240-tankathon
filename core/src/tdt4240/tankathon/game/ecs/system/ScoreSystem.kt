@@ -11,7 +11,7 @@ import tdt4240.tankathon.game.ecs.ECSengine
 import tdt4240.tankathon.game.ecs.component.AIComponent
 import tdt4240.tankathon.game.ecs.component.EnemyScoreComponent
 import tdt4240.tankathon.game.ecs.component.PlayerComponent
-import tdt4240.tankathon.game.screens.GameOverScreen
+import tdt4240.tankathon.game.menuscreens.GameOverScreen
 
 private val LOG = logger<ScoreSystem>()
 
@@ -38,6 +38,6 @@ class ScoreSystem : IteratingSystem(
 
         GameOverScreen.setCompanionHigscore(playerScore)
         LOG.info{"Score oppdatert med "+ enemyScore+ "og er nå "+ playerScore}
-        println("gamOverScore:"+GameOverScreen.getCompanionHighscore().toString())
+        println("gamOverScore:"+ GameOverScreen.getCompanionHighscore().toString())
     }
 }
