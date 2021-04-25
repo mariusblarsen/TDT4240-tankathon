@@ -29,13 +29,22 @@ Use your desired way of running the apk file.
 
 For mac we suggest Bluestack. 
 
-### Desktop client
-Open the project in Andorid Studio. Press run and “edit configuration”. Press the green plus sign in order to add a new configuration and choose “Application”. As MainClass you have to pick “desktopLauncer”. The working direcotry needs to be set to the assets file of the project which is. “TDT4240-tankathon/android/assets/”. At last choose desktop under “Use classpath or module”. 
-
-You should now be able to run the application in a desktop mode. 
 
  
 ## Rules of GitHub
+- Merges to dev and master must be approved by minimum 1 code reviewer.
+- Code is written using branches.
+  - One person writing code per branch at once. 
+
+
+### How to push
+- git add [files to add to commit]
+  - To push all changed files:  git add -A 
+  - To push a single file: git add MenuState.ktx
+- git commit -m [commit message]
+  - git commit -m "Make changes to MenuState"
+- git push
+  - To push to certain branch: git push origin [branchname]
 
 
 
