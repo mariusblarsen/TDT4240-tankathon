@@ -18,7 +18,7 @@ abstract class AbstractScreen(
         val engine: ECSengine = game.engine,
         val gameViewport: Viewport = game.gameViewport,
         val renderer: OrthogonalTiledMapRenderer = game.renderer,
-        val menuStage: Stage = Stage(gameManager.game.UIViewport)
+        val menuStage: Stage = Stage(game.UIViewport)
 
 ) : KtxScreen {
     override fun resize(width: Int, height: Int) {

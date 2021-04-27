@@ -32,8 +32,7 @@ class LightCharacter : Character() {
 }
 
 
-class GameManager (val game: TankathonGame
-) {
+class GameManager {
     val assetManager: AssetManager by lazy { AssetManager().apply {
         setLoader(TiledMap::class.java, TmxMapLoader(fileHandleResolver))
     } }

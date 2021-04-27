@@ -21,7 +21,7 @@ One of
   - For mac we suggest Bluestack
 
 ### Installation
-1. Download the [latest release](https://github.com/mariusblarsen/TDT4240-tankathon/releases/) of the APK.
+1. Download the [latest release](https://github.com/mariusblarsen/TDT4240-tankathon/releases/latest) of the APK.
 2. Install the APK on your device/emulator.
 3. Enjoy!
 

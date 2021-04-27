@@ -31,7 +31,7 @@ private val LOG: Logger = logger<TankathonGame>()
 class TankathonGame(IF: FirebaseInterface) : KtxGame<AbstractScreen>() {
 
     val FBIF = IF
-    val gameManager: GameManager = GameManager(this)
+    val gameManager: GameManager = GameManager()
     val gameCamera: OrthographicCamera by lazy { OrthographicCamera() }
     val batch: Batch by lazy { SpriteBatch() }
     val renderer: OrthogonalTiledMapRenderer by lazy { OrthogonalTiledMapRenderer(TiledMap(), MAP_SCALE, batch) }
