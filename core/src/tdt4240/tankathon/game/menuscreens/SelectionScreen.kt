@@ -20,6 +20,7 @@ private val LOG = logger<SelectionScreen>()
 class SelectionScreen(game: TankathonGame) : AbstractUI(game) {
     //ui elements
     //interaction elements
+    private var backTextButton : TextButton
     private var lightPlayerTextButton : TextButton
     private var heavyPlayerTextButton : TextButton
     private val lightPlayerLabel : Label by lazy { Label("", uiSkin).apply {
@@ -46,6 +47,13 @@ class SelectionScreen(game: TankathonGame) : AbstractUI(game) {
         initUI()
         //interaction-elements
         topLabel?.setText("Select characters")
+
+        backTextButton = TextButton("Return to main menu", uiSkin)
+        backTextButton.addListener(object : ChangeListener() {
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                game.setScreen<MenuScreen>()
+            }
+        })
 
         lightPlayerTextButton = TextButton("Lightweight", uiSkin)
         lightPlayerTextButton.addListener(object : ChangeListener() {
@@ -89,6 +97,9 @@ class SelectionScreen(game: TankathonGame) : AbstractUI(game) {
         uiTable.add(heavyPlayerTextButton).fillX
         uiTable.row().colspan(4).expandX().fillX();
         uiTable.add(heavyPlayerLabel).fillX
+        /* Back button */
+        uiTable.row().colspan(4).expandX().fillX();
+        uiTable.add(backTextButton).fillX
     }
 
     override fun dispose() {
