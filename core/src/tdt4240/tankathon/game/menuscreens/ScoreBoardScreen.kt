@@ -98,6 +98,9 @@ class ScoreBoardScreen(game: TankathonGame) : AbstractUI(game){
 
     }
 
+    /**
+     * For debugging in desktop launcher.
+     */
     fun getScores(): HashMap<String, Int> {
         val scores = hashMapOf<String,Int>(
                 "magnus" to 120,
