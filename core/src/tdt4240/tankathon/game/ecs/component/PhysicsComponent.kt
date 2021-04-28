@@ -8,12 +8,6 @@ class PhysicsComponent: Component, Pool.Poolable {
     var width = 0f
     var height = 0f
 
-    /** Delegates.notNull
-     * Returns a delegate for a read/write porperty,
-     * that is initialized not during construction,
-     * but at a later time.
-     */
-
     override fun reset() {
         height = 0f
         width = 0f

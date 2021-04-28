@@ -34,10 +34,11 @@ class ScoreSystem : IteratingSystem(
         player[PlayerScoreComponent.mapper]?.run{
             playerScore += enemyScore
         }
-        val playerScore = player.getComponent(PlayerScoreComponent::class.java).playerScore
+        val playerScore = player[PlayerScoreComponent.mapper]?.playerScore
 
-        GameOverScreen.setCompanionHigscore(playerScore)
+        if (playerScore != null) {
+            GameOverScreen.setCompanionHigscore(playerScore)
+        }
         LOG.info{"Score oppdatert med "+ enemyScore+ "og er nå "+ playerScore}
-        println("gamOverScore:"+ GameOverScreen.getCompanionHighscore().toString())
     }
 }

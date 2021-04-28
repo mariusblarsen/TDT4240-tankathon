@@ -9,8 +9,8 @@ class NPCWaveComponent : Component, Pool.Poolable{
     var numberOfWaves: Int = 100
     var remaingNumberOfWaves: Int = numberOfWaves
     var numberOfNPCInWave: Int = 40
-    var deltaTimeWaves: Float = 30f //Time between waves
-    var countDown: Float = 0f //Begin to countdown from deltaTimeWaves when wave is launched. When <0 new wave
+    var deltaTimeWaves: Float = 30f //Time between waves (in seconds)
+    var countDown: Float = 0f //Begin to countdown for next wave from deltaTimeWaves, each wave
     override fun reset() {
         numberOfWaves = 100
         remaingNumberOfWaves = numberOfWaves

@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Pool
 import ktx.ashley.mapperFor
 
 class HealthComponent: Component, Pool.Poolable {
-    var maxHealth: Float = 1000.0f  // TODO: Find and set real value
+    var maxHealth: Float = 1000.0f
     var health: Float = maxHealth
 
     override fun reset() {

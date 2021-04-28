@@ -23,7 +23,6 @@ class HealthSystem(private val game: TankathonGame) : IteratingSystem(allOf(Heal
         val healthComponent = entity[HealthComponent.mapper]
         require(healthComponent != null){ "Entity |entity| must have a healthComponent. entity=$entity"}
         val enemyScoreComponent = entity[EnemyScoreComponent.mapper]
-        //require(enemyScoreComponent != null){ "Entity |entity| must have a healthComponent. entity=$entity"}
 
         val healthPercentage = healthComponent.health/healthComponent.maxHealth
         val healthbarWidth = max(0f, 3f*healthPercentage)
