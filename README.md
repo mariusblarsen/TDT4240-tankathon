@@ -4,7 +4,7 @@
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.14-green.svg)](https://libgdx.badlogicgames.com/)
 [![LibKTX](https://img.shields.io/badge/libktx-1.9.14--b1-blue.svg)](https://libktx.github.io/)
 
-This Project has been developed by
+This Project has been developed with :heart: by
 ```
 Marius Bæver Larsen     mariubla@stud.ntnu.no   Student @ NTNU
 Johan M E Johnsen       jmjohnse@stud.ntnu.no   Student @ NTNU
@@ -13,7 +13,7 @@ Kristian Flock          krisfloc@ntnu.no        Student @ NTNU
 Bjørn Nygard Lerberg    btlerber@stud.ntnu.no   Student @ NTNU 
 ```
 
-## Run the game
+## Run the game :rocket:
 ### Prerequisites
 One of
 - Android phone
@@ -23,20 +23,20 @@ One of
 ### Installation
 1. Download the [latest release](https://github.com/mariusblarsen/TDT4240-tankathon/releases/latest) of the APK.
 2. Install the APK on your device/emulator.
-3. Enjoy!
+3. Enjoy :tada:
 
 
-## Background
+## Background :mag_right:
 Tankathon is an Android game built while taking NTNU’s software architecture course, TDT4240, taught by Alf Inge Wang. Therefore the background for the  development process has been to learn about architectural design.
 
-## The game
+## The game :video_game:
 The objective of the game is to have fun, and be able to compete with your friends at the highscore list.   
 
-## The technologies
+## The technologies :hammer_and_wrench:
 The game is developed in using Kotling with the gamedevelopment framwork LibGDX and LibKTX. The LibDGX framework provides useful utilities and LibKTX provides Kotlin extension for the framework. Firebase is used as the database to keep track of highscores. 
 
 
-## Structure
+## Structure :open_file_folder:
 Main folders of the project
 
     .

@@ -16,7 +16,7 @@ class HeavyCharacter : Character() {
     init {
         maxHealth = 150f
         speed = 4f
-        damage = 50f
+        damage = 75f
         fireRate = 0.3f
         texture = 0
     }

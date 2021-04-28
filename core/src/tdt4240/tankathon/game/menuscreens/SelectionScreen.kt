@@ -36,7 +36,6 @@ class SelectionScreen(game: TankathonGame) : AbstractUI(game) {
 
 
     override fun show() {
-        LOG.info { "Menu Screen" }
         menuStage.clear()
         Gdx.input.inputProcessor = menuStage
         Gdx.graphics.setTitle("main menu")

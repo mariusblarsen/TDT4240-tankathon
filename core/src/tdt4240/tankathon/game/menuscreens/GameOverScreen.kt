@@ -75,9 +75,7 @@ class GameOverScreen(game: TankathonGame) : AbstractUI(game) {
     }
 
     private fun saveHighScoreToScoreBoard(){
-        //TODO: lagre highscore i database og sjekke om username er gyldig
         val username = enteredUsernameTextfield.text
-        //hvis man prøver å lagre uten å skirve navn returnerer man til hjemskjerm
         if (username.equals(null) || username.toString().equals("(unique username here)") || username.equals("")){
             enteredUsernameTextfield.text="(unique username here)"
             LOG.info { "highscore not saved" }

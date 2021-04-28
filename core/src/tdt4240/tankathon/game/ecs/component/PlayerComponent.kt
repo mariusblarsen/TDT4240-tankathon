@@ -11,5 +11,4 @@ class PlayerComponent: Component, Pool.Poolable {
     companion object {
         val mapper = mapperFor<PlayerComponent>()
     }
-    var team: Int = 1
 }
